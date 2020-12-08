@@ -1,11 +1,11 @@
 type Counter = {
-  1: number,
-  2: number,
-  3: number,
-  4: number,
-  5: number,
-  6: number
-}
+  1: number;
+  2: number;
+  3: number;
+  4: number;
+  5: number;
+  6: number;
+};
 
 export default class DiceMap {
   private diceMap: number[][];
@@ -28,7 +28,10 @@ export default class DiceMap {
     this.newMap();
 
     // create new map while filtered element length is zero
-    while (Object.values(this.counter).filter((n: number) => n < this.MIN_COUNT).length > 0) {
+    while (
+      Object.values(this.counter).filter((n: number) => n < this.MIN_COUNT)
+        .length > 0
+    ) {
       this.initializeCounter();
       this.newMap();
     }
@@ -49,7 +52,9 @@ export default class DiceMap {
 
   // create random number between 1 and 6
   private createRandomNumber(): number {
-    return Math.floor(Math.random() * (this.DICE_MAX + 1 - this.DICE_MIN) + this.DICE_MIN);
+    return Math.floor(
+      Math.random() * (this.DICE_MAX + 1 - this.DICE_MIN) + this.DICE_MIN
+    );
   }
 
   private newMap() {
@@ -63,26 +68,26 @@ export default class DiceMap {
 
   private counting(num: number) {
     switch (num) {
-    case 1:
-      this.counter[1] += 1;
-      break;
-    case 2:
-      this.counter[2] += 1;
-      break;
-    case 3:
-      this.counter[3] += 1;
-      break;
-    case 4:
-      this.counter[4] += 1;
-      break;
-    case 5:
-      this.counter[5] += 1;
-      break;
-    case 6:
-      this.counter[6] += 1;
-      break;
-    default:
-      break;
+      case 1:
+        this.counter[1] += 1;
+        break;
+      case 2:
+        this.counter[2] += 1;
+        break;
+      case 3:
+        this.counter[3] += 1;
+        break;
+      case 4:
+        this.counter[4] += 1;
+        break;
+      case 5:
+        this.counter[5] += 1;
+        break;
+      case 6:
+        this.counter[6] += 1;
+        break;
+      default:
+        break;
     }
   }
 }
