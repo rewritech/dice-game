@@ -1,0 +1,16 @@
+<button class="btn btn-secondary mb-2" routerLink="/">GO DASHBOARD</button>
+
+<div class="d-flex flex-column p-1 bg-dark" style="width: fit-content; height: fit-content;">
+  <div class="d-flex" *ngFor="let dices of diceMap">
+    <div *ngFor="let dice of dices">
+      <div [ngSwitch]="dice">
+        <app-dice-one *ngSwitchCase="1"></app-dice-one>
+        <app-dice-two *ngSwitchCase="2"></app-dice-two>
+        <app-dice-three *ngSwitchCase="3"></app-dice-three>
+        <app-dice-four *ngSwitchCase="4"></app-dice-four>
+        <app-dice-five *ngSwitchCase="5"></app-dice-five>
+        <app-dice-six *ngSwitchCase="6"></app-dice-six>
+      </div>
+    </div>
+  </div>
+</div>

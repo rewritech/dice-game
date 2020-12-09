@@ -1,1 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+
+body {
+  // background-color: bisque;
+}
+
+.logo-size {
+  height: 100px;
+}
+
+.dice-size {
+  height: 100px;
+  width: 100px;
+}
+
+.dice-point-sm {
+  width:20px;
+  height:20px;
+}
+
+.dice-point-md {
+  width:25px;
+  height:25px;
+}
+
+.dice-point-lg {
+  width:30px;
+  height:30px;
+}
