@@ -9,21 +9,16 @@ body {
 }
 
 .dice-size {
-  height: 100px;
-  width: 100px;
+  height: 65px;
+  width: 65px;
 }
 
 .dice-point-sm {
-  width:20px;
-  height:20px;
+  width:10px;
+  height:10px;
 }
 
-.dice-point-md {
-  width:25px;
-  height:25px;
-}
-
-.dice-point-lg {
-  width:30px;
-  height:30px;
+.dice-point {
+  width:15px;
+  height:15px;
 }
