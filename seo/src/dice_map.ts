@@ -25,10 +25,14 @@ export default class DiceMap {
   constructor() {
     this.diceMap = Array.from(Array(10), () => new Array(10));
     this.counter = this.initializeCounter();
-    this.newMap();
+  }
 
-    // create new map while filtered element length is zero
-    while (Object.values(this.counter).filter((n: number) => n < this.MIN_COUNT).length > 0) {
+  createNewMap(): void {
+    this.counter = this.initializeCounter();
+    this.newMap();
+    const lengthOfUnderMinCount = Object.values(this.counter).filter((n: number) => n < this.MIN_COUNT);
+    // create new map while filtered element length is not zero
+    while (lengthOfUnderMinCount.length > 0) {
       this.initializeCounter();
       this.newMap();
     }

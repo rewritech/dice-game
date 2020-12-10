@@ -69,8 +69,9 @@ export class DiceMapService {
   private newMap() {
     for (let i = 0; i < this.MAP_ROW; i += 1) {
       for (let j = 0; j < this.MAP_COL; j += 1) {
-        this.diceMap[i][j] = this.createRandomNumber();
-        this.counting(this.diceMap[i][j]);
+        const randomNumber = this.createRandomNumber();
+        this.diceMap[i][j] = randomNumber;
+        this.counting(randomNumber);
       }
     }
   }

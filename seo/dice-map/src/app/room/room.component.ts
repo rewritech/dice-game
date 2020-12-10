@@ -12,6 +12,10 @@ export class RoomComponent implements OnInit {
   constructor(private diceMapService: DiceMapService) { }
 
   ngOnInit(): void {
+    this.shupple();
+  }
+
+  shupple(): void {
     this.diceMapService.createNewMap();
     console.log(this.diceMapService.getCounter());
     this.diceMap = this.diceMapService.getDiceMap();
