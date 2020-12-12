@@ -16,4 +16,4 @@ npm install
 npm start
 ```
 
-[localhost](http://localhost:4200)
+[localhost](http://localhost:4200){:target="_blank"}
