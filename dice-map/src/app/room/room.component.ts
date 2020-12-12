@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DiceMapService } from '../dice-map.service';
-import * as socketIO from 'socket.io-client';
+import { RoomService } from '../room.service';
 
 @Component({
   selector: 'app-room',
@@ -9,10 +9,14 @@ import * as socketIO from 'socket.io-client';
 })
 export class RoomComponent implements OnInit {
   diceMap: number[][];
-  private socket: socketIO.Socket;
 
-  constructor(private diceMapService: DiceMapService) {
-    this.socket = socketIO.io("http://localhost:3000", {transports: ['websocket']})
+  constructor(
+    private diceMapService: DiceMapService,
+    private roomService: RoomService
+  ) {
+    this.roomService.on("new-map-broadcast", (data: number[][]) => {
+      this.diceMap = data;
+    })
   }
 
   ngOnInit(): void {
@@ -21,7 +25,7 @@ export class RoomComponent implements OnInit {
 
   shupple(): void {
     this.diceMapService.createNewMap();
-    console.log(this.diceMapService.getCounter());
     this.diceMap = this.diceMapService.getDiceMap();
+    this.roomService.emit("new-map", this.diceMap);
   }
 }
