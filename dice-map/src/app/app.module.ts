@@ -14,6 +14,7 @@ import { RoomComponent } from './views/room/room.component';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { NewRoomComponent } from './views/new-room/new-room.component';
 import { RoomsComponent } from './views/rooms/rooms.component';
+import { HowToPlayComponent } from './views/how-to-play/how-to-play.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { RoomsComponent } from './views/rooms/rooms.component';
     RoomComponent,
     DashboardComponent,
     NewRoomComponent,
-    RoomsComponent
+    RoomsComponent,
+    HowToPlayComponent
   ],
   imports: [BrowserModule, AppRoutingModule, NgbModule],
   providers: [],
