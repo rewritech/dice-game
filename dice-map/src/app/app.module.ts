@@ -29,7 +29,7 @@ import { HowToPlayComponent } from './views/how-to-play/how-to-play.component';
     DashboardComponent,
     NewRoomComponent,
     RoomsComponent,
-    HowToPlayComponent
+    HowToPlayComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, NgbModule],
   providers: [],

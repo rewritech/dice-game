@@ -14,9 +14,9 @@ export class RoomComponent implements OnInit {
     private diceMapService: DiceMapService,
     private roomService: RoomService
   ) {
-    this.roomService.on("new-map-broadcast", (data: number[][]) => {
+    this.roomService.on('new-map-broadcast', (data: number[][]) => {
       this.diceMap = data;
-    })
+    });
   }
 
   ngOnInit(): void {
@@ -26,6 +26,6 @@ export class RoomComponent implements OnInit {
   shupple(): void {
     this.diceMapService.createNewMap();
     this.diceMap = this.diceMapService.getDiceMap();
-    this.roomService.emit("new-map", this.diceMap);
+    this.roomService.emit('new-map', this.diceMap);
   }
 }

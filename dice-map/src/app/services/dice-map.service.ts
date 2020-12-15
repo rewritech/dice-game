@@ -1,13 +1,5 @@
 import { Injectable } from '@angular/core';
-
-type Counter = {
-  1: number;
-  2: number;
-  3: number;
-  4: number;
-  5: number;
-  6: number;
-};
+import { Counter } from '../types';
 
 @Injectable({
   providedIn: 'root',
