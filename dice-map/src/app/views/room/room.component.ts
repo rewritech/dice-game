@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DiceMapService } from '../dice-map.service';
-import { RoomService } from '../room.service';
+import { DiceMapService } from '../../services/dice-map.service';
+import { RoomService } from '../../services/room.service';
 
 @Component({
   selector: 'app-room',
