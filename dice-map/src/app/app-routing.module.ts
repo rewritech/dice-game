@@ -8,9 +8,9 @@ import { RoomsComponent } from './views/rooms/rooms.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
-  { path: 'room/new', component: NewRoomComponent },
+  { path: 'rooms/new', component: NewRoomComponent },
+  { path: 'rooms/:id', component: RoomComponent },
   { path: 'rooms', component: RoomsComponent },
-  { path: 'room/:id', component: RoomComponent },
   { path: 'how-to-play', component: HowToPlayComponent },
 ];
 

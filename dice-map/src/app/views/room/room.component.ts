@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Room } from '../../types';
 import { DiceMapService } from '../../services/dice-map.service';
 import { RoomService } from '../../services/room.service';
 
@@ -8,24 +10,30 @@ import { RoomService } from '../../services/room.service';
   styleUrls: ['./room.component.scss'],
 })
 export class RoomComponent implements OnInit {
-  diceMap: number[][];
+  room: Room;
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private diceMapService: DiceMapService,
     private roomService: RoomService
   ) {
-    this.roomService.on('new-map-broadcast', (data: number[][]) => {
-      this.diceMap = data;
-    });
+    // this.roomService.on('new-map-broadcast', (data: number[][]) => {
+    //   this.diceMap = data;
+    // });
   }
 
   ngOnInit(): void {
-    this.shupple();
+    // this.shupple();
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.roomService.getRoom(id).subscribe((res) => {
+      this.room = res;
+    });
   }
 
-  shupple(): void {
-    this.diceMapService.createNewMap();
-    this.diceMap = this.diceMapService.getDiceMap();
-    this.roomService.emit('new-map', this.diceMap);
-  }
+  // shupple(): void {
+  //   this.diceMapService.createNewMap();
+  //   this.diceMap = this.diceMapService.getDiceMap();
+  //   this.roomService.emit('new-map', this.diceMap);
+  // }
 }

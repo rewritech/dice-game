@@ -1,1 +1,12 @@
-<p>rooms works!</p>
+<h1>Rooms</h1>
+
+<table>
+  <tr>
+    <th>Id</th>
+    <th>title</th>
+  </tr>
+  <tr *ngFor="let room of rooms">
+    <td>{{room.id}}</td>
+    <td><a routerLink="/rooms/{{room.id}}">{{room.title}}({{room.memberCount}}/{{room.memberLimit}})</a></td>
+  </tr>
+</table>
