@@ -1,8 +1,14 @@
+export type Player = {
+  id: string;
+  roomId: number;
+  name: string;
+};
+
 export type Room = {
-  id: number;
+  id?: number;
   title: string;
-  memberCount: number;
-  memberLimit: number;
+  players?: Player[];
+  playerLimit: number;
   map: number[][];
 };
 

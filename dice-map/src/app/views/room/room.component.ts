@@ -24,16 +24,28 @@ export class RoomComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.shupple();
+    console.log('oninit');
+    // this.shuffle();
     const id = +this.route.snapshot.paramMap.get('id');
     this.roomService.getRoom(id).subscribe((res) => {
       this.room = res;
     });
   }
 
-  // shupple(): void {
+  ngOnDestroy(): void {
+    console.log('destroy');
+  }
+
+  // shuffle(): void {
   //   this.diceMapService.createNewMap();
   //   this.diceMap = this.diceMapService.getDiceMap();
   //   this.roomService.emit('new-map', this.diceMap);
   // }
+
+  leave(): void {
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.roomService.leaveRoom(id).subscribe((res) => {
+      this.router.navigate(['/rooms']);
+    });
+  }
 }

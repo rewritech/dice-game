@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -17,6 +17,7 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { NewRoomComponent } from './views/new-room/new-room.component';
 import { RoomsComponent } from './views/rooms/rooms.component';
 import { HowToPlayComponent } from './views/how-to-play/how-to-play.component';
+import { WaitingRoomComponent } from './views/waiting-room/waiting-room.component';
 
 @NgModule({
   declarations: [
@@ -32,12 +33,13 @@ import { HowToPlayComponent } from './views/how-to-play/how-to-play.component';
     NewRoomComponent,
     RoomsComponent,
     HowToPlayComponent,
+    WaitingRoomComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    ReactiveFormsModule,
+    FormsModule,
     HttpClientModule,
   ],
   providers: [],

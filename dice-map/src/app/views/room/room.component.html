@@ -1,7 +1,7 @@
 <div *ngIf="room">
-  <h1>{{room.title}}</h1>
+  <h1>{{room.title}}({{room.players.length}}/{{room.playerLimit}})</h1>
 
-  <button class="btn btn-secondary mb-2" routerLink="/">GO DASHBOARD</button>
+  <button class="btn btn-secondary mb-2" (click)="leave()">LEAVE ROOM</button>
   <button class="btn btn-info ml-2 mb-2" (click)="shupple()">SHUFFLE</button>
 
   <div class="row">
@@ -26,4 +26,3 @@
     </div>
   </div>
 </div>
-
