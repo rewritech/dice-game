@@ -10,12 +10,9 @@ import { Room } from '../../types';
 export class RoomsComponent implements OnInit {
   rooms: Room[];
 
-  pid: string;
-
   constructor(private roomService: RoomService) {}
 
   ngOnInit(): void {
-    this.pid = sessionStorage.getItem('pid');
     this.roomService.getRooms().subscribe((res) => {
       this.rooms = res;
     });

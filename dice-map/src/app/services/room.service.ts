@@ -23,7 +23,7 @@ export class RoomService {
       .pipe(catchError(this.handleError<Room>(`getRoom  id=${id}`)));
   }
 
-  newRoom(room: Room): Observable<Room> {
+  createRoom(room: Room): Observable<Room> {
     return this.http
       .post<Room>(`${API_ENDPOINT}/rooms`, room)
       .pipe(catchError(this.handleError<Room>(`postRoom`)));

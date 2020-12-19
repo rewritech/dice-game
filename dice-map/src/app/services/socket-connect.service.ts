@@ -11,18 +11,17 @@ export class SocketConnectService {
 
   // constructor() {}
 
-  connect(player: Player): void {
-    this.socket = socketIO.io(`${API_ENDPOINT}`, {
+  connect(): void {
+    this.socket = socketIO.io(`${API_ENDPOINT}/dice-map-room`, {
       transports: ['websocket'],
-      query: player,
     });
   }
 
-  on(key: string, func: (data: number[][]) => void): void {
+  on<T>(key: string, func: (value: T) => void): void {
     this.socket.on(key, func);
   }
 
-  emit(key: string, value: number[][]): void {
+  emit<T>(key: string, value: T): void {
     this.socket.emit(key, value);
   }
 }

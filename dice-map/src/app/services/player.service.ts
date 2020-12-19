@@ -1,27 +1,35 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Player } from '../types';
+import { API_ENDPOINT } from '../endpoints';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlayerService {
-  private players: Player[];
+  constructor(private http: HttpClient) {}
 
-  constructor() {
-    this.players = [];
+  // getPlayer(player: Player): Observable<Player[]> {
+  //   return this.http
+  //     .get<Player[]>(
+  //       `${API_ENDPOINT}/rooms/${player.roomId}/players/${player.id}`
+  //     )
+  //     .pipe(catchError(this.handleError('getRoomPlayers', [])));
+  // }
+
+  createPlayer(player: Player): Observable<Player> {
+    return this.http
+      .post<Player>(`${API_ENDPOINT}/players`, player)
+      .pipe(catchError(this.handleError<Player>(`postPlayer`)));
   }
 
-  newPlayer(name: string): Player {
-    return {
-      id: `${new Date().getTime()}`,
-      roomId: -1,
-      name,
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error);
+      console.log(`${operation} failed: ${error.message}`);
+      return of(result as T);
     };
-  }
-
-  setPlayer(newPlayer: Player): void {
-    if (this.players.indexOf(newPlayer) === -1) {
-      this.players.push(newPlayer);
-    }
   }
 }

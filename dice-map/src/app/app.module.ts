@@ -18,6 +18,7 @@ import { NewRoomComponent } from './views/new-room/new-room.component';
 import { RoomsComponent } from './views/rooms/rooms.component';
 import { HowToPlayComponent } from './views/how-to-play/how-to-play.component';
 import { WaitingRoomComponent } from './views/waiting-room/waiting-room.component';
+import { PlayerCreateModalComponent } from './components/player-create-modal/player-create-modal.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { WaitingRoomComponent } from './views/waiting-room/waiting-room.componen
     RoomsComponent,
     HowToPlayComponent,
     WaitingRoomComponent,
+    PlayerCreateModalComponent,
   ],
   imports: [
     BrowserModule,

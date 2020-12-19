@@ -1,4 +1,6 @@
 <h1>Rooms</h1>
-<div *ngFor="let room of rooms">
-  <a class="btn btn-outline-dark btn-lg btn-block mb-1" routerLink="/rooms/{{room.id}}" [queryParams]="{ pid: pid }">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</a>
+<div *ngIf="rooms">
+  <div *ngFor="let room of rooms">
+    <app-player-create-modal [room]="room"></app-player-create-modal>
+  </div>
 </div>
