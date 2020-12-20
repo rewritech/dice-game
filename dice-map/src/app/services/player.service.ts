@@ -11,14 +11,6 @@ import { API_ENDPOINT } from '../endpoints';
 export class PlayerService {
   constructor(private http: HttpClient) {}
 
-  // getPlayer(player: Player): Observable<Player[]> {
-  //   return this.http
-  //     .get<Player[]>(
-  //       `${API_ENDPOINT}/rooms/${player.roomId}/players/${player.id}`
-  //     )
-  //     .pipe(catchError(this.handleError('getRoomPlayers', [])));
-  // }
-
   createPlayer(player: Player): Observable<Player> {
     return this.http
       .post<Player>(`${API_ENDPOINT}/players`, player)

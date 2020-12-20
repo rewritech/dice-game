@@ -12,7 +12,7 @@ import { DiceThreeComponent } from './components/dice/dice-three/dice-three.comp
 import { DiceFourComponent } from './components/dice/dice-four/dice-four.component';
 import { DiceFiveComponent } from './components/dice/dice-five/dice-five.component';
 import { DiceSixComponent } from './components/dice/dice-six/dice-six.component';
-import { RoomComponent } from './views/room/room.component';
+import { PlayRoomComponent } from './views/play-room/play-room.component';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { NewRoomComponent } from './views/new-room/new-room.component';
 import { RoomsComponent } from './views/rooms/rooms.component';
@@ -29,7 +29,7 @@ import { PlayerCreateModalComponent } from './components/player-create-modal/pla
     DiceFourComponent,
     DiceFiveComponent,
     DiceSixComponent,
-    RoomComponent,
+    PlayRoomComponent,
     DashboardComponent,
     NewRoomComponent,
     RoomsComponent,

@@ -4,14 +4,13 @@ import { Player, Room } from '../../types';
 import { SocketConnectService } from '../../services/socket-connect.service';
 import { DiceMapService } from '../../services/dice-map.service';
 import { RoomService } from '../../services/room.service';
-import { PlayerService } from '../../services/player.service';
 
 @Component({
-  selector: 'app-room',
-  templateUrl: './room.component.html',
-  styleUrls: ['./room.component.scss'],
+  selector: 'app-play-room',
+  templateUrl: './play-room.component.html',
+  styleUrls: ['./play-room.component.scss'],
 })
-export class RoomComponent implements OnInit {
+export class PlayRoomComponent implements OnInit {
   room: Room;
 
   player: Player;
@@ -21,8 +20,7 @@ export class RoomComponent implements OnInit {
     private router: Router,
     private diceMapService: DiceMapService,
     private roomService: RoomService,
-    private socket: SocketConnectService,
-    private playerService: PlayerService
+    private socket: SocketConnectService
   ) {}
 
   ngOnInit(): void {
@@ -40,7 +38,6 @@ export class RoomComponent implements OnInit {
         this.socket.connect();
         // websocket room에서 데이터 전송 받기 위한 연결
         this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
-          console.log(newRoom)
           this.room = newRoom;
         });
         // websocket room에 join

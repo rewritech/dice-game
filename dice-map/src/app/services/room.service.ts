@@ -29,18 +29,6 @@ export class RoomService {
       .pipe(catchError(this.handleError<Room>(`postRoom`)));
   }
 
-  leaveRoom(id: number): Observable<Room> {
-    return this.http
-      .delete<Room>(`${API_ENDPOINT}/rooms/${id}`)
-      .pipe(catchError(this.handleError<Room>(`leaveRoom`)));
-  }
-
-  shuffleRoom(room: Room): Observable<Room> {
-    return this.http
-      .put<Room>(`${API_ENDPOINT}/rooms/${room.id}`, room)
-      .pipe(catchError(this.handleError<Room>(`leaveRoom`)));
-  }
-
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error);

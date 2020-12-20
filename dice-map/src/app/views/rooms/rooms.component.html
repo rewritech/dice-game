@@ -4,3 +4,6 @@
     <app-player-create-modal [room]="room"></app-player-create-modal>
   </div>
 </div>
+<div *ngIf="rooms && rooms.length === 0">
+  <span>표시할 방이 없습니다.</span>
+</div>
