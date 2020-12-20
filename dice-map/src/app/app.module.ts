@@ -19,6 +19,7 @@ import { RoomsComponent } from './views/rooms/rooms.component';
 import { HowToPlayComponent } from './views/how-to-play/how-to-play.component';
 import { WaitingRoomComponent } from './views/waiting-room/waiting-room.component';
 import { PlayerCreateModalComponent } from './components/player-create-modal/player-create-modal.component';
+import { DashboardButtonComponent } from './components/dashboard-button/dashboard-button.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { PlayerCreateModalComponent } from './components/player-create-modal/pla
     HowToPlayComponent,
     WaitingRoomComponent,
     PlayerCreateModalComponent,
+    DashboardButtonComponent,
   ],
   imports: [
     BrowserModule,
