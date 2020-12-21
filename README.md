@@ -1,19 +1,17 @@
-# dice-game
-
-## socket-server
-
+# 초기설정
 ```bash
-cd socket-server
-npm install
-node index.js
+$ npm install -g @angular/cli@11.0.4 # 만약 Angular Cli가 설치되지 않았다면 실행
+$ npm install -g nodemon
+$ npm install
+$ npm run build
 ```
 
-## dice-map
-
+# 서버 기동
 ```bash
-cd dice-map
-npm install
-npm start
+$ npm start
 ```
 
-[localhost](http://localhost:4200)
+# angular수정하면 아래 명령어 실행해줘야함
+```bash
+$ npm run build
+```
