@@ -1,18 +1,6 @@
 <div class="row d-flex align-items-center justify-content-center h-100 m-5">
   <img class="logo-size" src="../assets/logo.png" alt="">
 </div>
-<div class="row d-flex align-items-center justify-content-center h-100">
-  <button class="btn btn-info btn-lg w-50 d-block mb-2" routerLink="/rooms/new">
-    <h1>NEW ROOM</h1>
-  </button>
-</div>
-<div class="row d-flex align-items-center justify-content-center h-100">
-  <button class="btn btn-info btn-lg w-50 d-block mb-2" routerLink="/rooms">
-    <h1>ROOMS</h1>
-  </button>
-</div>
-<div class="row d-flex align-items-center justify-content-center h-100">
-  <button class="btn btn-info btn-lg w-50 d-block mb-2" routerLink="/how-to-play">
-    <h1>HOW TO PLAY</h1>
-  </button>
-</div>
+<app-dashboard-button [buttonTitle]="'NEW ROOM'" [linkPath]="'/rooms/new'"></app-dashboard-button>
+<app-dashboard-button [buttonTitle]="'ROOMS'" [linkPath]="'/rooms'"></app-dashboard-button>
+<app-dashboard-button [buttonTitle]="'HOW TO PLAY'" [linkPath]="'/how-to-play'"></app-dashboard-button>
