@@ -37,7 +37,7 @@ function getLastRoomId(targetRooms) {
 // { id: 1, title: '초보방 아무나', players: 1, playerLimit: 2, map: [[5, 6, 3, 6, 4, 1, 1, 1, 3, 3],[4, 3, 1, 4, 5, 1, 3, 5, 2, 1],[2, 1, 4, 2, 4, 4, 2, 3, 1, 3],[6, 1, 5, 3, 6, 5, 5, 4, 4, 1],[2, 1, 5, 1, 4, 4, 6, 1, 4, 6],[5, 3, 2, 1, 5, 6, 4, 4, 6, 1],[6, 1, 5, 4, 5, 3, 2, 4, 6, 6],[1, 6, 4, 2, 2, 5, 2, 3, 2, 5],[4, 4, 1, 3, 1, 6, 5, 5, 1, 5],[5, 6, 4, 2, 6, 3, 2, 3, 5, 3]] },
 const rooms = []
 
-io.of('/dice-map-room').on('connection', (socket) => {
+io.of('/api/dice-map-room').on('connection', (socket) => {
   console.log(`[${new Date()}]: user socket connected`)
   /**
    * room join 할때

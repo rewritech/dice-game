@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import * as socketIO from 'socket.io-client'
 import { environment } from '../../environments/environment'
-import { Player } from '../types'
 
 @Injectable({
   providedIn: 'root',
