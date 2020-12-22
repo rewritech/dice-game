@@ -6,7 +6,7 @@ $ npm start
 ```
 
 ## For Development
-### 초기화
+### 초기설정
 ```bash
 $ npm install -g @angular/cli@11.0.4
 $ npm install -g nodemon
