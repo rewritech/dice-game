@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Player, Room } from '../../types';
 import { SocketConnectService } from '../../services/socket-connect.service';
@@ -46,6 +46,7 @@ export class PlayRoomComponent implements OnInit {
     });
   }
 
+  @HostListener('window:beforeunload')
   ngOnDestroy(): void {
     this.leave();
   }
