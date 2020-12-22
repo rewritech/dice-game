@@ -6,14 +6,14 @@ import { environment } from '../../environments/environment'
   providedIn: 'root',
 })
 export class SocketConnectService {
-  private apiBaseUrl = environment.apiBaseUrl
+  private wsBaseUrl = environment.wsBaseUrl
 
   private socket: socketIO.Socket
 
   // constructor() {}
 
   connect(): void {
-    this.socket = socketIO.io(`${this.apiBaseUrl}/dice-map-room`, {
+    this.socket = socketIO.io(this.wsBaseUrl, {
       transports: ['websocket'],
     })
   }
