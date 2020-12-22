@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { WaitingRoomComponent } from './waiting-room.component'
+import { HowToPlayComponent } from './how-to-play.component'
 
-describe('WaitingRoomComponent', () => {
-  let component: WaitingRoomComponent
-  let fixture: ComponentFixture<WaitingRoomComponent>
+describe('HowToPlayComponent', () => {
+  let component: HowToPlayComponent
+  let fixture: ComponentFixture<HowToPlayComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [WaitingRoomComponent],
+      declarations: [HowToPlayComponent],
     }).compileComponents()
   })
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WaitingRoomComponent)
+    fixture = TestBed.createComponent(HowToPlayComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })
