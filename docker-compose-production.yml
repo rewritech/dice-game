@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  proxy:
+    image: nginx:latest
+    container_name: dice-map-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./proxy/proxy.conf:/etc/nginx/nginx.conf
+    restart: "unless-stopped"
+  client:
+    build:
+      context: ./client
+      dockerfile: client-production.dockerfile
+    container_name: dice-map-client
+    expose:
+      - "8720"
+    volumes:
+      - /client/node_modules
+    restart: "unless-stopped"
+  api:
+    build:
+      context: ./api
+      dockerfile: api-production.dockerfile
+    container_name: dice-map-api
+    expose:
+      - "7145"
+      - "5417"
+    volumes:
+      - /api/node_modules
+    depends_on:
+      - db
+    restart: "unless-stopped"
+  db:
+    image: mongo
+    container_name: dice-map-db
+    ports:
+      - "27017:27017"
