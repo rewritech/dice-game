@@ -14,9 +14,9 @@ export class DiceComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log('this.isDisable:'+this.isDisabled )
+    // console.log('this.isDisable:'+this.isDisabled )
     this.disabled = this.isDisabled ? 'disabled' : ''
-    console.log('this.disable:'+this.disabled )
+    // console.log('this.disable:'+this.disabled )
 
   }
 }
