@@ -28,7 +28,7 @@ export class PlayerCreateModalComponent implements OnInit {
     this.player = {
       id: 0,
       roomId: this.room.id,
-      name: '',
+      name: ''
     }
   }
 
