@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DiceAllComponent } from './dice-all.component';
+import { DiceComponent } from './dice.component';
 
-describe('DiceAllComponent', () => {
-  let component: DiceAllComponent;
-  let fixture: ComponentFixture<DiceAllComponent>;
+describe('DiceComponent', () => {
+  let component: DiceComponent;
+  let fixture: ComponentFixture<DiceComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DiceAllComponent ]
+      declarations: [ DiceComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DiceAllComponent);
+    fixture = TestBed.createComponent(DiceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

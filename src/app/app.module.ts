@@ -13,10 +13,8 @@ import { RoomsComponent } from './views/rooms/rooms.component'
 import { HowToPlayComponent } from './views/how-to-play/how-to-play.component'
 import { WaitingRoomComponent } from './views/waiting-room/waiting-room.component'
 import { PlayerCreateModalComponent } from './components/player-create-modal/player-create-modal.component'
-import { DashboardButtonComponent } from './components/dashboard-button/dashboard-button.component';
-import { PlayerComponent } from './components/player/player.component';
-import { MessageComponent } from './components/message/message.component';
-import { DiceAllComponent } from './components/dice-all/dice-all.component'
+import { DashboardButtonComponent } from './components/dashboard-button/dashboard-button.component'
+import { DiceComponent } from './components/dice/dice.component'
 
 @NgModule({
   declarations: [
@@ -29,9 +27,7 @@ import { DiceAllComponent } from './components/dice-all/dice-all.component'
     WaitingRoomComponent,
     PlayerCreateModalComponent,
     DashboardButtonComponent,
-    PlayerComponent,
-    MessageComponent,
-    DiceAllComponent,
+    DiceComponent,
   ],
   imports: [
     BrowserModule,

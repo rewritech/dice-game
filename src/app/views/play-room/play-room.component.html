@@ -3,14 +3,13 @@
 
   <button class="btn btn-secondary mb-2" routerLink="/rooms">LEAVE ROOM</button>
   <button class="btn btn-info ml-2 mb-2" (click)="shuffle()">SHUFFLE</button>
-  <button class="btn btn-info ml-2 mb-2" (click)="gameStart()">START</button>
 
   <div class="row">
     <div class="col">
       <div class="d-flex flex-column p-1 bg-dark fit-contents">
         <div class="d-flex" *ngFor="let dices of room.map">
           <div *ngFor="let dice of dices">
-            <app-dice-all [dice] = "dice" [isDisabled] = "true"></app-dice-all>
+            <app-dice [dice] = "dice"></app-dice>
           </div>
         </div>
       </div>

@@ -131,5 +131,8 @@
       }
     }
   },
-  "defaultProject": "dice-map"
+  "defaultProject": "dice-map",
+  "cli": {
+    "analytics": false
+  }
 }

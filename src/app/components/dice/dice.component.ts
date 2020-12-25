@@ -1,11 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core'
 
 @Component({
-  selector: 'app-dice-all',
-  templateUrl: './dice-all.component.html',
-  styleUrls: ['./dice-all.component.scss']
+  selector: 'app-dice',
+  templateUrl: './dice.component.html',
+  styleUrls: ['./dice.component.scss']
 })
-export class DiceAllComponent implements OnInit {
+export class DiceComponent implements OnInit {
   @Input() dice: number
   @Input() isDisabled: boolean
 
