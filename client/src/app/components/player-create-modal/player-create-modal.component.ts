@@ -26,8 +26,7 @@ export class PlayerCreateModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.player = {
-      id: 0,
-      roomId: this.room.id,
+      _roomId: this.room._id,
       name: ''
     }
   }
@@ -38,8 +37,8 @@ export class PlayerCreateModalComponent implements OnInit {
 
   onSubmit(form: Player): void {
     this.playerService.createPlayer(form).subscribe((res) => {
-      this.router.navigate([`/rooms/${res.roomId}`], {
-        queryParams: { pid: res.id },
+      this.router.navigate([`/rooms/${res._roomId}`], {
+        queryParams: { pid: res._id },
       })
     })
   }

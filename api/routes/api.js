@@ -1,64 +1,86 @@
 const express = require('express');
 const router = express.Router();
-const rooms = require('../room').rooms;
-
-function getLastRoomId(targetRooms) {
-  return targetRooms.length > 0 ? targetRooms[targetRooms.length - 1].id : 0;
-}
+const Room = require('../models/Room');
+const Player = require('../models/Player');
 
 /**
  * GET rooms
  * 전체 방 리스트 가져오기
  */
-router.get('/rooms', (req, res) => {
+router.get('/rooms', async (req, res) => {
   console.log(`[${new Date()}]: GET rooms`);
-  res.send(JSON.stringify(rooms));
+  const rooms = await Room.find({}, { map: 0 });
+  res.json(rooms);
 });
 
 /**
- * POST room
+ * POST rooms
  * 새로운 방 만들기
  */
-router.post('/rooms', (req, res) => {
+router.post('/rooms', async (req, res) => {
   console.log(`[${new Date()}]: POST rooms`);
-  const newRoom = req.body;
-  newRoom.id = getLastRoomId(rooms) + 1;
-  rooms.push(newRoom);
-  res.send(JSON.stringify(newRoom));
+  const roomCount = await Room.count();
+  const newRoom = new Room({_id: roomCount + 1, ...req.body});
+  const savedRoom = await newRoom.save();
+  res.json(savedRoom);
 });
 
 /**
- * GET room/:id
- * 방 정보 가져오기
+ * PUT rooms
+ * 방에 플레이어 추가하기
  */
-router.get('/rooms/:id', (req, res) => {
-  console.log(`[${new Date()}]: GET rooms/${req.params.id}`);
-  const targetRoom = rooms.find(
-    (room) => Number(room.id) === Number(req.params.id)
-  );
-  res.send(JSON.stringify(targetRoom));
-});
-
-/**
- * POST rooms/:roomId/players
- * 특정 방의 플레이어 추가하기
- */
-router.post('/players', (req, res) => {
-  const newPlayer = req.body;
-
-  console.log(`[${new Date()}]: POST room ${newPlayer.roomId} players`);
-  const targetRoom = rooms.find(
-    (room) => Number(room.id) === Number(newPlayer.roomId)
-  );
-  const index = rooms.indexOf(targetRoom);
-
-  newPlayer.id = new Date().getTime();
-
-  if (index > -1) {
-    rooms[index].players.push(newPlayer);
+router.put('/rooms/:id', async (req, res) => {
+  console.log(`[${new Date()}]: PUT add player to room ${req.params.id}`);
+  // DB room에 유저 추가(중복체크)
+  const roomInPlayer = await Room.find({ _id: req.params.id, players: { $in: req.body._id } });
+  if (roomInPlayer) {
+    await Room.update({ _id: req.params.id }, { $push: { players: req.body._id } });
   }
 
-  res.send(JSON.stringify(newPlayer));
+  const room = await Room.findById(req.params.id).populate('players');
+  res.json(room);
+});
+
+/**
+ * GET rooms/:id
+ * 방 정보 가져오기
+ */
+router.get('/rooms/:id', async (req, res) => {
+  console.log(`[${new Date()}]: GET rooms/${req.params.id}`);
+  const room = await Room.findById(req.params.id).populate('players');
+  res.json(room);
+});
+
+/**
+ * DELETE rooms/:id
+ * 방 삭제
+ */
+router.delete('/rooms/:id', async (req, res) => {
+  console.log(`[${new Date()}]: DELETE rooms/${req.params.id}`);
+  await Room.remove({ _id: req.params.id });
+  res.json(`deleted room ${req.params.id}`);
+});
+
+/**
+ * GET player/:id
+ * 특정 플레이어 정보 가져오기
+ */
+router.get('/players/:id', async (req, res) => {
+  console.log(`[${new Date()}]: GET player/${req.params.id}`);
+  const player = await Player.findById(req.params.id);
+  res.json(player);
+});
+
+/**
+ * POST players
+ * 플레이어 추가하기
+ */
+router.post('/players', async (req, res) => {
+  console.log(`[${new Date()}]: POST room ${req.body._roomId} players`);
+
+  const newPlayer = new Player(req.body);
+  await newPlayer.save();
+  res.json(newPlayer);
 });
 
 module.exports = router;

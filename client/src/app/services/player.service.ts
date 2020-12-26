@@ -19,6 +19,12 @@ export class PlayerService {
       .pipe(catchError(this.handleError<Player>(`postPlayer`)))
   }
 
+  getPlayer(pid: string): Observable<Player> {
+    return this.http
+      .get<Player>(`${this.apiBaseUrl}/players/${pid}`)
+      .pipe(catchError(this.handleError<Player>(`getPlayer`)))
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error)

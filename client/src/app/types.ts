@@ -1,11 +1,11 @@
 export type Player = {
-  id: number
-  roomId: number
+  _id?: number
+  _roomId: number
   name: string
 }
 
 export type Room = {
-  id?: number
+  _id?: number
   title: string
   players?: Player[]
   playerLimit: number

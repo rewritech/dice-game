@@ -1,8 +1,9 @@
+/* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable, of } from 'rxjs'
 import { catchError } from 'rxjs/operators'
-import { Room } from '../types'
+import { Player, Room } from '../types'
 import { environment } from '../../environments/environment'
 
 @Injectable({
@@ -29,6 +30,18 @@ export class RoomService {
     return this.http
       .post<Room>(`${this.apiBaseUrl}/rooms`, room)
       .pipe(catchError(this.handleError<Room>(`postRoom`)))
+  }
+
+  addPlayerToRoom(player: Player): Observable<Room> {
+    return this.http
+      .put<Room>(`${this.apiBaseUrl}/rooms/${player._roomId}`, player)
+      .pipe(catchError(this.handleError<Room>(`add player to room `)))
+  }
+
+  deleteRoom(room: Room): Observable<Room> {
+    return this.http
+      .delete<Room>(`${this.apiBaseUrl}/rooms/${room._id}`)
+      .pipe(catchError(this.handleError<Room>(`deleteRoom`)))
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
