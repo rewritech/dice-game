@@ -1,13 +1,13 @@
 ## For Production
 ```bash
-$ docker-compose -f docker-compose-production.yml up -d --build
+$ ./docker-up.sh prod
+$ ./docker-down.sh prod
 ```
 
 ## For Development
 ```bash
-$ docker-compose up --build # 빌드 + 서버기동, --build옵션은 처음 한번만
-$ docker-compose down # docker 종료
-$ docker-compose exec client /bin/bash # 내부접속(client)
+$ ./docker-up.sh dev
+$ ./docker-down.sh dev
 ```
 
 ## Production과 Development환경의 차이점

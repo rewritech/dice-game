@@ -1,3 +1,4 @@
+require('dotenv').config();
 const app = require('express')();
 const bodyParser = require('body-parser');
 const http = require('http');
@@ -12,6 +13,8 @@ const Room = require('./models/Room');
 const Player = require('./models/Player');
 
 // ==================== DB ====================
+const username = process.env.MONGO_INITDB_ROOT_USERNAME
+const pwd = process.env.MONGO_INITDB_ROOT_PASSWORD
 
 const options = {
 	useUnifiedTopology : true,
@@ -19,7 +22,7 @@ const options = {
   useFindAndModify: false
 }
 
-mongoose.connect('mongodb://db/dice_db', options);
+mongoose.connect(`mongodb://${username}:${pwd}@db/dice_db?authSource=admin`, options);
 
 const db = mongoose.connection;
 

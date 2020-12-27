@@ -9,9 +9,8 @@ services:
       - "4200:4200"
     volumes:
       - ./client:/client
-      - ./client/node_modules:/client/node_modules
+      - /client/node_modules
     restart: "unless-stopped"
-    tty: true
   api:
     build:
       context: ./api
@@ -21,12 +20,21 @@ services:
       - "3001:3001"
     volumes:
       - ./api:/api
-      - ./api/node_modules:/api/node_modules
+      - /api/node_modules
     restart: "unless-stopped"
     depends_on:
       - db
+    links:
+      - db
   db:
-    image: mongo
+    image: mongo:4.4.2
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
     container_name: dice-map-db-dev
     ports:
       - "27017:27017"
+    volumes:
+      - /data/db:/data/db
