@@ -9,7 +9,7 @@ const Player = require('../models/Player');
  */
 router.get('/rooms', async (req, res) => {
   console.log(`[${new Date()}]: GET rooms`);
-  const rooms = await Room.find({}, { map: 0 });
+  const rooms = await Room.find({ deleted: false }, { map: 0 });
   res.json(rooms);
 });
 
@@ -19,8 +19,8 @@ router.get('/rooms', async (req, res) => {
  */
 router.post('/rooms', async (req, res) => {
   console.log(`[${new Date()}]: POST rooms`);
-  const roomCount = await Room.count();
-  const newRoom = new Room({_id: roomCount + 1, ...req.body});
+  const roomCount = await Room.countDocuments();
+  const newRoom = new Room({ _id: roomCount + 1, deleted: false, ...req.body });
   const savedRoom = await newRoom.save();
   res.json(savedRoom);
 });
@@ -32,9 +32,9 @@ router.post('/rooms', async (req, res) => {
 router.put('/rooms/:id', async (req, res) => {
   console.log(`[${new Date()}]: PUT add player to room ${req.params.id}`);
   // DB room에 유저 추가(중복체크)
-  const roomInPlayer = await Room.find({ _id: req.params.id, players: { $in: req.body._id } });
-  if (roomInPlayer) {
-    await Room.update({ _id: req.params.id }, { $push: { players: req.body._id } });
+  const roomInPlayer = await Room.findOne({ _id: req.params.id, deleted: false, players: { $in: req.body._id } });
+  if (!roomInPlayer) {
+    await Room.updateOne({ _id: req.params.id }, { $push: { players: req.body._id } });
   }
 
   const room = await Room.findById(req.params.id).populate('players');
@@ -47,7 +47,7 @@ router.put('/rooms/:id', async (req, res) => {
  */
 router.get('/rooms/:id', async (req, res) => {
   console.log(`[${new Date()}]: GET rooms/${req.params.id}`);
-  const room = await Room.findById(req.params.id).populate('players');
+  const room = await Room.findOne({ _id: req.params.id, deleted: false }).populate('players');
   res.json(room);
 });
 
@@ -57,7 +57,7 @@ router.get('/rooms/:id', async (req, res) => {
  */
 router.delete('/rooms/:id', async (req, res) => {
   console.log(`[${new Date()}]: DELETE rooms/${req.params.id}`);
-  await Room.remove({ _id: req.params.id });
+  await Room.updateOne({ _id: req.params.id }, { $set: { deleted: true } });
   res.json(`deleted room ${req.params.id}`);
 });
 

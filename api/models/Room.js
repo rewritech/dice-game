@@ -7,6 +7,7 @@ const RoomSchema = mongoose.Schema({
   players: [{ type: Schema.Types.ObjectId, ref: 'Player' }],
   playerLimit: Number,
   map: [[]],
+  deleted: Boolean,
 });
 
 module.exports = mongoose.model('Room', RoomSchema);

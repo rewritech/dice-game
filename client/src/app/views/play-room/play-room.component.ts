@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { Player, Room } from '../../types'
 import { SocketConnectService } from '../../services/socket-connect.service'
 import { DiceMapService } from '../../services/dice-map.service'
@@ -22,6 +22,7 @@ export class PlayRoomComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private diceMapService: DiceMapService,
     private roomService: RoomService,
     private playerService: PlayerService,
@@ -31,6 +32,11 @@ export class PlayRoomComponent implements OnInit {
   ngOnInit(): void {
     // websocket 연결
     this.connectSocket(this.roomId)
+    this.roomService.getRoom(this.roomId).subscribe((room) => {
+      if (!room) {
+        this.router.navigate([`/rooms`])
+      }
+    })
 
     this.playerService.getPlayer(this.playerId).subscribe((player) => {
       this.player = player
@@ -56,7 +62,6 @@ export class PlayRoomComponent implements OnInit {
 
   leave(): void {
     this.socket.emit<Player>('leave', this.player)
-    // this.router.navigate(['/rooms'])
   }
 
   private connectSocket(roomId: number): void {
