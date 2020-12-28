@@ -35,6 +35,7 @@ router.put('/rooms/:id', async (req, res) => {
   const roomInPlayer = await Room.findOne({ _id: req.params.id, deleted: false, players: { $in: req.body._id } });
   if (!roomInPlayer) {
     await Room.updateOne({ _id: req.params.id }, { $push: { players: req.body._id } });
+    await Player.updateOne({ _id: req.body._id }, { $set: { _roomId: req.params.id } });
   }
 
   const room = await Room.findById(req.params.id).populate('players');
@@ -76,11 +77,32 @@ router.get('/players/:id', async (req, res) => {
  * 플레이어 추가하기
  */
 router.post('/players', async (req, res) => {
-  console.log(`[${new Date()}]: POST room ${req.body._roomId} players`);
+  console.log(`[${new Date()}]: POST players ${req.body._roomId}`);
 
   const newPlayer = new Player(req.body);
   await newPlayer.save();
   res.json(newPlayer);
+});
+
+/**
+ * PUT players
+ * 플레이어 이름 변경하기
+ */
+router.put('/players/:id', async (req, res) => {
+  console.log(`[${new Date()}]: PUT players ${req.body._roomId}`);
+  await Player.updateOne({ _id: req.params.id }, { $set: { name: req.body.name } });
+  const player = await Player.findOne({ _id: req.params.id })
+  res.json(player);
+});
+
+/**
+ * DELETE players/:id
+ * 플레이어 삭제
+ */
+router.delete('/players/:id', async (req, res) => {
+  console.log(`[${new Date()}]: DELETE players/${req.params.id}`);
+  await Player.remove({ _id: req.params.id });
+  res.json(`deleted players ${req.params.id}`);
 });
 
 module.exports = router;

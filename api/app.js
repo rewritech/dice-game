@@ -87,6 +87,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
       console.log(player);
       // DB 업데이트
       await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id } });
+      await Player.updateOne({ _id: player._id }, { $set: { _roomId: 0 } });
       // player가 없으면 삭제한다.
       const room = await Room.findOne({ _id: player._roomId, deleted: false }, { map: 0 })
       if (room.players.length < 1) {

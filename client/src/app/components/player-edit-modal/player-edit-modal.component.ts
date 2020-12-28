@@ -5,14 +5,14 @@ import { PlayerService } from '../../services/player.service'
 import { Player, Room } from '../../types'
 
 @Component({
-  selector: 'app-player-create-modal',
-  templateUrl: './player-create-modal.component.html',
-  styleUrls: ['./player-create-modal.component.scss'],
+  selector: 'app-player-edit-modal',
+  templateUrl: './player-edit-modal.component.html',
+  styleUrls: ['./player-edit-modal.component.scss'],
 })
-export class PlayerCreateModalComponent implements OnInit {
+export class PlayerEditModalComponent implements OnInit {
   player: Player
 
-  @Input() room: Room
+  private playerId = sessionStorage.getItem('pId')
 
   constructor(
     private config: NgbModalConfig,
@@ -20,15 +20,14 @@ export class PlayerCreateModalComponent implements OnInit {
     private router: Router,
     private playerService: PlayerService
   ) {
-    this.config.backdrop = 'static'
-    this.config.keyboard = false
+    // this.config.backdrop = 'static'
+    // this.config.keyboard = false
   }
 
   ngOnInit(): void {
-    this.player = {
-      _roomId: this.room._id,
-      name: ''
-    }
+    this.playerService.getPlayer(this.playerId).subscribe((player) => {
+      this.player = player
+    })
   }
 
   open(content: any): void {
@@ -36,10 +35,8 @@ export class PlayerCreateModalComponent implements OnInit {
   }
 
   onSubmit(form: Player): void {
-    this.playerService.createPlayer(form).subscribe((res) => {
-      this.router.navigate([`/rooms/${res._roomId}`], {
-        queryParams: { pid: res._id },
-      })
+    this.playerService.editPlayer(form).subscribe(() => {
+      window.location.reload()
     })
   }
 }

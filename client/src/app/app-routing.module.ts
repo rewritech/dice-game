@@ -6,9 +6,11 @@ import { NewRoomComponent } from './views/new-room/new-room.component'
 import { PlayRoomComponent } from './views/play-room/play-room.component'
 import { RoomsComponent } from './views/rooms/rooms.component'
 import { WaitingRoomComponent } from './views/waiting-room/waiting-room.component'
+import { LoginComponent } from './views/login/login.component'
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
+  { path: 'login', component: LoginComponent },
   { path: 'rooms/new', component: NewRoomComponent },
   { path: 'rooms/:id', component: PlayRoomComponent },
   { path: 'waiting/rooms/:id', component: WaitingRoomComponent },

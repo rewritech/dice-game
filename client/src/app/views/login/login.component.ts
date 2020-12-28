@@ -1,0 +1,29 @@
+import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
+import { PlayerService } from '../../services/player.service'
+import { Player } from '../../types'
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
+})
+export class LoginComponent implements OnInit {
+  player: Player
+
+  constructor(private router: Router, private playerService: PlayerService) {}
+
+  ngOnInit(): void {
+    this.player = {
+      _roomId: 0,
+      name: '',
+    }
+  }
+
+  onSubmit(form: Player): void {
+    this.playerService.createPlayer(form).subscribe((res) => {
+      sessionStorage.setItem('pId', res._id)
+      this.router.navigate(['/'])
+    })
+  }
+}

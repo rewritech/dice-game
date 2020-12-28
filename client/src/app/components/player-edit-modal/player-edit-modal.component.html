@@ -2,23 +2,30 @@
   <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Player</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')" tabindex="-1">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-body">
+      <input type="hidden" name="_id" [ngModel]="player._id">
       <input type="hidden" name="_roomId" [ngModel]="player._roomId">
       <div class="form-group">
-        <label for="forPlayerName">플레이어 이름</label>
+        <label for="forPlayerName">닉네임</label>
         <div class="input-group">
           <input type="text" class="form-control" id="forPlayerName" name="name" [ngModel]="player.name">
         </div>
       </div>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-outline-dark" (click)="modal.close()">Save</button>
+      <button type="submit" class="btn btn-outline-dark" (click)="modal.close()">등록</button>
     </div>
   </form>
 </ng-template>
 
-<button class="btn btn-outline-dark btn-lg btn-block mb-1" (click)="open(content)">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</button>
+<div *ngIf="player">
+  <div class="row d-flex align-items-center justify-content-center h-100">
+    <button class="btn btn-danger btn-lg w-50 d-block mb-2" (click)="open(content)">
+      <h1>닉네임({{player.name}}) 변경</h1>
+    </button>
+  </div>
+</div>

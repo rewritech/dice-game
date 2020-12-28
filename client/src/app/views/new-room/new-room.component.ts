@@ -31,8 +31,8 @@ export class NewRoomComponent implements OnInit {
   onSubmit(form: Room): void {
     this.room.title = form.title
     this.room.playerLimit = form.playerLimit
-    this.roomService.createRoom(this.room).subscribe(() => {
-      this.router.navigate([`/rooms`])
+    this.roomService.createRoom(this.room).subscribe((res) => {
+      this.router.navigate([`/rooms/${res._id}`])
     })
   }
 }

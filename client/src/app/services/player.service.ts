@@ -19,6 +19,18 @@ export class PlayerService {
       .pipe(catchError(this.handleError<Player>(`postPlayer`)))
   }
 
+  editPlayer(player: Player): Observable<Player> {
+    return this.http
+      .put<Player>(`${this.apiBaseUrl}/players/${player._id}`, player)
+      .pipe(catchError(this.handleError<Player>(`putPlayer`)))
+  }
+
+  deletePlayer(pId: string): Observable<Player> {
+    return this.http
+      .delete<Player>(`${this.apiBaseUrl}/players/${pId}`)
+      .pipe(catchError(this.handleError<Player>(`deletePlayer`)))
+  }
+
   getPlayer(pid: string): Observable<Player> {
     return this.http
       .get<Player>(`${this.apiBaseUrl}/players/${pid}`)

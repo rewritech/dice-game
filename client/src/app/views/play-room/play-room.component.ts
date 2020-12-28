@@ -14,7 +14,7 @@ import { PlayerService } from '../../services/player.service'
 export class PlayRoomComponent implements OnInit {
   private roomId = +this.route.snapshot.paramMap.get('id')
 
-  private playerId = this.route.snapshot.queryParamMap.get('pid')
+  private playerId = sessionStorage.getItem('pId')
 
   room: Room
 
@@ -41,11 +41,14 @@ export class PlayRoomComponent implements OnInit {
     this.playerService.getPlayer(this.playerId).subscribe((player) => {
       this.player = player
       // DB에 player추가
-      this.roomService.addPlayerToRoom(this.player).subscribe((room) => {
-        this.room = room
-        // websocket room에 join
-        this.socket.emit<Player>('join-room', this.player)
-      })
+      this.roomService
+        .addPlayerToRoom(this.roomId, this.player)
+        .subscribe((room) => {
+          this.room = room
+          this.player._roomId = this.room._id
+          // websocket room에 join
+          this.socket.emit<Player>('join-room', this.player)
+        })
     })
   }
 

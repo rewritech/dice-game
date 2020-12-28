@@ -1,5 +1,5 @@
 export type Player = {
-  _id?: number
+  _id?: string
   _roomId: number
   name: string
 }

@@ -1,0 +1,12 @@
+<div class="ml-auto mr-auto mt-5 p-2 border border-primary rounded w-50">
+  <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+    <input type="hidden" name="_roomId" [ngModel]="player._roomId">
+    <div class="form-group">
+      <label for="forPlayerName">닉네임</label>
+      <div class="input-group">
+        <input type="text" class="form-control" id="forPlayerName" name="name" [ngModel]="player.name">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">등록</button>
+  </form>
+</div>

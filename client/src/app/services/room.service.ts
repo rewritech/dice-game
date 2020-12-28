@@ -32,9 +32,9 @@ export class RoomService {
       .pipe(catchError(this.handleError<Room>(`postRoom`)))
   }
 
-  addPlayerToRoom(player: Player): Observable<Room> {
+  addPlayerToRoom(roomId: number, player: Player): Observable<Room> {
     return this.http
-      .put<Room>(`${this.apiBaseUrl}/rooms/${player._roomId}`, player)
+      .put<Room>(`${this.apiBaseUrl}/rooms/${roomId}`, player)
       .pipe(catchError(this.handleError<Room>(`add player to room `)))
   }
 
