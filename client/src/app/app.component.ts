@@ -16,7 +16,7 @@ export class AppComponent {
     if (this.playerId) {
       this.playerService.getPlayer(this.playerId).subscribe((player) => {
         if (!player) {
-          sessionStorage.clear()
+          sessionStorage.removeItem('pId')
           this.router.navigate(['/login'])
         }
       })

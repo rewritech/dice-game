@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
-import { PlayerService } from '../../services/player.service'
 
 @Component({
   selector: 'app-dashboard',
@@ -8,16 +6,7 @@ import { PlayerService } from '../../services/player.service'
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  private playerId = sessionStorage.getItem('pId')
-
-  constructor(private playerService: PlayerService, private router: Router) {}
+  constructor() {}
 
   ngOnInit(): void {}
-
-  logout(): void {
-    this.playerService.deletePlayer(this.playerId).subscribe(() => {
-      sessionStorage.removeItem('pId')
-      this.router.navigate(['/login'])
-    })
-  }
 }

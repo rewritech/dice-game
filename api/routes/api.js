@@ -68,7 +68,7 @@ router.delete('/rooms/:id', async (req, res) => {
  */
 router.get('/players/:id', async (req, res) => {
   console.log(`[${new Date()}]: GET player/${req.params.id}`);
-  const player = await Player.findById(req.params.id);
+  const player = await Player.findOne({ _id: req.params.id });
   res.json(player);
 });
 

@@ -1,15 +1,6 @@
+<app-user-info></app-user-info>
 <div class="row d-flex align-items-center justify-content-center h-100 m-5">
   <img class="logo-size" src="../assets/logo.png" alt="">
-</div>
-<div class="d-flex align-items-center justify-content-center h-100">
-  <div class="">
-    <app-player-edit-modal></app-player-edit-modal>
-  </div>
-  <div class="">
-    <button class="btn btn-danger mb-2 ml-2" (click)="logout()">
-      <h4>LOGOUT</h4>
-    </button>
-  </div>
 </div>
 <app-dashboard-button [buttonTitle]="'NEW ROOM'" [linkPath]="'/rooms/new'"></app-dashboard-button>
 <app-dashboard-button [buttonTitle]="'ROOMS'" [linkPath]="'/rooms'"></app-dashboard-button>

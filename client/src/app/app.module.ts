@@ -15,7 +15,8 @@ import { WaitingRoomComponent } from './views/waiting-room/waiting-room.componen
 import { PlayerEditModalComponent } from './components/player-edit-modal/player-edit-modal.component'
 import { DashboardButtonComponent } from './components/dashboard-button/dashboard-button.component'
 import { DiceComponent } from './components/dice/dice.component'
-import { LoginComponent } from './views/login/login.component'
+import { LoginComponent } from './views/login/login.component';
+import { UserInfoComponent } from './components/user-info/user-info.component'
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { LoginComponent } from './views/login/login.component'
     DashboardButtonComponent,
     DiceComponent,
     LoginComponent,
+    UserInfoComponent,
   ],
   imports: [
     BrowserModule,
