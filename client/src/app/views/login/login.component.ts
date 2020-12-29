@@ -11,7 +11,13 @@ import { Player } from '../../types'
 export class LoginComponent implements OnInit {
   player: Player
 
-  constructor(private router: Router, private playerService: PlayerService) {}
+  private playerId = sessionStorage.getItem('pId')
+
+  constructor(private router: Router, private playerService: PlayerService) {
+    if (this.playerId) {
+      this.router.navigate(['/'])
+    }
+  }
 
   ngOnInit(): void {
     this.player = {

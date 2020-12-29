@@ -101,7 +101,7 @@ router.put('/players/:id', async (req, res) => {
  */
 router.delete('/players/:id', async (req, res) => {
   console.log(`[${new Date()}]: DELETE players/${req.params.id}`);
-  await Player.remove({ _id: req.params.id });
+  await Player.deleteOne({ _id: req.params.id });
   res.json(`deleted players ${req.params.id}`);
 });
 
