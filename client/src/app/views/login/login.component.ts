@@ -11,7 +11,7 @@ import { Player } from '../../types'
 export class LoginComponent implements OnInit {
   player: Player
 
-  private playerId = sessionStorage.getItem('pId')
+  private playerId = localStorage.getItem('pId')
 
   constructor(private router: Router, private playerService: PlayerService) {
     if (this.playerId) {
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit(form: Player): void {
     this.playerService.createPlayer(form).subscribe((res) => {
-      sessionStorage.setItem('pId', res._id)
+      localStorage.setItem('pId', res._id)
       this.router.navigate(['/'])
     })
   }

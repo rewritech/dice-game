@@ -14,7 +14,7 @@ import { PlayerService } from '../../services/player.service'
 export class PlayRoomComponent implements OnInit {
   private roomId = +this.route.snapshot.paramMap.get('id')
 
-  private playerId = sessionStorage.getItem('pId')
+  private playerId = localStorage.getItem('pId')
 
   room: Room
 
@@ -71,6 +71,7 @@ export class PlayRoomComponent implements OnInit {
     this.socket.connect()
     // websocket room에서 데이터 전송 받기 위한 연결
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
+      if (!newRoom) this.router.navigate(['/rooms'])
       this.room = newRoom
     })
   }

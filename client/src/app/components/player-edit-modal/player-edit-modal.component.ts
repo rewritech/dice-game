@@ -12,7 +12,7 @@ import { Player, Room } from '../../types'
 export class PlayerEditModalComponent implements OnInit {
   player: Player
 
-  private playerId = sessionStorage.getItem('pId')
+  private playerId = localStorage.getItem('pId')
 
   constructor(
     private config: NgbModalConfig,

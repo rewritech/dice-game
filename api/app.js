@@ -49,7 +49,7 @@ socketServer.listen(socketPort, () => {
 
 // ==================== socket connect ====================
 async function broadcastRoom (socket, roomId) {
-  const room = await Room.findById(roomId).populate('players');
+  const room = await Room.findOne({ _id: roomId, deleted: false }).populate('players');
   socket.in(`room-${roomId}`).emit(`changeRoomInfo-${roomId}`, room);
 }
 
@@ -87,16 +87,20 @@ io.of('/dice-map-room').on('connection', (socket) => {
       console.log(player);
       // DB 업데이트
       await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id } });
-      await Player.updateOne({ _id: player._id }, { $set: { _roomId: 0 } });
       // player가 없으면 삭제한다.
       const room = await Room.findOne({ _id: player._roomId, deleted: false }, { map: 0 })
-      if (room.players.length < 1) {
+      if (room && room.players.length < 1) {
         await Room.updateOne({ _id: player._roomId }, { $set: { deleted: true } });
       }
-      // Socket room 갱신
-      broadcastRoom(socket, player._roomId);
-      // 웹소켓 룸에서 나옴
-      socket.leave(`room-${player._roomId}`);
+
+      await Player.updateOne({ _id: player._id }, { $set: { _roomId: 0 } });
+
+      if(player._roomId > 0) {
+        // Socket room 갱신
+        broadcastRoom(socket, player._roomId);
+        // 웹소켓 룸에서 나옴
+        socket.leave(`room-${player._roomId}`);
+      }
     } catch (e) {
       console.error(`error: ${e}`);
     } finally {

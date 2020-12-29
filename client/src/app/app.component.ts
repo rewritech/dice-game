@@ -10,13 +10,13 @@ import { PlayerService } from './services/player.service'
 export class AppComponent {
   title = 'DiceMap'
 
-  private playerId = sessionStorage.getItem('pId')
+  private playerId = localStorage.getItem('pId')
 
   constructor(private router: Router, private playerService: PlayerService) {
     if (this.playerId) {
       this.playerService.getPlayer(this.playerId).subscribe((player) => {
         if (!player) {
-          sessionStorage.removeItem('pId')
+          localStorage.removeItem('pId')
           this.router.navigate(['/login'])
         }
       })
