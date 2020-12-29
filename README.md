@@ -1,13 +1,13 @@
 ## For Production
 ```bash
-$ ./docker-up.sh prod
-$ ./docker-down.sh prod
+$ ./docker-prod.sh up
+$ ./docker-prod.sh down
 ```
 
 ## For Development
 ```bash
-$ ./docker-up.sh dev
-$ ./docker-down.sh dev
+$ ./docker-dev.sh up
+$ ./docker-dev.sh down
 ```
 
 ## Production과 Development환경의 차이점
