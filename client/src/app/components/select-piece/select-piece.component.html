@@ -9,18 +9,18 @@
     <div class="col">
       <div class="row">
         <button class="dice-size btn m-2 {{knightActive ? defaultBtnClass : disableBtnClass}}" (click)="selectPiece(position, knight, knightActive)">
-          <h1><fa-icon class="text-white" [icon]="knight"></fa-icon></h1>
+          <h1><fa-icon [icon]="knight"></fa-icon></h1>
         </button>
         <button class="dice-size btn m-2 {{rookActive ? defaultBtnClass : disableBtnClass}}" (click)="selectPiece(position, rook, rookActive)">
-          <h1><fa-icon class="text-white" [icon]="rook"></fa-icon></h1>
+          <h1><fa-icon [icon]="rook"></fa-icon></h1>
         </button>
       </div>
       <div class="row">
         <button class="dice-size btn m-2 {{kingActive ? defaultBtnClass : disableBtnClass}}" (click)="selectPiece(position, king, kingActive)">
-          <h1><fa-icon class="text-white" [icon]="king"></fa-icon></h1>
+          <h1><fa-icon [icon]="king"></fa-icon></h1>
         </button>
         <button class="dice-size btn m-2 {{queenActive ? defaultBtnClass : disableBtnClass}}" (click)="selectPiece(position, queen, queenActive)">
-          <h1><fa-icon class="text-white" [icon]="queen"></fa-icon></h1>
+          <h1><fa-icon [icon]="queen"></fa-icon></h1>
         </button>
       </div>
     </div>
