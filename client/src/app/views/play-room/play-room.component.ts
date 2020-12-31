@@ -20,6 +20,10 @@ export class PlayRoomComponent implements OnInit {
 
   player: Player
 
+  isEnableStartButton: string
+
+  positions = ['left-top', 'right-top', 'left-bottom', 'right-bottom']
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -30,37 +34,47 @@ export class PlayRoomComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // websocket 연결
-    this.connectSocket(this.roomId)
-    this.roomService.getRoom(this.roomId).subscribe((room) => {
-      if (!room) {
+    this.roomService.getRoom(this.roomId).subscribe((getRoom) => {
+      if (this.checkCanJoinRoom(getRoom, this.playerId)) {
+        this.playerService.getPlayer(this.playerId).subscribe((player) => {
+          this.player = player
+          // DB에 player추가
+          this.roomService
+            .addPlayerToRoom(this.roomId, this.player)
+            .subscribe((room) => {
+              this.room = room
+              this.player._roomId = this.room._id
+              // websocket 연결
+              this.connectSocket(this.roomId)
+              // websocket room에 join
+              this.socket.emit<Player>('join-room', this.player)
+              this.isEnableStartButton = this.checkMyTurn() ? '' : 'disabled'
+            })
+        })
+      } else {
+        // 1. roomid가 데이터에 없는 경우
+        // 2. 방에 속하지 않은 플레이어 인데 방에 빈자리가 없는 경우
         this.router.navigate([`/rooms`])
       }
-    })
-
-    this.playerService.getPlayer(this.playerId).subscribe((player) => {
-      this.player = player
-      // DB에 player추가
-      this.roomService
-        .addPlayerToRoom(this.roomId, this.player)
-        .subscribe((room) => {
-          this.room = room
-          this.player._roomId = this.room._id
-          // websocket room에 join
-          this.socket.emit<Player>('join-room', this.player)
-        })
     })
   }
 
   @HostListener('window:beforeunload')
   ngOnDestroy(): void {
-    this.leave()
+    // this.leave()
   }
 
   shuffle(): void {
     this.diceMapService.createNewMap()
     this.room.map = this.diceMapService.getDiceMap()
     this.socket.emit<Room>('shuffle-map', this.room)
+  }
+
+  start(): void {
+    if (this.checkMyTurn()) {
+      this.room.status = 'PLAYING'
+      this.socket.emit<Room>('game-start', this.room)
+    }
   }
 
   leave(): void {
@@ -74,5 +88,20 @@ export class PlayRoomComponent implements OnInit {
       if (!newRoom) this.router.navigate(['/rooms'])
       this.room = newRoom
     })
+  }
+
+  // 1. room이 존재함
+  // 2. 이미 방에 속한 플레이어 인 경우
+  // 3. 방에 빈자리가 있는 경우
+  private checkCanJoinRoom(room: Room, playerId: string): boolean {
+    return (
+      room &&
+      (room.players.filter((p) => p._id === playerId).length === 1 ||
+        room.players.length < room.playerLimit)
+    )
+  }
+
+  private checkMyTurn(): boolean {
+    return this.player._id === this.room.currentPlayer
   }
 }

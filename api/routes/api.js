@@ -9,7 +9,7 @@ const Player = require('../models/Player');
  */
 router.get('/rooms', async (req, res) => {
   console.log(`[${new Date()}]: GET rooms`);
-  const rooms = await Room.find({ deleted: false }, { map: 0 });
+  const rooms = await Room.find({ deleted: false }, { map: 0 }).populate('players');
   res.json(rooms);
 });
 

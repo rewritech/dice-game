@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="row p-3 pr-0">
+    <div class="col m-2 border border-white d-flex p-0" [ngSwitch]="position">
+      <div *ngSwitchCase="'left-top'"     class="rounded-circle bg-white dice-point ml-2    mr-auto mb-auto mt-2"></div>
+      <div *ngSwitchCase="'right-top'"    class="rounded-circle bg-white dice-point ml-auto mr-2    mb-auto mt-2"></div>
+      <div *ngSwitchCase="'left-bottom'"  class="rounded-circle bg-white dice-point ml-2    mr-auto mb-2    mt-auto"></div>
+      <div *ngSwitchCase="'right-bottom'" class="rounded-circle bg-white dice-point ml-auto mr-2    mb-2    mt-auto"></div>
+    </div>
+    <div class="col">
+      <div class="row">
+        <button class="dice-size btn m-2 {{knightActive ? defaultBtnClass : disableBtnClass}}" (click)="selectPiece(position, knight, knightActive)">
+          <h1><fa-icon class="text-white" [icon]="knight"></fa-icon></h1>
+        </button>
+        <button class="dice-size btn m-2 {{rookActive ? defaultBtnClass : disableBtnClass}}" (click)="selectPiece(position, rook, rookActive)">
+          <h1><fa-icon class="text-white" [icon]="rook"></fa-icon></h1>
+        </button>
+      </div>
+      <div class="row">
+        <button class="dice-size btn m-2 {{kingActive ? defaultBtnClass : disableBtnClass}}" (click)="selectPiece(position, king, kingActive)">
+          <h1><fa-icon class="text-white" [icon]="king"></fa-icon></h1>
+        </button>
+        <button class="dice-size btn m-2 {{queenActive ? defaultBtnClass : disableBtnClass}}" (click)="selectPiece(position, queen, queenActive)">
+          <h1><fa-icon class="text-white" [icon]="queen"></fa-icon></h1>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

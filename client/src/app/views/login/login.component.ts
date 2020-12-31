@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { PlayerService } from '../../services/player.service'
 import { Player } from '../../types'
 
@@ -23,6 +24,10 @@ export class LoginComponent implements OnInit {
     this.player = {
       _roomId: 0,
       name: '',
+      coordinates: [0, 0],
+      piece: faTimes,
+      cards: [],
+      life: 3,
     }
   }
 

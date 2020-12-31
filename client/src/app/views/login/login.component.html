@@ -1,12 +1,17 @@
-<div class="ml-auto mr-auto mt-5 p-2 border border-primary rounded w-50">
-  <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
-    <input type="hidden" name="_roomId" [ngModel]="player._roomId">
-    <div class="form-group">
-      <label for="forPlayerName">닉네임</label>
-      <div class="input-group">
-        <input type="text" class="form-control" id="forPlayerName" name="name" [ngModel]="player.name">
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary">등록</button>
-  </form>
+<div class="mt-5 d-flex justify-content-center">
+  <h2>다이스맵 로그인</h2>
 </div>
+<form class="ml-auto mr-auto mt-5 p-2 border border-primary rounded w-50" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+  <input type="hidden" name="_roomId" [ngModel]="player._roomId">
+  <input type="hidden" name="coordinates" [ngModel]="player.coordinates">
+  <input type="hidden" name="piece" [ngModel]="player.piece">
+  <input type="hidden" name="cards" [ngModel]="player.cards">
+  <input type="hidden" name="life" [ngModel]="player.life">
+  <div class="form-group">
+    <label for="forPlayerName">닉네임</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="forPlayerName" name="name" [ngModel]="player.name">
+      <button type="submit" class="btn btn-primary ml-2">등록</button>
+    </div>
+  </div>
+</form>

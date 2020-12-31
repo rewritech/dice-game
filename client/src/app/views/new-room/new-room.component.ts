@@ -12,6 +12,8 @@ import { RoomService } from '../../services/room.service'
 export class NewRoomComponent implements OnInit {
   room: Room
 
+  private playerId = localStorage.getItem('pId')
+
   constructor(
     private router: Router,
     private roomService: RoomService,
@@ -25,6 +27,12 @@ export class NewRoomComponent implements OnInit {
       players: [],
       playerLimit: 2,
       map: this.diceMapService.getDiceMap(),
+      currentPlayer: this.playerId,
+      status: 'WAIT',
+      cardDeck: {
+        unused: [],
+        used: [],
+      },
     }
   }
 

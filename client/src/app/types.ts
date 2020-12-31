@@ -1,7 +1,13 @@
+import { IconDefinition } from '@fortawesome/free-solid-svg-icons'
+
 export type Player = {
   _id?: string
   _roomId: number
   name: string
+  coordinates: [number, number]
+  piece: IconDefinition
+  cards: number[]
+  life: number
 }
 
 export type Room = {
@@ -10,6 +16,12 @@ export type Room = {
   players?: Player[]
   playerLimit: number
   map: number[][]
+  currentPlayer: Player | string
+  status: 'WAIT' | 'PLAYING' | 'END'
+  cardDeck: {
+    unused: number[]
+    used: number[]
+  }
 }
 
 export type Counter = {

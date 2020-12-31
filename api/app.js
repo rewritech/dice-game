@@ -58,7 +58,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
 
   socket.on('join-room', async (player) => {
     try {
-      console.log(player);
+      // console.log(player);
       console.log(`[${new Date()}]: room-${player._roomId} join`);
       // websocket room 연결
       socket.join(`room-${player._roomId}`);
@@ -76,6 +76,30 @@ io.of('/dice-map-room').on('connection', (socket) => {
       await Room.updateOne({ _id: shuffledRoom._id }, { $set: { map: shuffledRoom.map } });
       // Socket room 갱신
       broadcastRoom(socket, shuffledRoom._id);
+    } catch (e) {
+      console.error(`error: ${e}`);
+    }
+  });
+
+  socket.on('select-piece', async (player) => {
+    try {
+      console.log(`[${new Date()}]: select-piece`);
+      // DB room 갱신
+      await Player.updateOne({ _id: player._id }, { $set: { piece: player.piece, coordinates: player.coordinates } });
+      // Socket room 갱신
+      broadcastRoom(socket, player._roomId);
+    } catch (e) {
+      console.error(`error: ${e}`);
+    }
+  });
+
+  socket.on('game-start', async (room) => {
+    try {
+      console.log(`[${new Date()}]: game-start`);
+      // DB room 갱신
+      await Room.updateOne({ _id: room._id }, { $set: { status: room.status } });
+      // Socket room 갱신
+      broadcastRoom(socket, room._id);
     } catch (e) {
       console.error(`error: ${e}`);
     }

@@ -2,8 +2,25 @@
   <h1>{{room.title}}({{room.players.length}}/{{room.playerLimit}})</h1>
 
   <button class="btn btn-secondary mb-2" routerLink="/rooms">LEAVE ROOM</button>
-  <button class="btn btn-info ml-2 mb-2" (click)="shuffle()">SHUFFLE</button>
 
+  <div class="background container" *ngIf="room.status === 'WAIT'">
+    <div class="card bg-transparent" style="width: fit-content;">
+      <div class="card-header border-white">
+        <h1 class="text-white">시작 위치와 말 선택</h1>
+      </div>
+      <div class="card-body border-white">
+        <div class="row row-cols-2">
+          <div class="col border border-white p-0" *ngFor="let position of positions">
+            <app-select-piece [position]="position" [player]="player" [room]="room"></app-select-piece>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer d-flex justify-content-end border-white">
+        <button class="btn btn-info ml-2" (click)="shuffle()">SHUFFLE</button>
+        <button class="btn btn-info ml-2 {{isEnableStartButton}}" (click)="start()">GAME START</button>
+      </div>
+    </div>
+  </div>
   <div class="row">
     <div class="col">
       <div class="d-flex flex-column p-1 bg-dark fit-contents">
