@@ -10,6 +10,8 @@ import { PlayerService } from './services/player.service'
 export class AppComponent {
   title = 'DiceMap'
 
+  path = window.location.pathname
+
   private playerId = localStorage.getItem('pId')
 
   constructor(private router: Router, private playerService: PlayerService) {
