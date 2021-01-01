@@ -17,6 +17,7 @@ export class PlayRoomComponent implements OnInit {
 
   room: Room
   player: Player
+  roomStatus = 'WAIT'
   startBtnDisableClass = 'disabled'
   positions = ['left-top', 'right-top', 'left-bottom', 'right-bottom']
 
@@ -39,6 +40,7 @@ export class PlayRoomComponent implements OnInit {
             .addPlayerToRoom(this.roomId, this.player)
             .subscribe((room) => {
               this.room = room
+              this.roomStatus = this.room.status
               this.player._roomId = this.room._id
               // websocket 연결
               this.connectSocket(this.roomId)
@@ -77,6 +79,7 @@ export class PlayRoomComponent implements OnInit {
     if (this.checkCanStart()) {
       this.room.status = 'PLAYING'
       this.room.playerLimit = this.room.players.length
+      this.roomStatus = this.room.status
       this.socket.emit<Room>('game-start', this.room)
     }
   }
@@ -91,6 +94,7 @@ export class PlayRoomComponent implements OnInit {
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
       if (!newRoom) this.router.navigate(['/rooms'])
       this.room = newRoom
+      this.roomStatus = this.room.status
       if (this.room.status === 'WAIT' && this.checkCanStart()) {
         this.startBtnDisableClass = ''
       }
