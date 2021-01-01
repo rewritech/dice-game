@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core'
 import {
-  IconDefinition,
   faChessKnight,
   faChessRook,
   faChessQueen,
@@ -8,7 +7,7 @@ import {
   IconName,
 } from '@fortawesome/free-solid-svg-icons'
 import { SocketConnectService } from '../../services/socket-connect.service'
-import { Player, Room } from '../../types'
+import { Player, PieceBtn, Room } from '../../types'
 
 @Component({
   selector: 'app-select-piece',
@@ -20,77 +19,68 @@ export class SelectPieceComponent implements OnInit {
   @Input() player: Player
   @Input() room: Room
 
-  knight = faChessKnight
-  rook = faChessRook
-  king = faChessKing
-  queen = faChessQueen
+  private defaultBtnClass = 'btn-outline-light'
+  private disableBtnClass = 'disabled cursor-unset'
 
-  defaultBtnClass = 'btn-outline-light'
-  disableBtnClass = 'disabled cursor-unset btn-dark'
-  otherPlayerBtnClass = 'disabled cursor-unset btn-primary'
-
-  knightActive = true
-  rookActive = true
-  kingActive = true
-  queenActive = true
+  knightPiece: PieceBtn
+  rookPiece: PieceBtn
+  kingPiece: PieceBtn
+  queenPiece: PieceBtn
 
   constructor(private socket: SocketConnectService) {}
 
-  ngOnInit(): void {
-    // this.setBtnClass(this.room, false)
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.setBtnClass(changes.room.previousValue || this.room, true)
-    this.setBtnClass(changes.room.currentValue, false)
+    this.initializeBtnClass()
+    this.setPieceBtn(changes.room.currentValue)
   }
 
-  selectPiece(
-    position: string,
-    piece: IconDefinition,
-    isActive: boolean
-  ): void {
-    if (isActive) {
-      this.player.coordinates = this.getCoordinate(position)
-      this.player.piece = piece
+  selectPiece(pieceBtn: PieceBtn): void {
+    if (pieceBtn.isActive) {
+      this.player.coordinates = this.getCoordinate(this.position)
+      this.player.piece = pieceBtn.piece
+      // TODO: 버튼 색 변경 처리
       this.socket.emit('select-piece', this.player)
     }
   }
 
-  // disable 처리
-  private setBtnClass(room: Room, isActive: boolean) {
-    const otherPlayers = room.players.filter((p) => p._id !== this.player._id)
-    otherPlayers.forEach((p) => {
-      switch (p.piece.iconName) {
-        case 'chess-knight' as IconName:
-          this.knightActive = isActive
-          break
-        case 'chess-rook' as IconName:
-          this.rookActive = isActive
-          break
-        case 'chess-king' as IconName:
-          this.kingActive = isActive
-          break
-        case 'chess-queen' as IconName:
-          this.queenActive = isActive
-          break
-        default:
-          break
-      }
-
-      // 상대방이 선택한 스타팅 포인트 전부 비활성화
-      if (
-        JSON.stringify(p.coordinates) ===
-        JSON.stringify(this.getCoordinate(this.position))
-      ) {
-        this.knightActive = isActive
-        this.rookActive = isActive
-        this.kingActive = isActive
-        this.queenActive = isActive
-      }
-    })
+  setClassName(pieceBtn: PieceBtn): string {
+    const colors = ['btn-primary', 'btn-danger', 'btn-warning', 'btn-success']
+    const base = pieceBtn.isActive ? this.defaultBtnClass : this.disableBtnClass
+    let result = base
+    if (pieceBtn.selectedId) {
+      const ids = this.room.players.map((p) => p._id)
+      const index = ids.indexOf(pieceBtn.selectedId)
+      result = `${base} ${colors[index]}`
+    } else {
+      result = `${base}${pieceBtn.isActive ? '' : ' btn-outline-secondary'}`
+    }
+    return result
   }
 
+  // PieceBtn에 값을 넣는다.
+  private setPieceBtn(room: Room) {
+    // 본인
+    this.setActive(this.player, true)
+
+    // 타인
+    room.players
+      .filter((p) => p._id !== this.player._id)
+      .forEach((p) => {
+        // 상대방이 선택한 스타팅 포인트 전부 비활성화
+        if (this.compare(p.coordinates, this.getCoordinate(this.position))) {
+          this.knightPiece.isActive = false
+          this.rookPiece.isActive = false
+          this.kingPiece.isActive = false
+          this.queenPiece.isActive = false
+        }
+        // 상대방이 선택한 말 비활성화
+        this.setActive(p, false)
+      })
+  }
+
+  // position에 따른 좌표값을 반환한다
   private getCoordinate(position: string): [number, number] {
     switch (position) {
       case 'left-top':
@@ -103,6 +93,52 @@ export class SelectPieceComponent implements OnInit {
         return [9, 9]
       default:
         return [0, 0]
+    }
+  }
+
+  // 버튼의 초기 상태
+  private initializeBtnClass() {
+    this.knightPiece = {
+      isActive: true,
+      selectedId: null,
+      piece: faChessKnight,
+    }
+    this.rookPiece = { isActive: true, selectedId: null, piece: faChessRook }
+    this.kingPiece = { isActive: true, selectedId: null, piece: faChessKing }
+    this.queenPiece = { isActive: true, selectedId: null, piece: faChessQueen }
+  }
+
+  // 두 배열을 비교한다. 좌표 비교할 때 사용함
+  private compare(x: number[], y: number[]): boolean {
+    return JSON.stringify(x) === JSON.stringify(y)
+  }
+
+  // 각 버튼의 isActive를 할당한다.
+  // 만약 player의 좌표와 현재 좌표가 같다면 selectedId를 넣는다.
+  private setActive(player: Player, isActive: boolean) {
+    const condition = this.compare(
+      player.coordinates,
+      this.getCoordinate(this.position)
+    )
+    switch (player.piece.iconName) {
+      case 'chess-knight' as IconName:
+        this.knightPiece.isActive = isActive
+        if (condition) this.knightPiece.selectedId = player._id
+        break
+      case 'chess-rook' as IconName:
+        this.rookPiece.isActive = isActive
+        if (condition) this.rookPiece.selectedId = player._id
+        break
+      case 'chess-king' as IconName:
+        this.kingPiece.isActive = isActive
+        if (condition) this.kingPiece.selectedId = player._id
+        break
+      case 'chess-queen' as IconName:
+        this.queenPiece.isActive = isActive
+        if (condition) this.queenPiece.selectedId = player._id
+        break
+      default:
+        break
     }
   }
 }

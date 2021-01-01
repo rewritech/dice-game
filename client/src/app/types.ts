@@ -24,6 +24,12 @@ export type Room = {
   }
 }
 
+export type PieceBtn = {
+  isActive: boolean
+  selectedId: string | null
+  piece: IconDefinition
+}
+
 export type Counter = {
   1: number
   2: number
