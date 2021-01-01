@@ -56,7 +56,7 @@ export class PlayRoomComponent implements OnInit {
 
   @HostListener('window:beforeunload')
   ngOnDestroy(): void {
-    // this.leave()
+    this.leave()
   }
 
   // 자식에서 room을 변경한 것을 적용함
@@ -76,6 +76,7 @@ export class PlayRoomComponent implements OnInit {
   start(): void {
     if (this.checkCanStart()) {
       this.room.status = 'PLAYING'
+      this.room.playerLimit = this.room.players.length
       this.socket.emit<Room>('game-start', this.room)
     }
   }

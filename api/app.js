@@ -97,7 +97,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
     try {
       console.log(`[${new Date()}]: game-start`);
       // DB room 갱신
-      await Room.updateOne({ _id: room._id }, { $set: { status: room.status } });
+      await Room.updateOne({ _id: room._id }, { $set: { status: room.status, playerLimit: room.playerLimit } });
       // Socket room 갱신
       broadcastRoom(socket, room._id);
     } catch (e) {
@@ -117,7 +117,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
         await Room.updateOne({ _id: player._roomId }, { $set: { deleted: true } });
       }
 
-      await Player.updateOne({ _id: player._id }, { $set: { _roomId: 0 } });
+      await Player.updateOne({ _id: player._id }, { $set: { _roomId: 0, coordinates: null, piece: {icon: []} } });
 
       if(player._roomId > 0) {
         // Socket room 갱신
