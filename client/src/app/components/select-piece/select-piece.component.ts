@@ -48,10 +48,8 @@ export class SelectPieceComponent implements OnInit {
     if (pieceBtn.isActive) {
       this.player.coordinates = this.getCoordinate(this.position)
       this.player.piece = pieceBtn.piece
-      // TODO: 버튼 색 변경 처리
       const player = this.room.players.find((p) => p._id === this.player._id)
-      player.coordinates = this.player.coordinates
-      player.piece = this.player.piece
+      this.room.players[this.room.players.indexOf(player)] = player
       this.roomChange.emit(this.room)
       this.socket.emit('select-piece', this.player)
     }
