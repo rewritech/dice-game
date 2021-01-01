@@ -4,8 +4,8 @@ export type Player = {
   _id?: string
   _roomId: number
   name: string
-  coordinates: [number, number]
-  piece: IconDefinition
+  coordinates: [number, number] | null
+  piece: IconDefinition | null
   cards: number[]
   life: number
 }

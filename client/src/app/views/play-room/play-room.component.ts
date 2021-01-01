@@ -17,7 +17,7 @@ export class PlayRoomComponent implements OnInit {
 
   room: Room
   player: Player
-  isEnableStartButton: string
+  startBtnDisableClass = 'disabled'
   positions = ['left-top', 'right-top', 'left-bottom', 'right-bottom']
 
   constructor(
@@ -44,7 +44,6 @@ export class PlayRoomComponent implements OnInit {
               this.connectSocket(this.roomId)
               // websocket room에 join
               this.socket.emit<Player>('join-room', this.player)
-              this.isEnableStartButton = this.checkMyTurn() ? '' : 'disabled'
             })
         })
       } else {
@@ -63,6 +62,9 @@ export class PlayRoomComponent implements OnInit {
   // 자식에서 room을 변경한 것을 적용함
   changeRoom($event: Room): void {
     this.room = { ...$event }
+    if (this.checkCanStart()) {
+      this.startBtnDisableClass = ''
+    }
   }
 
   shuffle(): void {
@@ -72,7 +74,7 @@ export class PlayRoomComponent implements OnInit {
   }
 
   start(): void {
-    if (this.checkMyTurn()) {
+    if (this.checkCanStart()) {
       this.room.status = 'PLAYING'
       this.socket.emit<Room>('game-start', this.room)
     }
@@ -88,6 +90,9 @@ export class PlayRoomComponent implements OnInit {
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
       if (!newRoom) this.router.navigate(['/rooms'])
       this.room = newRoom
+      if (this.room.status === 'WAIT' && this.checkCanStart()) {
+        this.startBtnDisableClass = ''
+      }
     })
   }
 
@@ -104,5 +109,13 @@ export class PlayRoomComponent implements OnInit {
 
   private checkMyTurn(): boolean {
     return this.player._id === this.room.currentPlayer
+  }
+
+  private checkReadyToStart(): boolean {
+    return this.room.players.filter((p) => p.coordinates).length > 1
+  }
+
+  private checkCanStart(): boolean {
+    return this.checkMyTurn() && this.checkReadyToStart()
   }
 }

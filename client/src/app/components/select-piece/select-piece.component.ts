@@ -49,7 +49,7 @@ export class SelectPieceComponent implements OnInit {
       this.player.coordinates = this.getCoordinate(this.position)
       this.player.piece = pieceBtn.piece
       const player = this.room.players.find((p) => p._id === this.player._id)
-      this.room.players[this.room.players.indexOf(player)] = player
+      this.room.players[this.room.players.indexOf(player)] = this.player
       this.roomChange.emit(this.room)
       this.socket.emit('select-piece', this.player)
     }
@@ -79,7 +79,10 @@ export class SelectPieceComponent implements OnInit {
       .filter((p) => p._id !== this.player._id)
       .forEach((p) => {
         // 상대방이 선택한 스타팅 포인트 전부 비활성화
-        if (this.compare(p.coordinates, this.getCoordinate(this.position))) {
+        if (
+          p.coordinates &&
+          this.compare(p.coordinates, this.getCoordinate(this.position))
+        ) {
           this.knightPiece.isActive = false
           this.rookPiece.isActive = false
           this.kingPiece.isActive = false
