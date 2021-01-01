@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core'
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core'
 import {
   faChessKnight,
   faChessRook,
@@ -18,6 +25,7 @@ export class SelectPieceComponent implements OnInit {
   @Input() position: string
   @Input() player: Player
   @Input() room: Room
+  @Output() roomChange = new EventEmitter<Room>()
 
   private defaultBtnClass = 'btn-outline-light'
   private disableBtnClass = 'disabled cursor-unset'
@@ -41,6 +49,10 @@ export class SelectPieceComponent implements OnInit {
       this.player.coordinates = this.getCoordinate(this.position)
       this.player.piece = pieceBtn.piece
       // TODO: 버튼 색 변경 처리
+      const player = this.room.players.find((p) => p._id === this.player._id)
+      player.coordinates = this.player.coordinates
+      player.piece = this.player.piece
+      this.roomChange.emit(this.room)
       this.socket.emit('select-piece', this.player)
     }
   }
@@ -61,7 +73,7 @@ export class SelectPieceComponent implements OnInit {
 
   // PieceBtn에 값을 넣는다.
   private setPieceBtn(room: Room) {
-    // 본인
+    // 본인이 선택한 말 활성화
     this.setActive(this.player, true)
 
     // 타인

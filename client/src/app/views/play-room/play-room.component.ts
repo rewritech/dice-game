@@ -13,15 +13,11 @@ import { PlayerService } from '../../services/player.service'
 })
 export class PlayRoomComponent implements OnInit {
   private roomId = +this.route.snapshot.paramMap.get('id')
-
   private playerId = localStorage.getItem('pId')
 
   room: Room
-
   player: Player
-
   isEnableStartButton: string
-
   positions = ['left-top', 'right-top', 'left-bottom', 'right-bottom']
 
   constructor(
@@ -62,6 +58,11 @@ export class PlayRoomComponent implements OnInit {
   @HostListener('window:beforeunload')
   ngOnDestroy(): void {
     // this.leave()
+  }
+
+  // 자식에서 room을 변경한 것을 적용함
+  changeRoom($event: Room): void {
+    this.room = { ...$event }
   }
 
   shuffle(): void {

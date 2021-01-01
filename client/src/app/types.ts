@@ -13,7 +13,7 @@ export type Player = {
 export type Room = {
   _id?: number
   title: string
-  players?: Player[]
+  players: Player[]
   playerLimit: number
   map: number[][]
   currentPlayer: Player | string
