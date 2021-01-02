@@ -9,7 +9,8 @@ const Player = require('../models/Player');
  */
 router.get('/rooms', async (req, res) => {
   console.log(`[${new Date()}]: GET rooms`);
-  const rooms = await Room.find({ deleted: false }, { map: 0 }).populate('players');
+  const rooms = await Room.find({ deleted: false }, { __v: 0, map: 0, currentPlayer: 0, cardDeck: 0, deleted: 0 }).populate('players');
+  rooms.forEach((r) => r.players = new Array(r.players.length))
   res.json(rooms);
 });
 
