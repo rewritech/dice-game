@@ -12,14 +12,16 @@ import { DashboardComponent } from './views/dashboard/dashboard.component'
 import { NewRoomComponent } from './views/new-room/new-room.component'
 import { RoomsComponent } from './views/rooms/rooms.component'
 import { HowToPlayComponent } from './views/how-to-play/how-to-play.component'
-import { WaitingRoomComponent } from './components/waiting-room/waiting-room.component'
 import { PlayerEditModalComponent } from './components/player-edit-modal/player-edit-modal.component'
 import { DashboardButtonComponent } from './components/dashboard-button/dashboard-button.component'
 import { DiceComponent } from './components/dice/dice.component'
-import { LoginComponent } from './views/login/login.component';
-import { UserInfoComponent } from './components/user-info/user-info.component';
-import { SelectPieceComponent } from './components/select-piece/select-piece.component';
+import { LoginComponent } from './views/login/login.component'
+import { UserInfoComponent } from './components/user-info/user-info.component'
+import { SelectPieceComponent } from './components/select-piece/select-piece.component'
 import { HeaderComponent } from './components/header/header.component'
+import { ChatComponent } from './components/chat/chat.component'
+import { ChatMessageOthersComponent } from './components/chat-message-others/chat-message-others.component'
+import { ChatMessageSelfComponent } from './components/chat-message-self/chat-message-self.component'
 
 @NgModule({
   declarations: [
@@ -29,7 +31,6 @@ import { HeaderComponent } from './components/header/header.component'
     NewRoomComponent,
     RoomsComponent,
     HowToPlayComponent,
-    WaitingRoomComponent,
     PlayerEditModalComponent,
     DashboardButtonComponent,
     DiceComponent,
@@ -37,6 +38,9 @@ import { HeaderComponent } from './components/header/header.component'
     UserInfoComponent,
     SelectPieceComponent,
     HeaderComponent,
+    ChatComponent,
+    ChatMessageOthersComponent,
+    ChatMessageSelfComponent,
   ],
   imports: [
     BrowserModule,

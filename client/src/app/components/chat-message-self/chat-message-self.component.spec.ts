@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { WaitingRoomComponent } from './waiting-room.component'
+import { ChatMessageSelfComponent } from './chat-message-self.component'
 
-describe('WaitingRoomComponent', () => {
-  let component: WaitingRoomComponent
-  let fixture: ComponentFixture<WaitingRoomComponent>
+describe('ChatMessageSelfComponent', () => {
+  let component: ChatMessageSelfComponent
+  let fixture: ComponentFixture<ChatMessageSelfComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [WaitingRoomComponent],
+      declarations: [ChatMessageSelfComponent],
     }).compileComponents()
   })
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WaitingRoomComponent)
+    fixture = TestBed.createComponent(ChatMessageSelfComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })

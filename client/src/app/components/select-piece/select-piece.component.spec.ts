@@ -1,25 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { SelectPieceComponent } from './select-piece.component';
+import { SelectPieceComponent } from './select-piece.component'
 
 describe('SelectPieceComponent', () => {
-  let component: SelectPieceComponent;
-  let fixture: ComponentFixture<SelectPieceComponent>;
+  let component: SelectPieceComponent
+  let fixture: ComponentFixture<SelectPieceComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SelectPieceComponent ]
-    })
-    .compileComponents();
-  });
+      declarations: [SelectPieceComponent],
+    }).compileComponents()
+  })
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SelectPieceComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(SelectPieceComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})
