@@ -116,8 +116,14 @@ io.of('/dice-map-room').on('connection', (socket) => {
       console.log(player);
       // DB 업데이트
       await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id } });
-      // player가 없으면 삭제한다.
+
       const room = await Room.findOne({ _id: player._roomId, deleted: false }, { map: 0 })
+      // WAIT 상태에서 방장이 나가면 다음사람을 방장으로 선정
+      if (room && String(room.currentPlayer) === player._id && room.status === 'WAIT') {
+        await Room.updateOne({ _id: player._roomId }, { $set: { currentPlayer: room.players[0]._id } });
+      }
+
+      // player가 없으면 삭제한다.
       if (room && room.players.length < 1) {
         await Room.updateOne({ _id: player._roomId }, { $set: { deleted: true } });
         // messages 삭제
