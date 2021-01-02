@@ -17,7 +17,6 @@ export class PlayRoomComponent implements OnInit {
 
   room: Room
   player: Player
-  roomStatus = 'WAIT'
   startBtnDisableClass = 'disabled'
   positions = ['left-top', 'right-top', 'left-bottom', 'right-bottom']
 
@@ -32,6 +31,8 @@ export class PlayRoomComponent implements OnInit {
 
   ngOnInit(): void {
     this.roomService.getRoom(this.roomId).subscribe((getRoom) => {
+      // websocket 연결
+      this.socket.connect()
       if (this.checkCanJoinRoom(getRoom, this.playerId)) {
         this.playerService.getPlayer(this.playerId).subscribe((player) => {
           this.player = player
@@ -40,10 +41,9 @@ export class PlayRoomComponent implements OnInit {
             .addPlayerToRoom(this.roomId, this.player)
             .subscribe((room) => {
               this.room = room
-              this.roomStatus = this.room.status
               this.player._roomId = this.room._id
               // websocket 연결
-              this.connectSocket(this.roomId)
+              this.socketOnChangeRoom(this.roomId)
               // websocket room에 join
               this.socket.emit<Player>('join-room', this.player)
             })
@@ -79,22 +79,22 @@ export class PlayRoomComponent implements OnInit {
     if (this.checkCanStart()) {
       this.room.status = 'PLAYING'
       this.room.playerLimit = this.room.players.length
-      this.roomStatus = this.room.status
       this.socket.emit<Room>('game-start', this.room)
     }
   }
 
   leave(): void {
     this.socket.emit<Player>('leave', this.player)
+    // this.router.navigate(['/rooms'])
   }
 
-  private connectSocket(roomId: number): void {
-    this.socket.connect()
+  private socketOnChangeRoom(roomId: number): void {
     // websocket room에서 데이터 전송 받기 위한 연결
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
       if (!newRoom) this.router.navigate(['/rooms'])
       this.room = newRoom
-      this.roomStatus = this.room.status
+
+      // 스타트 버튼 활성화 조건
       if (this.room.status === 'WAIT' && this.checkCanStart()) {
         this.startBtnDisableClass = ''
       }

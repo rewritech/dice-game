@@ -1,7 +1,10 @@
+<app-header></app-header>
 <app-user-info></app-user-info>
-<div class="row d-flex align-items-center justify-content-center h-100 m-5">
-  <img class="logo-size" src="../assets/logo.png" alt="">
+<div class="container">
+  <div class="row d-flex align-items-center justify-content-center h-100 m-5">
+    <img class="logo-size" src="../assets/logo.png" alt="">
+  </div>
+  <app-dashboard-button [buttonTitle]="'NEW ROOM'" [linkPath]="'/rooms/new'"></app-dashboard-button>
+  <app-dashboard-button [buttonTitle]="'ROOMS'" [linkPath]="'/rooms'"></app-dashboard-button>
+  <app-dashboard-button [buttonTitle]="'HOW TO PLAY'" [linkPath]="'/how-to-play'"></app-dashboard-button>
 </div>
-<app-dashboard-button [buttonTitle]="'NEW ROOM'" [linkPath]="'/rooms/new'"></app-dashboard-button>
-<app-dashboard-button [buttonTitle]="'ROOMS'" [linkPath]="'/rooms'"></app-dashboard-button>
-<app-dashboard-button [buttonTitle]="'HOW TO PLAY'" [linkPath]="'/how-to-play'"></app-dashboard-button>

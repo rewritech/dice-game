@@ -1,10 +1,13 @@
+<app-header></app-header>
 <app-user-info></app-user-info>
-<h1>Rooms</h1>
-<div *ngIf="rooms">
-  <div *ngFor="let room of rooms">
-    <a class="btn btn-outline-dark btn-lg btn-block mb-1" routerLink="/rooms/{{room._id}}">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</a>
+<div class="container">
+  <h1>Rooms</h1>
+  <div *ngIf="rooms">
+    <div *ngFor="let room of rooms">
+      <a class="btn btn-outline-dark btn-lg btn-block mb-1" routerLink="/rooms/{{room._id}}">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</a>
+    </div>
   </div>
-</div>
-<div *ngIf="rooms && rooms.length === 0">
-  <span>표시할 방이 없습니다.</span>
+  <div *ngIf="rooms && rooms.length === 0">
+    <span>표시할 방이 없습니다.</span>
+  </div>
 </div>

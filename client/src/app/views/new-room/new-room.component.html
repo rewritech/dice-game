@@ -1,22 +1,24 @@
+<app-header></app-header>
 <app-user-info></app-user-info>
-<h1>New Room</h1>
-
-<form class="rounded border p-4 w-50" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
-  <input type="hidden" name="currentPlayer" [ngModel]="room.currentPlayer">
-  <input type="hidden" name="status" [ngModel]="room.status">
-  <input type="hidden" name="cardDeck" [ngModel]="room.cardDeck">
-  <div class="form-group">
-    <label for="forTitle">방제</label>
-    <input type="text" class="form-control" id="forTitle" placeholder="님만 오면 출발" name="title" [ngModel]="room.title">
-  </div>
-  <div class="form-group">
-    <label for="forPlayerLimit">인원제한</label>
-    <select class="form-control" id="forPlayerLimit" name="playerLimit" [ngModel]="room.playerLimit">
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-    </select>
-  </div>
-  <button class="btn btn-primary" type="submit">OK</button>
-  <button class="btn btn-link" routerLink="/">Cancel</button>
-</form>
+<div class="container">
+  <h1>New Room</h1>
+  <form class="rounded border p-4 w-50" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+    <input type="hidden" name="currentPlayer" [ngModel]="room.currentPlayer">
+    <input type="hidden" name="status" [ngModel]="room.status">
+    <input type="hidden" name="cardDeck" [ngModel]="room.cardDeck">
+    <div class="form-group">
+      <label for="forTitle">방제</label>
+      <input type="text" class="form-control" id="forTitle" placeholder="님만 오면 출발" name="title" [ngModel]="room.title">
+    </div>
+    <div class="form-group">
+      <label for="forPlayerLimit">인원제한</label>
+      <select class="form-control" id="forPlayerLimit" name="playerLimit" [ngModel]="room.playerLimit">
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" type="submit">OK</button>
+    <button class="btn btn-link" routerLink="/">Cancel</button>
+  </form>
+</div>

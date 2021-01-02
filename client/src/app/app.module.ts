@@ -18,7 +18,8 @@ import { DashboardButtonComponent } from './components/dashboard-button/dashboar
 import { DiceComponent } from './components/dice/dice.component'
 import { LoginComponent } from './views/login/login.component';
 import { UserInfoComponent } from './components/user-info/user-info.component';
-import { SelectPieceComponent } from './components/select-piece/select-piece.component'
+import { SelectPieceComponent } from './components/select-piece/select-piece.component';
+import { HeaderComponent } from './components/header/header.component'
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { SelectPieceComponent } from './components/select-piece/select-piece.com
     LoginComponent,
     UserInfoComponent,
     SelectPieceComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
