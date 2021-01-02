@@ -24,6 +24,15 @@ export type Room = {
   }
 }
 
+export type Message = {
+  _id?: string
+  _roomId: number
+  _playerId: string
+  playerName?: string
+  content: string
+  sendedAt: Date | string
+}
+
 export type PieceBtn = {
   isActive: boolean
   selectedId: string | null

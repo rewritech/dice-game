@@ -11,6 +11,7 @@ const api = require('./routes/api');
 const mongoose = require('mongoose');
 const Room = require('./models/Room');
 const Player = require('./models/Player');
+const Message = require('./models/Message');
 
 // ==================== DB ====================
 const username = process.env.MONGO_INITDB_ROOT_USERNAME
@@ -51,6 +52,10 @@ socketServer.listen(socketPort, () => {
 async function broadcastRoom (socket, roomId) {
   const room = await Room.findOne({ _id: roomId, deleted: false }).populate('players');
   socket.in(`room-${roomId}`).emit(`changeRoomInfo-${roomId}`, room);
+}
+async function broadcastRoomMessage (socket, roomId) {
+  const messages = await Message.find({ _roomId: roomId });
+  socket.in(`room-${roomId}`).emit(`chat-room-${roomId}`, messages);
 }
 
 io.of('/dice-map-room').on('connection', (socket) => {
@@ -115,6 +120,8 @@ io.of('/dice-map-room').on('connection', (socket) => {
       const room = await Room.findOne({ _id: player._roomId, deleted: false }, { map: 0 })
       if (room && room.players.length < 1) {
         await Room.updateOne({ _id: player._roomId }, { $set: { deleted: true } });
+        // messages 삭제
+        await Message.deleteMany({ _roomId: player._roomId })
       }
 
       await Player.updateOne({ _id: player._id }, { $set: { _roomId: 0, coordinates: null, piece: {icon: []} } });
@@ -129,6 +136,20 @@ io.of('/dice-map-room').on('connection', (socket) => {
       console.error(`error: ${e}`);
     } finally {
       socket.disconnect(true);
+    }
+  });
+
+  socket.on('send-message', async (message) => {
+    try {
+      console.log(`[${new Date()}]: send-message`);
+      // DB message 등록
+      const player = await Player.findOne({ _id: message._playerId })
+      const newMessage = new Message({ playerName: player.name, ...message });
+      await newMessage.save();
+      // Socket room 갱신
+      broadcastRoomMessage(socket, message._roomId);
+    } catch (e) {
+      console.error(`error: ${e}`);
     }
   });
 

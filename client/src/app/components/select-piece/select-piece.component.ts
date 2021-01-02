@@ -51,7 +51,7 @@ export class SelectPieceComponent implements OnInit {
       const player = this.room.players.find((p) => p._id === this.player._id)
       this.room.players[this.room.players.indexOf(player)] = this.player
       this.roomChange.emit(this.room)
-      this.socket.emit('select-piece', this.player)
+      this.socket.emit<Player>('select-piece', this.player)
     }
   }
 

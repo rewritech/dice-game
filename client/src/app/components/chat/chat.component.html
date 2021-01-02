@@ -1,1 +1,14 @@
-<p>chat works!</p>
+<div #scrollMe class="p-2 mb-1 rounded chat-size chat-bg overflow-auto">
+  <div *ngFor="let message of messages">
+    <app-chat-message-self [message]="message.content" *ngIf="message._playerId === playerId"></app-chat-message-self>
+    <app-chat-message-others [message]="message" *ngIf="message._playerId !== playerId"></app-chat-message-others>
+  </div>
+</div>
+<form #f="ngForm" (ngSubmit)="onSubmit()">
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="메세지를 입력하세요" name="content" [(ngModel)]="message.content">
+    <button class="btn btn-primary btn-sm text-white" type="submit">
+      <fa-icon [icon]="planeIcon"></fa-icon>
+    </button>
+  </div>
+</form>

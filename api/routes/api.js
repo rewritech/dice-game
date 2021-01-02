@@ -2,6 +2,17 @@ const express = require('express');
 const router = express.Router();
 const Room = require('../models/Room');
 const Player = require('../models/Player');
+const Message = require('../models/Message');
+
+/**
+ * GET messages/:roomId
+ * 방의 메세지 가져오기
+ */
+router.get('/messages/:roomId', async (req, res) => {
+  console.log(`[${new Date()}]: GET messages in room-${req.params.roomId}`);
+  const messages = await Message.find({ _roomId: req.params.roomId });
+  res.json(messages);
+});
 
 /**
  * GET rooms

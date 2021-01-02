@@ -22,6 +22,6 @@
   </form>
 </ng-template>
 
-<button class="btn btn-secondary mb-2 ml-auto" (click)="open(content)" *ngIf="player">
-  <h4>닉네임({{player.name}}) 변경</h4>
+<button class="btn btn-secondary mb-2 ml-auto p-1" (click)="open(content)" *ngIf="player">
+  <h4 class="d-inline-block text-truncate player-name-width">닉네임({{player.name}}) 변경</h4>
 </button>

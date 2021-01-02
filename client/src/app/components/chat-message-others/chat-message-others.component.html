@@ -1,1 +1,7 @@
-<p>chat-message-others works!</p>
+<small class="text-white ml-2">
+  <span class="d-inline-block text-truncate player-name-width" title="{{message.playerName}}">{{message.playerName}}</span>
+  ({{formatDate(message.sendedAt)}})
+</small>
+<div class="mr-auto bg-light text-dark mb-1 p-2 rounded w-75">
+  <span class="m-2 text-break">{{message.content}}</span>
+</div>
