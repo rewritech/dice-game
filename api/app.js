@@ -150,7 +150,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
       console.log(`[${new Date()}]: send-message`);
       // DB message 등록
       const player = await Player.findOne({ _id: message._playerId })
-      const newMessage = new Message({ playerName: player.name, ...message });
+      const newMessage = new Message({ playerName: player.name, sendedAt: new Date(), ...message });
       await newMessage.save();
       // Socket room 갱신
       broadcastRoomMessage(socket, message._roomId);
