@@ -40,6 +40,14 @@ export class DiceMapService {
     return this.diceMap
   }
 
+  getDiceMin(): number {
+    return this.DICE_MIN
+  }
+
+  getDiceMax(): number {
+    return this.DICE_MAX
+  }
+
   createPieces(room: Room, disabled: boolean): Map[][] {
     const result: Map[][] = Array.from(Array(10), () => new Array(10))
     const { players, map } = room
@@ -109,13 +117,5 @@ export class DiceMapService {
       default:
         break
     }
-  }
-
-  getDiceMin(): number {
-    return this.DICE_MIN
-  }
-
-  getDiceMax(): number {
-    return this.DICE_MAX
   }
 }
