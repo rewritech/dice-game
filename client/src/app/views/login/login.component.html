@@ -4,6 +4,7 @@
 <form class="ml-auto mr-auto mt-5 p-2 border border-primary rounded w-50" #f="ngForm" (ngSubmit)="onSubmit(f.value)">
   <input type="hidden" name="_roomId" [ngModel]="player._roomId">
   <input type="hidden" name="coordinates" [ngModel]="player.coordinates">
+  <input type="hidden" name="initialCoordinates" [ngModel]="player.initialCoordinates">
   <input type="hidden" name="piece" [ngModel]="player.piece">
   <input type="hidden" name="cards" [ngModel]="player.cards">
   <input type="hidden" name="life" [ngModel]="player.life">

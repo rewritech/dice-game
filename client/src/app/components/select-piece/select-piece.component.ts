@@ -47,6 +47,7 @@ export class SelectPieceComponent implements OnInit {
   selectPiece(pieceBtn: PieceBtn): void {
     if (pieceBtn.isActive) {
       this.player.coordinates = this.getCoordinate(this.position)
+      this.player.initialCoordinates = this.getCoordinate(this.position)
       this.player.piece = pieceBtn.piece
       const player = this.room.players.find((p) => p._id === this.player._id)
       this.room.players[this.room.players.indexOf(player)] = this.player

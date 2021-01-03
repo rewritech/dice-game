@@ -110,6 +110,26 @@ io.of('/dice-map-room').on('connection', (socket) => {
     }
   });
 
+  socket.on('change-turn', async (value) => {
+    try {
+      console.log(`[${new Date()}]: change-turn`);
+      const room = value.room
+      const player = value.player
+      // DB room 갱신
+      await Player.updateOne({ _id: player._id }, { $set: { coordinates: player.coordinates } });
+      await Room.updateOne({ _id: room._id }, {
+        $set: {
+          currentPlayer: room.currentPlayer,
+          cardDeck: room.cardDeck
+        }
+      });
+      // Socket room 갱신
+      broadcastRoom(socket, room._id);
+    } catch (e) {
+      console.error(`error: ${e}`);
+    }
+  });
+
   socket.on('leave', async (player) => {
     try {
       console.log(`[${new Date()}]: room leave`);

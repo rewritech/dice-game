@@ -1,22 +1,16 @@
 import { Injectable } from '@angular/core'
-import { Counter } from '../types'
+import { Counter, Map, Player, Room } from '../types'
 
 @Injectable({
   providedIn: 'root',
 })
 export class DiceMapService {
   private diceMap: number[][]
-
   private counter: Counter
-
   private DICE_MIN = 1
-
   private DICE_MAX = 6
-
   private MAP_ROW = 10
-
   private MAP_COL = 10
-
   private MIN_COUNT = 10
 
   constructor() {
@@ -44,6 +38,30 @@ export class DiceMapService {
 
   getDiceMap(): number[][] {
     return this.diceMap
+  }
+
+  createPieces(room: Room, disabled: boolean): Map[][] {
+    const result: Map[][] = Array.from(Array(10), () => new Array(10))
+    const { players, map } = room
+    const coordIcons = this.createCoordIcon(players)
+    map.forEach((row, i) => {
+      row.forEach((col, j) => {
+        result[i][j] = {
+          num: col,
+          disabled,
+          icon: coordIcons[[i, j].join('.')],
+        }
+      })
+    })
+    return result
+  }
+
+  private createCoordIcon(players: Player[]) {
+    const result = {}
+    players.forEach((p: Player) => {
+      result[p.coordinates.join('.')] = p.piece
+    })
+    return result
   }
 
   private initializeCounter(): Counter {

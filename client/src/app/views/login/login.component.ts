@@ -24,6 +24,7 @@ export class LoginComponent implements OnInit {
       _roomId: 0,
       name: '',
       coordinates: null,
+      initialCoordinates: null,
       piece: null,
       cards: [],
       life: 3,
