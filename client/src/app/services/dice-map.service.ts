@@ -92,4 +92,12 @@ export class DiceMapService {
         break
     }
   }
+
+  getDiceMin(): number {
+    return this.DICE_MIN
+  }
+
+  getDiceMax(): number {
+    return this.DICE_MAX
+  }
 }
