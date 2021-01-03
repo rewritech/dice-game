@@ -1,19 +1,22 @@
-<div [ngSwitch]="dice">
-  <button class="btn dice {{colors[dice - 1]}}">
+<div [ngSwitch]="num">
+  <button *ngIf="!icon" class="btn dice {{colors[this.num - 1]}} {{disabledClass}}" (click)="onClick()">
     <div class="column">
-      <div class="dot" [style.background-color]="[2, 3, 4, 5, 6].includes(dice) ? 'white' : 'transparent'"></div>
-      <div class="dot" [style.background-color]="[6].includes(dice) ? 'white' : 'transparent'"></div>
-      <div class="dot" [style.background-color]="[4, 5, 6].includes(dice) ? 'white' : 'transparent'"></div>
+      <div class="dot" [style.background-color]="[2, 3, 4, 5, 6].includes(num) ? 'white' : 'transparent'"></div>
+      <div class="dot" [style.background-color]="[6].includes(num) ? 'white' : 'transparent'"></div>
+      <div class="dot" [style.background-color]="[4, 5, 6].includes(num) ? 'white' : 'transparent'"></div>
     </div>
     <div class="column">
-      <div class="dot" [style.background-color]="[].includes(dice) ? 'white' : 'transparent'"></div>
-      <div class="dot" [style.background-color]="[1, 3, 5].includes(dice) ? 'white' : 'transparent'"></div>
-      <div class="dot" [style.background-color]="[].includes(dice) ? 'white' : 'transparent'"></div>
+      <div class="dot" [style.background-color]="[].includes(num) ? 'white' : 'transparent'"></div>
+      <div class="dot" [style.background-color]="[1, 3, 5].includes(num) ? 'white' : 'transparent'"></div>
+      <div class="dot" [style.background-color]="[].includes(num) ? 'white' : 'transparent'"></div>
     </div>
     <div class="column">
-      <div class="dot" [style.background-color]="[4, 5, 6].includes(dice) ? 'white' : 'transparent'"></div>
-      <div class="dot" [style.background-color]="[6].includes(dice) ? 'white' : 'transparent'"></div>
-      <div class="dot" [style.background-color]="[2, 3, 4, 5, 6].includes(dice) ? 'white' : 'transparent'"></div>
+      <div class="dot" [style.background-color]="[4, 5, 6].includes(num) ? 'white' : 'transparent'"></div>
+      <div class="dot" [style.background-color]="[6].includes(num) ? 'white' : 'transparent'"></div>
+      <div class="dot" [style.background-color]="[2, 3, 4, 5, 6].includes(num) ? 'white' : 'transparent'"></div>
     </div>
+  </button>
+  <button *ngIf="icon" class="btn piece {{colors[this.num - 1]}} {{disabledClass}}" (click)="onClick()">
+    <h3><fa-icon class="icon-color" [icon]="icon"></fa-icon></h3>
   </button>
 </div>

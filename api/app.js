@@ -55,7 +55,13 @@ async function broadcastRoom (socket, roomId) {
 }
 async function broadcastRoomMessage (socket, roomId) {
   const messages = await Message.find({ _roomId: roomId });
-  socket.in(`room-${roomId}`).emit(`chat-room-${roomId}`, messages);
+  io.of("/dice-map-room").to(`room-${roomId}`).emit(`chat-room-${roomId}`, messages);
+}
+async function broadcastSystemMessage (socket, roomId, content) {
+  const message = new Message({ _roomId: roomId, _playerId: null, playerName: 'System', sendedAt: new Date(), content });
+  await message.save();
+  // Socket room 갱신
+  broadcastRoomMessage(socket, roomId);
 }
 
 io.of('/dice-map-room').on('connection', (socket) => {
@@ -69,6 +75,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
       socket.join(`room-${player._roomId}`);
       // Socket room 갱신
       broadcastRoom(socket, player._roomId);
+      broadcastSystemMessage(socket, player._roomId, `${player.name}님이 참가하셨습니다.`);
     } catch (e) {
       console.error(`error: ${e}`);
     }
@@ -81,6 +88,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
       await Room.updateOne({ _id: shuffledRoom._id }, { $set: { map: shuffledRoom.map } });
       // Socket room 갱신
       broadcastRoom(socket, shuffledRoom._id);
+      broadcastSystemMessage(socket, shuffledRoom._id, '맵이 변경되었습니다.');
     } catch (e) {
       console.error(`error: ${e}`);
     }
@@ -105,6 +113,29 @@ io.of('/dice-map-room').on('connection', (socket) => {
       await Room.updateOne({ _id: room._id }, { $set: { status: room.status, playerLimit: room.playerLimit } });
       // Socket room 갱신
       broadcastRoom(socket, room._id);
+      broadcastSystemMessage(socket, room._id, '게임을 시작합니다.');
+    } catch (e) {
+      console.error(`error: ${e}`);
+    }
+  });
+
+  socket.on('change-turn', async (value) => {
+    try {
+      console.log(`[${new Date()}]: change-turn`);
+      const room = value.room
+      const player = value.player
+      // DB room 갱신
+      await Player.updateOne({ _id: player._id }, { $set: { coordinates: player.coordinates } });
+      await Room.updateOne({ _id: room._id }, {
+        $set: {
+          currentPlayer: room.currentPlayer,
+          cardDeck: room.cardDeck
+        }
+      });
+      const newCurrentPlayer = await Player.findOne({ _id: room.currentPlayer })
+      // Socket room 갱신
+      broadcastRoom(socket, room._id);
+      broadcastSystemMessage(socket, room._id, `${player.name}님의 턴이 종료되었습니다.<br/>${newCurrentPlayer.name}님의 턴입니다.`);
     } catch (e) {
       console.error(`error: ${e}`);
     }
@@ -135,6 +166,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
       if(player._roomId > 0) {
         // Socket room 갱신
         broadcastRoom(socket, player._roomId);
+        broadcastSystemMessage(socket, player._roomId, `${player.name}님이 떠나셨습니다.`);
         // 웹소켓 룸에서 나옴
         socket.leave(`room-${player._roomId}`);
       }

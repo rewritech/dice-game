@@ -23,9 +23,9 @@
   <div class="row">
     <div class="col pr-0 mr-2">
       <div class="d-flex flex-column p-1 bg-dark fit-contents">
-        <div class="d-flex" *ngFor="let dices of room.map">
-          <div *ngFor="let dice of dices">
-            <app-dice [dice] = "dice"></app-dice>
+        <div class="d-flex" *ngFor="let piecesRow of pieces; index as i">
+          <div *ngFor="let piece of piecesRow; index as j">
+            <app-dice [num]="piece.num" [disabled]="piece.disabled" [icon]="piece.icon" [coordinate]="[i, j]" [callBackOnClick]="callBackOnClick"></app-dice>
           </div>
         </div>
       </div>
@@ -36,6 +36,12 @@
     </div>
   </div>
   <div class="row" *ngIf="room.status === 'PLAYING'">
-    <div class="col ml-3 bg-dark ui"></div>
+    <div class="col bg-dark console-ui">
+      <div class="playersInfo"></div>
+      <div class="myCards"></div>
+      <button class="btn btn-primary h-100 {{!canMove && this.checkMyTurn() ? '' : 'disabled cursor-unset'}}" (click)="cardSubmit()">
+        <h2>카드<br/>제출</h2>
+      </button>
+    </div>
   </div>
 </div>

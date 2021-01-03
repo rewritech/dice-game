@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Player, Room } from '../../types'
+import { Map, Player, Room } from '../../types'
 import { SocketConnectService } from '../../services/socket-connect.service'
 import { DiceMapService } from '../../services/dice-map.service'
 import { RoomService } from '../../services/room.service'
@@ -14,11 +14,14 @@ import { PlayerService } from '../../services/player.service'
 export class PlayRoomComponent implements OnInit {
   private roomId = +this.route.snapshot.paramMap.get('id')
   private playerId = localStorage.getItem('pId')
+  private canMove = false
 
   room: Room
   player: Player
   startBtnDisableClass = 'disabled'
   positions = ['left-top', 'right-top', 'left-bottom', 'right-bottom']
+  pieces: Map[][]
+  callBackOnClick = (x: number, y: number): void => this.move(x, y)
 
   constructor(
     private route: ActivatedRoute,
@@ -42,6 +45,7 @@ export class PlayRoomComponent implements OnInit {
             .subscribe((room) => {
               this.room = room
               this.player._roomId = this.room._id
+              this.changePieces()
               // websocket 연결
               this.socketOnChangeRoom(this.roomId)
               // websocket room에 join
@@ -58,7 +62,7 @@ export class PlayRoomComponent implements OnInit {
 
   @HostListener('window:beforeunload')
   ngOnDestroy(): void {
-    // this.leave()
+    this.leave()
   }
 
   // 자식에서 room을 변경한 것을 적용함
@@ -88,12 +92,40 @@ export class PlayRoomComponent implements OnInit {
     // this.router.navigate(['/rooms'])
   }
 
+  cardSubmit(): void {
+    // 카드 제출 player.cards -> room.used
+    // 맵에 이동가능 아이콘 표시
+    // move 가능한 상태로 변경
+    if (!this.canMove && this.checkMyTurn()) {
+      this.canMove = true
+      console.log('cardSubmit')
+    }
+  }
+
+  move(x: number, y: number): void {
+    // 카드 제출하기 전에는 눌러도 반응이 없어야 한다.
+    if (this.canMove) {
+      this.canMove = false
+      this.player.coordinates = [x, y] // player.coordnates 갱신
+
+      const index = this.room.players.findIndex(
+        (p) => p._id === this.player._id
+      )
+      this.room.players[index] = this.player
+
+      this.room.currentPlayer = this.getNextPlayer() // room.currentPlayer 변경
+      this.changePieces()
+      // TODO : if (다른 플레이어 좌표 === 이동하려는 좌표) player.life -1
+      this.socket.emit('change-turn', { player: this.player, room: this.room })
+    }
+  }
+
   private socketOnChangeRoom(roomId: number): void {
     // websocket room에서 데이터 전송 받기 위한 연결
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
       if (!newRoom) this.router.navigate(['/rooms'])
       this.room = newRoom
-
+      this.changePieces()
       // 스타트 버튼 활성화 조건
       if (this.room.status === 'WAIT' && this.checkCanStart()) {
         this.startBtnDisableClass = ''
@@ -122,5 +154,20 @@ export class PlayRoomComponent implements OnInit {
 
   private checkCanStart(): boolean {
     return this.checkMyTurn() && this.checkReadyToStart()
+  }
+
+  // 다음 플레이어를 가져온다. 배열의 마지막이면 초기로 돌아온다
+  private getNextPlayer(): string {
+    const { players, currentPlayer } = this.room
+    const index = players.findIndex((p) => p._id === currentPlayer) + 1
+    const nextIndex = index === players.length ? 0 : index
+    return players[nextIndex]._id
+  }
+
+  private changePieces(): void {
+    this.pieces = this.diceMapService.createPieces(
+      this.room,
+      !this.checkMyTurn()
+    )
   }
 }

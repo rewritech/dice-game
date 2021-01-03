@@ -42,13 +42,16 @@ export class ChatComponent implements OnInit {
     })
   }
 
-  ngAfterViewChecked() {
+  ngAfterViewChecked(): void {
     this.scrollToBottom()
   }
 
   onSubmit(): void {
     if (this.message.content.trim().length > 0) {
-      this.messages.push({ ...this.message })
+      this.messages.push({
+        ...this.message,
+        sendedAt: new Date().toISOString(),
+      })
       this.socket.emit<Message>('send-message', this.message)
       this.message.content = ''
     }

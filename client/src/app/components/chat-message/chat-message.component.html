@@ -1,0 +1,7 @@
+<small class="text-white {{smallClass}}">
+  <span *ngIf="kindOfMessage !== 'SELF'" class="d-inline-block text-truncate player-name-width" title="{{message.playerName}}">{{message.playerName}}</span>
+  <span>({{formatDate(message.sendedAt)}})</span>
+</small>
+<div class="mb-1 p-2 rounded {{textBlockClass}}">
+  <span class="m-2 text-break" [innerHTML]="message.content"></span>
+</div>

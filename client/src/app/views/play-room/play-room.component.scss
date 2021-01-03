@@ -14,8 +14,12 @@
   max-width: 20rem;
 }
 
-.ui {
+.console-ui {
   height: 7rem;
   width: 100%;
   margin-top: 0.25rem;
+  margin-left: 1rem;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
 }

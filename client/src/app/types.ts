@@ -5,6 +5,7 @@ export type Player = {
   _roomId: number
   name: string
   coordinates: [number, number] | null
+  initialCoordinates: [number, number] | null
   piece: IconDefinition | null
   cards: number[]
   life: number
@@ -22,6 +23,12 @@ export type Room = {
     unused: number[]
     used: number[]
   }
+}
+
+export type Map = {
+  num: number
+  disabled: boolean
+  icon: IconDefinition
 }
 
 export type Message = {

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core'
+import { IconDefinition } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-dice',
@@ -6,10 +7,11 @@ import { Component, OnInit, Input } from '@angular/core'
   styleUrls: ['./dice.component.scss'],
 })
 export class DiceComponent implements OnInit {
-  @Input() dice: number
-  @Input() isDisabled: boolean
-
-  disabled: string
+  @Input() num: number
+  @Input() icon: IconDefinition
+  @Input() disabled: boolean
+  @Input() coordinate: [number, number]
+  @Input() callBackOnClick: (x: number, y: number) => void
 
   colors = [
     'btn-success',
@@ -19,12 +21,15 @@ export class DiceComponent implements OnInit {
     'btn-info',
     'btn-primary',
   ]
+  disabledClass: string
 
   constructor() {}
 
   ngOnInit(): void {
-    // console.log('this.isDisable:'+this.isDisabled )
-    this.disabled = this.isDisabled ? 'disabled' : ''
-    // console.log('this.disable:'+this.disabled )
+    this.disabledClass = this.disabled ? 'disabled cursor-unset' : ''
+  }
+
+  onClick(): void {
+    this.callBackOnClick(this.coordinate[0], this.coordinate[1])
   }
 }

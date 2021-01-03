@@ -1,7 +1,6 @@
 <div #scrollMe class="p-2 mb-1 rounded chat-size chat-bg overflow-auto">
   <div *ngFor="let message of messages">
-    <app-chat-message-self [message]="message.content" *ngIf="message._playerId === playerId"></app-chat-message-self>
-    <app-chat-message-others [message]="message" *ngIf="message._playerId !== playerId"></app-chat-message-others>
+    <app-chat-message [message]="message" [playerId]="playerId"></app-chat-message>
   </div>
 </div>
 <form #f="ngForm" (ngSubmit)="onSubmit()">
