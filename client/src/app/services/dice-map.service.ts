@@ -59,7 +59,7 @@ export class DiceMapService {
   private createCoordIcon(players: Player[]) {
     const result = {}
     players.forEach((p: Player) => {
-      result[p.coordinates.join('.')] = p.piece
+      result[p.coordinates?.join('.')] = p.piece
     })
     return result
   }

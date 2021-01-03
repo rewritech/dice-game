@@ -96,8 +96,10 @@ export class PlayRoomComponent implements OnInit {
     // 카드 제출 player.cards -> room.used
     // 맵에 이동가능 아이콘 표시
     // move 가능한 상태로 변경
-    this.canMove = true
-    console.log('cardSubmit')
+    if (!this.canMove && this.checkMyTurn()) {
+      this.canMove = true
+      console.log('cardSubmit')
+    }
   }
 
   move(x: number, y: number): void {

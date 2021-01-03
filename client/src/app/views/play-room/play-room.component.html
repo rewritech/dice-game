@@ -39,7 +39,7 @@
     <div class="col bg-dark console-ui">
       <div class="playersInfo"></div>
       <div class="myCards"></div>
-      <button class="btn btn-primary h-100" (click)="cardSubmit()">
+      <button class="btn btn-primary h-100 {{!canMove && this.checkMyTurn() ? '' : 'disabled cursor-unset'}}" (click)="cardSubmit()">
         <h2>카드<br/>제출</h2>
       </button>
     </div>
