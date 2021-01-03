@@ -3,6 +3,7 @@ import { Router } from '@angular/router'
 import { Room } from '../../types'
 import { DiceMapService } from '../../services/dice-map.service'
 import { RoomService } from '../../services/room.service'
+import { CardService } from '../../services/card.service'
 
 @Component({
   selector: 'app-new-room',
@@ -17,11 +18,13 @@ export class NewRoomComponent implements OnInit {
   constructor(
     private router: Router,
     private roomService: RoomService,
-    private diceMapService: DiceMapService
+    private diceMapService: DiceMapService,
+    private cardService: CardService
   ) {}
 
   ngOnInit(): void {
     this.diceMapService.createNewMap()
+    this.cardService.createNewCardDeck()
     this.room = {
       title: '',
       players: [],
@@ -30,7 +33,7 @@ export class NewRoomComponent implements OnInit {
       currentPlayer: this.playerId,
       status: 'WAIT',
       cardDeck: {
-        unused: [],
+        unused: this.cardService.getCardDeck(),
         used: [],
       },
     }
