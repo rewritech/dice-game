@@ -24,12 +24,14 @@
 ```bash
 $ ./docker-prod.sh up
 $ ./docker-prod.sh down
+$ ./docker-prod.sh restart
 ```
 
 ## For Development
 ```bash
 $ ./docker-dev.sh up
 $ ./docker-dev.sh down
+$ ./docker-dev.sh restart
 ```
 
 ## Production과 Development환경의 차이점
