@@ -11,6 +11,15 @@ export class DiceComponent implements OnInit {
 
   disabled: string
 
+  colors = [
+    'btn-success',
+    'btn-warning',
+    'btn-secondary',
+    'btn-danger',
+    'btn-info',
+    'btn-primary',
+  ]
+
   constructor() {}
 
   ngOnInit(): void {

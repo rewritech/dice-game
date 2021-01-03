@@ -1,26 +1,26 @@
 <div class="container">
-  <div class="row p-3 pr-0">
+  <div class="row p-1 pr-0">
     <div class="col m-2 border border-white d-flex p-0" [ngSwitch]="position">
-      <div *ngSwitchCase="'left-top'"     class="rounded-circle bg-white dice-point ml-2    mr-auto mb-auto mt-2"></div>
-      <div *ngSwitchCase="'right-top'"    class="rounded-circle bg-white dice-point ml-auto mr-2    mb-auto mt-2"></div>
-      <div *ngSwitchCase="'left-bottom'"  class="rounded-circle bg-white dice-point ml-2    mr-auto mb-2    mt-auto"></div>
-      <div *ngSwitchCase="'right-bottom'" class="rounded-circle bg-white dice-point ml-auto mr-2    mb-2    mt-auto"></div>
+      <div *ngSwitchCase="'left-top'"     class="dot ml-2    mr-auto mb-auto mt-2"></div>
+      <div *ngSwitchCase="'right-top'"    class="dot ml-auto mr-2    mb-auto mt-2"></div>
+      <div *ngSwitchCase="'left-bottom'"  class="dot ml-2    mr-auto mb-2    mt-auto"></div>
+      <div *ngSwitchCase="'right-bottom'" class="dot ml-auto mr-2    mb-2    mt-auto"></div>
     </div>
     <div class="col">
       <div class="row">
         <button class="dice-size btn m-2 {{setClassName(knightPiece)}}" (click)="selectPiece(knightPiece)">
-          <h1><fa-icon [icon]="knightPiece.piece"></fa-icon></h1>
+          <h3><fa-icon [icon]="knightPiece.piece"></fa-icon></h3>
         </button>
         <button class="dice-size btn m-2 {{setClassName(rookPiece)}}" (click)="selectPiece(rookPiece)">
-          <h1><fa-icon [icon]="rookPiece.piece"></fa-icon></h1>
+          <h3><fa-icon [icon]="rookPiece.piece"></fa-icon></h3>
         </button>
       </div>
       <div class="row">
         <button class="dice-size btn m-2 {{setClassName(kingPiece)}}" (click)="selectPiece(kingPiece)">
-          <h1><fa-icon [icon]="kingPiece.piece"></fa-icon></h1>
+          <h3><fa-icon [icon]="kingPiece.piece"></fa-icon></h3>
         </button>
         <button class="dice-size btn m-2 {{setClassName(queenPiece)}}" (click)="selectPiece(queenPiece)">
-          <h1><fa-icon [icon]="queenPiece.piece"></fa-icon></h1>
+          <h3><fa-icon [icon]="queenPiece.piece"></fa-icon></h3>
         </button>
       </div>
     </div>

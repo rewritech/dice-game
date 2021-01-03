@@ -119,7 +119,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
 
       const room = await Room.findOne({ _id: player._roomId, deleted: false }, { map: 0 })
       // WAIT 상태에서 방장이 나가면 다음사람을 방장으로 선정
-      if (room && String(room.currentPlayer) === player._id && room.status === 'WAIT') {
+      if (room && String(room.currentPlayer) === player._id && room.status === 'WAIT' && room.players > 0) {
         await Room.updateOne({ _id: player._roomId }, { $set: { currentPlayer: room.players[0]._id } });
       }
 
