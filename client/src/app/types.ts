@@ -30,7 +30,7 @@ export type Message = {
   _playerId: string
   playerName?: string
   content: string
-  sendedAt: Date | string
+  sendedAt?: string
 }
 
 export type PieceBtn = {

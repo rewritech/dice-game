@@ -21,7 +21,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col">
+    <div class="col pr-0 mr-2">
       <div class="d-flex flex-column p-1 bg-dark fit-contents">
         <div class="d-flex" *ngFor="let dices of room.map">
           <div *ngFor="let dice of dices">
@@ -30,9 +30,12 @@
         </div>
       </div>
     </div>
-    <div class="col border bg-dark">
-      <h3 class="mt-1 text-white d-inline-block text-truncate player-name-width" title="{{player.name}}">플레이어({{player.name}})</h3>
+    <div class="col border bg-dark p-2">
+      <h4 class="mt-1 text-white d-inline-block text-truncate player-name-width" title="{{player.name}}">플레이어({{player.name}})</h4>
       <app-chat></app-chat>
     </div>
+  </div>
+  <div class="row" *ngIf="room.status === 'PLAYING'">
+    <div class="col ml-3 bg-dark ui"></div>
   </div>
 </div>

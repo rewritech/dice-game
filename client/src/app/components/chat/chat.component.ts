@@ -28,7 +28,6 @@ export class ChatComponent implements OnInit {
       _roomId: this.roomId,
       _playerId: this.playerId,
       content: '',
-      sendedAt: new Date(),
     }
   }
 
