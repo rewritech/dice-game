@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core'
+import { SelectedCard } from '../../types'
 
 @Component({
   selector: 'app-card',
@@ -6,12 +7,13 @@ import { Component, Input, OnInit } from '@angular/core'
   styleUrls: ['./card.component.scss'],
 })
 export class CardComponent implements OnInit {
-  @Input() callBackSelectCard: (num: number) => void
-  @Input() callBackUnselectCard: (num: number) => void
+  @Input() callBackSelectCard: (selectedCard: SelectedCard) => void
+  @Input() callBackUnselectCard: (selectedCard: SelectedCard) => void
   @Input() num: number
+  @Input() index: number
   @Input() disabled: boolean
+  @Input() selected: boolean
 
-  selected: boolean
   disabledClass: string
 
   constructor() {}
@@ -27,11 +29,13 @@ export class CardComponent implements OnInit {
     // 1. disabled 이면 클릭 해도 반응이 없을 것
     // 2. selected 이면 unselected가 실행될 것
     // 3. disabled 이지만 selected 라면 선택가능할 것
-
+    const selectedCard = { num, index: this.index }
     if (!this.disabled || this.selected) {
-      this.selected
-        ? this.callBackUnselectCard(num)
-        : this.callBackSelectCard(num)
+      if (this.selected) {
+        this.callBackUnselectCard(selectedCard)
+      } else {
+        this.callBackSelectCard(selectedCard)
+      }
       this.selected = !this.selected
     }
   }

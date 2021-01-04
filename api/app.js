@@ -109,8 +109,14 @@ io.of('/dice-map-room').on('connection', (socket) => {
   socket.on('game-start', async (room) => {
     try {
       console.log(`[${new Date()}]: game-start`);
+      // 카드 분배
+      const player = await Player.findOne({ _id: room.currentPlayer })
+      const newCards = room.cardDeck.unused.splice(0, 2)
+      player.cards = player.cards.concat(newCards)
+
       // DB room 갱신
-      await Room.updateOne({ _id: room._id }, { $set: { status: room.status, playerLimit: room.playerLimit } });
+      await Room.updateOne({ _id: room._id }, { $set: { status: room.status, playerLimit: room.playerLimit, cardDeck: room.cardDeck } });
+      await Player.updateOne({ _id: player._id }, { $set: { cards: player.cards } });
       // Socket room 갱신
       broadcastRoom(socket, room._id);
       broadcastSystemMessage(socket, room._id, '게임을 시작합니다.');
@@ -124,8 +130,13 @@ io.of('/dice-map-room').on('connection', (socket) => {
       console.log(`[${new Date()}]: change-turn`);
       const room = value.room
       const player = value.player
+
       // DB room 갱신
-      await Player.updateOne({ _id: player._id }, { $set: { coordinates: player.coordinates } });
+      await Player.updateOne({ _id: player._id }, { $set: { coordinates: player.coordinates, cards: player.cards } });
+
+      // 카드 분배
+      const newCards = room.cardDeck.unused.splice(0, 2)
+      await Player.updateOne({ _id: room.currentPlayer }, { $push: { cards: newCards } });
       await Room.updateOne({ _id: room._id }, {
         $set: {
           currentPlayer: room.currentPlayer,

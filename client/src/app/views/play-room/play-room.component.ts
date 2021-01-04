@@ -1,6 +1,6 @@
-import { Component, HostListener, OnInit, SimpleChange } from '@angular/core'
+import { Component, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Map, Player, Room } from '../../types'
+import { Map, Player, Room, SelectedCard } from '../../types'
 import { SocketConnectService } from '../../services/socket-connect.service'
 import { DiceMapService } from '../../services/dice-map.service'
 import { RoomService } from '../../services/room.service'
@@ -24,10 +24,10 @@ export class PlayRoomComponent implements OnInit {
   startBtnDisableClass = 'disabled'
   positions = ['left-top', 'right-top', 'left-bottom', 'right-bottom']
   pieces: Map[][]
-  selectedCard: number[] = []
+  selectedCards: SelectedCard[] = []
   callBackOnClick = (x: number, y: number): void => this.move(x, y)
-  callBackSelectCard = (num: number): void => this.selectCard(num)
-  callBackUnselectCard = (num: number): void => this.unselectCard(num)
+  callBackSelectCard = (sc: SelectedCard): void => this.selectCard(sc)
+  callBackUnselectCard = (sc: SelectedCard): void => this.unselectCard(sc)
 
   constructor(
     private route: ActivatedRoute,
@@ -99,6 +99,31 @@ export class PlayRoomComponent implements OnInit {
     // this.router.navigate(['/rooms'])
   }
 
+  selectCard(selectedCard: SelectedCard): void {
+    // 현재 카드 한계선보다 적게 선택했다면
+    if (this.selectedCards.length < this.CARD_SELECT_LIMIT) {
+      this.selectedCards.push(selectedCard) // 카드 추가
+      this.canCardSubmit = true // 카드 제출 활성화
+
+      // 추가 후에 한계를 넘는다면 카드 비활성화
+      if (this.selectedCards.length >= this.CARD_SELECT_LIMIT) {
+        this.cardDisabled = true
+      }
+    }
+  }
+
+  unselectCard(sc: SelectedCard): void {
+    const index = this.selectedCards.findIndex((c) => c.index === sc.index)
+    // 카드제거
+    if (index > -1) this.selectedCards.splice(index, 1)
+    // 카드제출 버튼 비활성화
+    if (this.selectedCards.length === 0) this.canCardSubmit = false
+    // 카드 선택 한계 보다 작아지면 다시 선택가능 상태로
+    if (this.selectedCards.length < this.CARD_SELECT_LIMIT) {
+      this.cardDisabled = false
+    }
+  }
+
   cardSubmit(): void {
     if (this.canCardSubmit) {
       // move 가능한 상태로 변경
@@ -108,8 +133,16 @@ export class PlayRoomComponent implements OnInit {
       // 카드 비활성화
       this.cardDisabled = true
       // 카드 제출 player.cards -> room.used
-      // 맵에 이동가능 아이콘 표시
-      console.log('cardSubmit')
+      const targetCards = this.selectedCards.map((c) => c.num)
+      const targetIndexes = this.selectedCards.map((c) => c.index)
+      this.player.cards = this.player.cards.filter(
+        (_, i) => !targetIndexes.includes(i)
+      )
+      this.room.cardDeck.used = this.room.cardDeck.used.concat(targetCards)
+      this.selectedCards = []
+
+      // TODO: 맵에 이동가능 아이콘 표시
+      // TODO: emit
     }
   }
 
@@ -127,29 +160,9 @@ export class PlayRoomComponent implements OnInit {
     }
   }
 
-  selectCard(num: number): void {
-    // 현재 카드 한계선보다 적게 선택했다면
-    if (this.selectedCard.length < this.CARD_SELECT_LIMIT) {
-      this.selectedCard.push(num) // 카드 추가
-      this.canCardSubmit = true // 카드 제출 활성화
-
-      // 추가 후에 한계를 넘는다면 카드 비활성화
-      if (this.selectedCard.length >= this.CARD_SELECT_LIMIT) {
-        this.cardDisabled = true
-      }
-    }
-  }
-
-  unselectCard(num: number): void {
-    const index = this.selectedCard.indexOf(num)
-    // 카드제거
-    if (index > -1) this.selectedCard.splice(index, 1)
-    // 카드제출 버튼 비활성화
-    if (this.selectedCard.length === 0) this.canCardSubmit = false
-    // 카드 선택 한계 보다 작아지면 다시 선택가능 상태로
-    if (this.selectedCard.length < this.CARD_SELECT_LIMIT) {
-      this.cardDisabled = false
-    }
+  // 선택된 카드인지 확인한다.
+  isSelectedCard(num: number, index: number): boolean {
+    return !!this.selectedCards.find((c) => c.num === num && c.index === index)
   }
 
   private socketOnChangeRoom(roomId: number): void {
@@ -157,6 +170,7 @@ export class PlayRoomComponent implements OnInit {
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
       if (!newRoom) this.router.navigate(['/rooms'])
       this.room = newRoom
+      this.player = newRoom.players.find((p) => p._id === this.playerId)
       this.cardDisabled = !this.checkMyTurn() // 내턴이면 카드 활성화
       this.changePieces()
       // 스타트 버튼 활성화 조건

@@ -46,6 +46,11 @@ export type PieceBtn = {
   piece: IconDefinition
 }
 
+export type SelectedCard = {
+  num: number
+  index: number
+}
+
 export type Counter = {
   1: number
   2: number
