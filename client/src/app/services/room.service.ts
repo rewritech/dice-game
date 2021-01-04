@@ -14,6 +14,7 @@ export class RoomService {
 
   constructor(private http: HttpClient) {}
 
+  // API CALL =================================================
   getRooms(): Observable<Room[]> {
     return this.http
       .get<Room[]>(`${this.apiBaseUrl}/rooms`)
@@ -44,6 +45,39 @@ export class RoomService {
       .pipe(catchError(this.handleError<Room>(`deleteRoom`)))
   }
 
+  // FOR PLAY-ROOM =================================================
+  checkMyTurn(player: Player, room: Room): boolean {
+    return player._id === room.currentPlayer
+  }
+
+  checkReadyToStart(room: Room): boolean {
+    return room.players.filter((p) => p.coordinates).length > 1
+  }
+
+  checkCanStart(player: Player, room: Room): boolean {
+    return this.checkMyTurn(player, room) && this.checkReadyToStart(room)
+  }
+
+  // 1. room이 존재함
+  // 2. 이미 방에 속한 플레이어 인 경우
+  // 3. 방에 빈자리가 있는 경우
+  checkCanJoinRoom(room: Room, playerId: string): boolean {
+    return (
+      room &&
+      (room.players.filter((p) => p._id === playerId).length === 1 ||
+        room.players.length < room.playerLimit)
+    )
+  }
+
+  // 다음 플레이어를 가져온다. 배열의 마지막이면 초기로 돌아온다
+  getNextPlayer(room: Room): string {
+    const { players, currentPlayer } = room
+    const index = players.findIndex((p) => p._id === currentPlayer) + 1
+    const nextIndex = index === players.length ? 0 : index
+    return players[nextIndex]._id
+  }
+
+  // PRIVATE =================================================
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error)
