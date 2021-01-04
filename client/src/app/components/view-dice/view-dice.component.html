@@ -1,5 +1,5 @@
 <div [ngSwitch]="num">
-  <div *ngIf="!icon" class="btn dice {{colors[this.num - 1]}} {{disabledClass}}">
+  <div class="btn dice {{colors[this.num - 1]}} {{disabledClass}}">
     <div class="column">
       <div class="dot" [style.background-color]="[2, 3, 4, 5, 6].includes(num) ? 'white' : 'transparent'"></div>
       <div class="dot" [style.background-color]="[6].includes(num) ? 'white' : 'transparent'"></div>
