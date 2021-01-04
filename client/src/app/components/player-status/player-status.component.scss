@@ -1,0 +1,29 @@
+.outline {
+  border-style: solid;
+  border-width: thin;
+  border-color: white;
+}
+
+.status-width {
+  width: 11rem;
+}
+
+.piece-size {
+  height: 100%;
+  width: 40px;
+}
+
+.font-size {
+  font-size: 1.7rem;
+}
+
+.pattern {
+  background: repeating-linear-gradient(45deg, #008ccf, #008ccf 4px, rgb(255, 255, 255) 0,rgb(255, 255, 255) 7px);
+}
+
+.card-size {
+  width: 25px;
+  border-style: solid;
+  border-width: thin;
+  border-color: white;
+}

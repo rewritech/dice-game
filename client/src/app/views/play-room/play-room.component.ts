@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core'
+import { Component, HostListener, OnInit, SimpleChange } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Map, Player, Room } from '../../types'
 import { SocketConnectService } from '../../services/socket-connect.service'
@@ -18,10 +18,15 @@ export class PlayRoomComponent implements OnInit {
 
   room: Room
   player: Player
+  cardDisabled = false
+  canCardSubmit = false
   startBtnDisableClass = 'disabled'
   positions = ['left-top', 'right-top', 'left-bottom', 'right-bottom']
   pieces: Map[][]
+  selectedCard: number[] = []
   callBackOnClick = (x: number, y: number): void => this.move(x, y)
+  callBackSelectCard = (num: number): void => this.selectCard(num)
+  callBackUnselectCard = (num: number): void => this.unselectCard(num)
 
   constructor(
     private route: ActivatedRoute,
@@ -45,6 +50,7 @@ export class PlayRoomComponent implements OnInit {
             .subscribe((room) => {
               this.room = room
               this.player._roomId = this.room._id
+              this.cardDisabled = !this.checkMyTurn()
               this.changePieces()
               // websocket 연결
               this.socketOnChangeRoom(this.roomId)
@@ -62,7 +68,7 @@ export class PlayRoomComponent implements OnInit {
 
   @HostListener('window:beforeunload')
   ngOnDestroy(): void {
-    this.leave()
+    // this.leave()
   }
 
   // 자식에서 room을 변경한 것을 적용함
@@ -96,8 +102,11 @@ export class PlayRoomComponent implements OnInit {
     // 카드 제출 player.cards -> room.used
     // 맵에 이동가능 아이콘 표시
     // move 가능한 상태로 변경
-    if (!this.canMove && this.checkMyTurn()) {
+    // this.canCardSubmit = !this.canMove && this.checkMyTurn() && this.selectedCard.length > 0
+    if (this.canCardSubmit) {
       this.canMove = true
+      this.canCardSubmit = false
+      this.cardDisabled = true
       console.log('cardSubmit')
     }
   }
@@ -106,12 +115,8 @@ export class PlayRoomComponent implements OnInit {
     // 카드 제출하기 전에는 눌러도 반응이 없어야 한다.
     if (this.canMove) {
       this.canMove = false
+      this.cardDisabled = true // 카드 선택불가
       this.player.coordinates = [x, y] // player.coordnates 갱신
-
-      const index = this.room.players.findIndex(
-        (p) => p._id === this.player._id
-      )
-      this.room.players[index] = this.player
 
       this.room.currentPlayer = this.getNextPlayer() // room.currentPlayer 변경
       this.changePieces()
@@ -120,11 +125,27 @@ export class PlayRoomComponent implements OnInit {
     }
   }
 
+  selectCard(num: number): void {
+    if (this.selectedCard.length < 3) {
+      this.selectedCard.push(num)
+      this.canCardSubmit = true
+      if (this.selectedCard.length > 2) this.cardDisabled = true
+    }
+  }
+
+  unselectCard(num: number): void {
+    const index = this.selectedCard.indexOf(num)
+    if (index > -1) this.selectedCard.splice(index, 1)
+    if (this.selectedCard.length === 0) this.canCardSubmit = false
+    if (this.selectedCard.length < 3) this.cardDisabled = false
+  }
+
   private socketOnChangeRoom(roomId: number): void {
     // websocket room에서 데이터 전송 받기 위한 연결
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
       if (!newRoom) this.router.navigate(['/rooms'])
       this.room = newRoom
+      this.cardDisabled = !this.checkMyTurn()
       this.changePieces()
       // 스타트 버튼 활성화 조건
       if (this.room.status === 'WAIT' && this.checkCanStart()) {

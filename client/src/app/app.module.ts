@@ -15,12 +15,15 @@ import { HowToPlayComponent } from './views/how-to-play/how-to-play.component'
 import { PlayerEditModalComponent } from './components/player-edit-modal/player-edit-modal.component'
 import { DashboardButtonComponent } from './components/dashboard-button/dashboard-button.component'
 import { DiceComponent } from './components/dice/dice.component'
+import { ViewDiceComponent } from './components/view-dice/view-dice.component'
 import { LoginComponent } from './views/login/login.component'
 import { UserInfoComponent } from './components/user-info/user-info.component'
 import { SelectPieceComponent } from './components/select-piece/select-piece.component'
 import { HeaderComponent } from './components/header/header.component'
 import { ChatComponent } from './components/chat/chat.component'
 import { ChatMessageComponent } from './components/chat-message/chat-message.component'
+import { PlayerStatusComponent } from './components/player-status/player-status.component'
+import { CardComponent } from './components/card/card.component'
 
 @NgModule({
   declarations: [
@@ -33,12 +36,15 @@ import { ChatMessageComponent } from './components/chat-message/chat-message.com
     PlayerEditModalComponent,
     DashboardButtonComponent,
     DiceComponent,
+    ViewDiceComponent,
     LoginComponent,
     UserInfoComponent,
     SelectPieceComponent,
     HeaderComponent,
     ChatComponent,
     ChatMessageComponent,
+    PlayerStatusComponent,
+    CardComponent,
   ],
   imports: [
     BrowserModule,

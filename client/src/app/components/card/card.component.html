@@ -1,0 +1,9 @@
+<div
+  class="btn outline p-1 card-size mr-1 d-flex justify-content-center {{disabledClass}}"
+  [style.background-color]="selected ? 'gold' : 'white'"
+  (click)="onClick(num)"
+>
+  <div class="inner-outline d-flex align-items-center bg-white">
+    <app-view-dice [num]="num" [disabledClass]="disabledClass"></app-view-dice>
+  </div>
+</div>

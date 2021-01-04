@@ -20,8 +20,8 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col pr-0 mr-2">
+  <div class="d-flex">
+    <div class="pr-0 mr-2">
       <div class="d-flex flex-column p-1 bg-dark fit-contents">
         <div class="d-flex" *ngFor="let piecesRow of pieces; index as i">
           <div *ngFor="let piece of piecesRow; index as j">
@@ -35,11 +35,22 @@
       <app-chat></app-chat>
     </div>
   </div>
-  <div class="row" *ngIf="room.status === 'PLAYING'">
-    <div class="col bg-dark console-ui">
-      <div class="playersInfo"></div>
-      <div class="myCards"></div>
-      <button class="btn btn-primary h-100 {{!canMove && this.checkMyTurn() ? '' : 'disabled cursor-unset'}}" (click)="cardSubmit()">
+  <div *ngIf="room.status === 'PLAYING'">
+    <div class="bg-dark console-ui p-1">
+      <div class="d-flex flex-column">
+        <div *ngFor="let player of room.players.slice(0,2)">
+          <app-player-status [icon]="player.piece" [life]="player.life" [cards]="player.cards.length"></app-player-status>
+        </div>
+      </div>
+      <div class="mr-1 d-flex flex-column">
+        <div *ngFor="let player of room.players.slice(2,4)">
+          <app-player-status *ngIf="player" [icon]="player.piece" [life]="player.life" [cards]="player.cards.length"></app-player-status>
+        </div>
+      </div>
+      <div class="border rounded border-white flex-fill h-100 overflow-auto d-flex p-1">
+        <!-- <app-card [num]="1" [disabled]="cardDisabled" [callBackUnselectCard]="callBackUnselectCard" [callBackSelectCard]="callBackSelectCard"></app-card> -->
+      </div>
+      <button class="card-submit-size btn btn-primary h-100 ml-1 {{canCardSubmit ? '' : 'disabled cursor-unset'}}" (click)="cardSubmit()">
         <h2>카드<br/>제출</h2>
       </button>
     </div>

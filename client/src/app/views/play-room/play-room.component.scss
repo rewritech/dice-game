@@ -15,11 +15,14 @@
 }
 
 .console-ui {
-  height: 7rem;
+  height: 7.1rem;
   width: 100%;
   margin-top: 0.25rem;
-  margin-left: 1rem;
   padding: 0;
   display: flex;
   justify-content: space-between;
+}
+
+.card-submit-size {
+  width: 7rem;
 }

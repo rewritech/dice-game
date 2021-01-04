@@ -51,7 +51,7 @@ socketServer.listen(socketPort, () => {
 // ==================== socket connect ====================
 async function broadcastRoom (socket, roomId) {
   const room = await Room.findOne({ _id: roomId, deleted: false }).populate('players');
-  socket.in(`room-${roomId}`).emit(`changeRoomInfo-${roomId}`, room);
+  io.of("/dice-map-room").to(`room-${roomId}`).emit(`changeRoomInfo-${roomId}`, room);
 }
 async function broadcastRoomMessage (socket, roomId) {
   const messages = await Message.find({ _roomId: roomId });

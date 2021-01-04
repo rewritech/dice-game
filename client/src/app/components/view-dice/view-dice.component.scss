@@ -1,0 +1,30 @@
+.dot {
+  width:12px;
+  height:12px;
+  border-radius: 50%;
+}
+
+.dark-dot {
+  @extend .dot;
+  background-color: #343a40;
+}
+
+.dice {
+  @extend .dice-size;
+  margin: 0.25rem;
+  padding: 0.25rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.column {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.dice-size {
+  height: 50px;
+  width: 50px;
+}
