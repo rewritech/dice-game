@@ -98,7 +98,13 @@ io.of('/dice-map-room').on('connection', (socket) => {
     try {
       console.log(`[${new Date()}]: select-piece`);
       // DB room 갱신
-      await Player.updateOne({ _id: player._id }, { $set: { piece: player.piece, coordinates: player.coordinates } });
+      await Player.updateOne({ _id: player._id }, {
+        $set: {
+          piece: player.piece,
+          coordinates: player.coordinates,
+          initialCoordinates: player.initialCoordinates
+        }
+      });
       // Socket room 갱신
       broadcastRoom(socket, player._roomId);
     } catch (e) {
@@ -177,7 +183,16 @@ io.of('/dice-map-room').on('connection', (socket) => {
         await Message.deleteMany({ _roomId: player._roomId })
       }
 
-      await Player.updateOne({ _id: player._id }, { $set: { _roomId: 0, coordinates: null, piece: {icon: []} } });
+      await Player.updateOne({ _id: player._id }, {
+        $set: {
+          _roomId: 0,
+          coordinates: null,
+          initialCoordinates: null,
+          cards: [],
+          piece: {icon: []},
+          life: 3
+        }
+      });
 
       if(player._roomId > 0) {
         // Socket room 갱신
