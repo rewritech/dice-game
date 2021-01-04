@@ -135,6 +135,11 @@ io.of('/dice-map-room').on('connection', (socket) => {
       await Player.updateOne({ _id: player._id }, { $set: { coordinates: player.coordinates, cards: player.cards } });
 
       // 카드 분배
+      // unused에 카드가 2장 미만이면 used의 카드를 다시 가져온다.
+      if (room.cardDeck.unused.length < 2) {
+        room.cardDeck.unused = room.cardDeck.unused.concat(room.cardDeck.used)
+        room.cardDeck.used = []
+      }
       const newCards = room.cardDeck.unused.splice(0, 2)
       await Player.updateOne({ _id: room.currentPlayer }, { $push: { cards: newCards } });
       await Room.updateOne({ _id: room._id }, {
