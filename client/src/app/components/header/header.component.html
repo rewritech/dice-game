@@ -1,5 +1,9 @@
-<div class="bg-dark">
-  <a class="btn text-white" routerLink="/">
+<div class="d-flex bg-dark p-1">
+  <a class="btn text-white mr-auto" routerLink="/">
     <h2>DiceMap</h2>
   </a>
+  <app-player-edit-modal></app-player-edit-modal>
+  <button class="btn-font-size btn btn-danger ml-2" (click)="logout()">
+    <span>LOGOUT</span>
+  </button>
 </div>

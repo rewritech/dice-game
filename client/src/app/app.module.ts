@@ -17,7 +17,6 @@ import { DashboardButtonComponent } from './components/dashboard-button/dashboar
 import { DiceComponent } from './components/dice/dice.component'
 import { ViewDiceComponent } from './components/view-dice/view-dice.component'
 import { LoginComponent } from './views/login/login.component'
-import { UserInfoComponent } from './components/user-info/user-info.component'
 import { SelectPieceComponent } from './components/select-piece/select-piece.component'
 import { HeaderComponent } from './components/header/header.component'
 import { ChatComponent } from './components/chat/chat.component'
@@ -38,7 +37,6 @@ import { CardComponent } from './components/card/card.component'
     DiceComponent,
     ViewDiceComponent,
     LoginComponent,
-    UserInfoComponent,
     SelectPieceComponent,
     HeaderComponent,
     ChatComponent,
