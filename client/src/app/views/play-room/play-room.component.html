@@ -25,7 +25,7 @@
       <div class="d-flex flex-column p-1 bg-dark fit-contents">
         <div class="d-flex" *ngFor="let piecesRow of pieces; index as i">
           <div *ngFor="let piece of piecesRow; index as j">
-            <app-dice [num]="piece.num" [disabled]="piece.disabled" [icon]="piece.icon" [coordinate]="[i, j]" [callBackOnClick]="callBackOnClick"></app-dice>
+            <app-dice [num]="piece.num" [disabled]="piece.disabled" [icon]="piece.icon" [blink]="piece.blink" [coordinate]="[i, j]" [callBackOnClick]="callBackOnClick"></app-dice>
           </div>
         </div>
       </div>

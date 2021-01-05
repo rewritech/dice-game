@@ -10,6 +10,7 @@ export class DiceComponent implements OnInit {
   @Input() num: number
   @Input() icon: IconDefinition
   @Input() disabled: boolean
+  @Input() blink: boolean
   @Input() coordinate: [number, number]
   @Input() callBackOnClick: (x: number, y: number) => void
 
@@ -21,11 +22,13 @@ export class DiceComponent implements OnInit {
     'btn-info',
     'btn-primary',
   ]
+  blinkClass: string
   disabledClass: string
 
   constructor() {}
 
   ngOnInit(): void {
+    this.blinkClass = this.blink ? 'blinking' : ''
     this.disabledClass = this.disabled ? 'disabled cursor-unset' : ''
   }
 

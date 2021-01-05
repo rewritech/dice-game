@@ -16,7 +16,7 @@
       <div class="dot" [style.background-color]="[2, 3, 4, 5, 6].includes(num) ? 'white' : 'transparent'"></div>
     </div>
   </div>
-  <div *ngIf="icon" class="btn piece {{colors[this.num - 1]}} {{disabledClass}}" (click)="onClick()">
+  <div *ngIf="icon" class="btn piece {{blinkClass}} {{colors[this.num - 1]}} {{disabledClass}}" (click)="onClick()">
     <h3><fa-icon class="icon-color" [icon]="icon"></fa-icon></h3>
   </div>
 </div>
