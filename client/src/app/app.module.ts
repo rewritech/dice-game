@@ -24,6 +24,7 @@ import { ChatComponent } from './components/chat/chat.component'
 import { ChatMessageComponent } from './components/chat-message/chat-message.component'
 import { PlayerStatusComponent } from './components/player-status/player-status.component'
 import { CardComponent } from './components/card/card.component'
+import { DiceBoardComponent } from './components/dice-board/dice-board.component'
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { CardComponent } from './components/card/card.component'
     ChatMessageComponent,
     PlayerStatusComponent,
     CardComponent,
+    DiceBoardComponent,
   ],
   imports: [
     BrowserModule,
