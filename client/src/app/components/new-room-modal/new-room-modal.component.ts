@@ -13,6 +13,8 @@ import { Room } from '../../types'
 })
 export class NewRoomModalComponent implements OnInit {
   room: Room
+  validationError = false
+  invalidClass = ''
 
   private playerId = localStorage.getItem('pId')
 
@@ -49,11 +51,15 @@ export class NewRoomModalComponent implements OnInit {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
   }
 
-  onSubmit(form: Room): void {
-    this.room.title = form.title
-    this.room.playerLimit = form.playerLimit
-    this.roomService.createRoom(this.room).subscribe((res) => {
-      this.router.navigate([`/rooms/${res._id}`])
-    })
+  onSubmit(): void {
+    if (this.room.title.trim().length > 0) {
+      this.modalService.dismissAll()
+      this.roomService.createRoom(this.room).subscribe((res) => {
+        this.router.navigate([`/rooms/${res._id}`])
+      })
+    } else {
+      this.validationError = true
+      this.invalidClass = 'border border-danger'
+    }
   }
 }
