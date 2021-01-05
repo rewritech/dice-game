@@ -160,11 +160,27 @@ export class PlayRoomComponent implements OnInit {
       this.player.coordinates = [x, y] // player.coordnates 갱신
 
       this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
+
+      // 적플레이어를 잡으면 라이프 -1, 말 위치 초기화
+      const targetIndex = this.room.players.findIndex(
+        (p) =>
+          this.diceMapService.compare(p.coordinates, [x, y]) &&
+          p._id !== this.player._id
+      )
+      if (targetIndex > -1) {
+        this.room.players[targetIndex].life -= 1
+        this.room.players[targetIndex].coordinates = this.room.players[
+          targetIndex
+        ].initialCoordinates
+        this.socket.emit('catch-player', {
+          player: this.room.players[targetIndex],
+        })
+      }
+
       this.pieces = this.diceMapService.createPieces(
         this.room,
         !this.roomService.checkMyTurn(this.player, this.room)
       )
-      // TODO : if (다른 플레이어 좌표 === 이동하려는 좌표) player.life -1
       this.socket.emit('change-turn', { player: this.player, room: this.room })
     }
   }
