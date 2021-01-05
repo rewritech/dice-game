@@ -75,7 +75,7 @@ export class PlayRoomComponent implements OnInit {
 
   @HostListener('window:beforeunload')
   ngOnDestroy(): void {
-    // this.leave()
+    this.leave()
   }
 
   // 자식에서 room을 변경한 것을 적용함

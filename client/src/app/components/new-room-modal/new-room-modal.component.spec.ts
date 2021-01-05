@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { NewRoomComponent } from './new-room.component'
+import { NewRoomModalComponent } from './new-room-modal.component'
 
-describe('NewRoomComponent', () => {
-  let component: NewRoomComponent
-  let fixture: ComponentFixture<NewRoomComponent>
+describe('NewRoomModalComponent', () => {
+  let component: NewRoomModalComponent
+  let fixture: ComponentFixture<NewRoomModalComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NewRoomComponent],
+      declarations: [NewRoomModalComponent],
     }).compileComponents()
   })
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NewRoomComponent)
+    fixture = TestBed.createComponent(NewRoomModalComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })

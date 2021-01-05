@@ -1,26 +1,32 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Input } from '@angular/core'
 import { Router } from '@angular/router'
-import { Room } from '../../types'
+import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap'
 import { DiceMapService } from '../../services/dice-map.service'
 import { RoomService } from '../../services/room.service'
 import { CardService } from '../../services/card.service'
+import { Room } from '../../types'
 
 @Component({
-  selector: 'app-new-room',
-  templateUrl: './new-room.component.html',
-  styleUrls: ['./new-room.component.scss'],
+  selector: 'app-new-room-modal',
+  templateUrl: './new-room-modal.component.html',
+  styleUrls: ['./new-room-modal.component.scss'],
 })
-export class NewRoomComponent implements OnInit {
+export class NewRoomModalComponent implements OnInit {
   room: Room
 
   private playerId = localStorage.getItem('pId')
 
   constructor(
+    private config: NgbModalConfig,
+    private modalService: NgbModal,
     private router: Router,
     private roomService: RoomService,
     private diceMapService: DiceMapService,
     private cardService: CardService
-  ) {}
+  ) {
+    // this.config.backdrop = 'static'
+    // this.config.keyboard = false
+  }
 
   ngOnInit(): void {
     this.diceMapService.createNewMap()
@@ -37,6 +43,10 @@ export class NewRoomComponent implements OnInit {
         used: [],
       },
     }
+  }
+
+  open(content: any): void {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
   }
 
   onSubmit(form: Room): void {
