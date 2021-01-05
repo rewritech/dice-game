@@ -1,7 +1,7 @@
 <ng-template #content let-modal>
   <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">New Room</h4>
+      <h4 class="modal-title" id="modal-basic-title">방 만들기</h4>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')" tabindex="-1">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -31,7 +31,7 @@
 </ng-template>
 
 <div class="row d-flex justify-content-center h-100">
-  <button class="btn btn-info btn-lg w-50 d-block mb-2" (click)="open(content)">
-    <h1>NEW ROOM</h1>
+  <button class="btn btn-outline-info btn-lg mb-2 w-25" (click)="open(content)">
+    <h1>방 만들기</h1>
   </button>
 </div>

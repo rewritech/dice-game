@@ -1,5 +1,5 @@
 <div class="container" *ngIf="room">
-  <h1>{{room.title}}({{room.players.length}}/{{room.playerLimit}})</h1>
+  <h1 class="text-white">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</h1>
 
   <div class="background container" *ngIf="room.status === 'WAIT'">
     <div class="card bg-transparent" style="width: fit-content;">
