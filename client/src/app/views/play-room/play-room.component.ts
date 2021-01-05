@@ -157,8 +157,17 @@ export class PlayRoomComponent implements OnInit {
       this.player.coordinates = [x, y] // player.coordnates 갱신
 
       this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
+
+      // 적플레이어를 잡으면 라이프 -1, 말 위치 초기화
+      const targetIndex = this.room.players.findIndex((p) => this.compare(p.coordinates, [x, y]) && p._id != this.player._id)
+      if (targetIndex > -1) {
+        this.room.players[targetIndex].life -= 1
+        this.room.players[targetIndex].coordinates = this.room.players[targetIndex].initialCoordinates
+        this.socket.emit('catch-player', { player: this.room.players[targetIndex] })
+      }
+      
       this.changePieces()
-      // TODO : if (다른 플레이어 좌표 === 이동하려는 좌표) player.life -1
+
       this.socket.emit('change-turn', { player: this.player, room: this.room })
     }
   }
@@ -191,5 +200,10 @@ export class PlayRoomComponent implements OnInit {
       this.room,
       !this.roomService.checkMyTurn(this.player, this.room)
     )
+  }
+
+  // 두 배열을 비교한다. 좌표 비교할 때 사용함
+  private compare(x: number[], y: number[]): boolean {
+    return JSON.stringify(x) === JSON.stringify(y)
   }
 }
