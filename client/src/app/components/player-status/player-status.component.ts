@@ -10,10 +10,13 @@ export class PlayerStatusComponent implements OnInit {
   @Input() icon: IconDefinition
   @Input() life: number
   @Input() cards: number
+  @Input() blink: boolean
+
+  blinkClass: string
 
   constructor() { }
 
   ngOnInit(): void {
+    this.blinkClass = this.blink ? 'blinking' : ''
   }
-
 }
