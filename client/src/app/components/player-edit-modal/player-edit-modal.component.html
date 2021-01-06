@@ -22,7 +22,7 @@
   </form>
 </ng-template>
 
-<button class="btn btn-info h-100 btn-font-size d-flex" (click)="open(content)" *ngIf="player">
+<button class="btn btn-info h-100 d-flex" (click)="open(content)" *ngIf="player">
   <span class="d-inline-block text-truncate mt-auto mb-auto">{{i18n.get('nickName')}}(</span>
   <span class="d-inline-block text-truncate mt-auto mb-auto player-name-width">{{player.name}}</span>
   <span class="d-inline-block text-truncate mt-auto mb-auto">){{i18n.get('change')}}</span>
