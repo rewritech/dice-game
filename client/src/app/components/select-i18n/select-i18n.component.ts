@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { faGlobe } from '@fortawesome/free-solid-svg-icons'
 import { I18nService } from '../../services/i18n.service'
 import { Locale } from '../../types'
 
@@ -14,6 +15,7 @@ export class SelectI18nComponent implements OnInit {
     { key: 'jp', name: '日本語' },
   ]
   default: Locale
+  globe = faGlobe
 
   constructor(private i18nService: I18nService) {
     this.default = this.i18nService.getLocale()

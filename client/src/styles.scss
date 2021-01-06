@@ -52,6 +52,10 @@ body {
 }
 
 .i18n-select {
-  max-width: 7rem;
+  max-width: 9rem;
   right: 0;
+
+  .select-box-width {
+    width: 7rem;
+  }
 }

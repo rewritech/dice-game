@@ -1,8 +1,11 @@
-<select class="custom-select" (change)="onChange($event)">
-  <option *ngFor="let locale of locales"
-    [selected]="locale.key === default"
-    value="{{locale.key}}"
-  >
-    {{locale.name}}
-  </option>
-</select>
+<div class="d-flex text-white">
+  <h3><fa-icon [icon]="globe"></fa-icon></h3>
+  <select class="select-box-width custom-select ml-2" (change)="onChange($event)">
+    <option *ngFor="let locale of locales"
+      [selected]="locale.key === default"
+      value="{{locale.key}}"
+    >
+      {{locale.name}}
+    </option>
+  </select>
+</div>
