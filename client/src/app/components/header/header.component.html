@@ -1,9 +1,9 @@
 <div class="d-flex bg-secondary p-1">
-  <a class="text-white mr-auto mt-auto" routerLink="/">
-    <h3 >대시보드</h3>
+  <a class="btn p-0 text-white mr-auto mt-auto" routerLink="/">
+    <h3>{{i18n.get('dashboard')}}</h3>
   </a>
   <app-player-edit-modal></app-player-edit-modal>
   <button class="btn-font-size btn btn-danger ml-2" (click)="logout()">
-    <span>LOGOUT</span>
+    <span>{{i18n.get('logout')}}</span>
   </button>
 </div>

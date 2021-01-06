@@ -60,3 +60,5 @@ export type Counter = {
   5: number
   6: number
 }
+
+export type Locale = 'ko' | 'en' | 'jp'

@@ -1,0 +1,8 @@
+<select class="custom-select" (change)="onChange($event)">
+  <option *ngFor="let locale of locales"
+    [selected]="locale.key === default"
+    value="{{locale.key}}"
+  >
+    {{locale.name}}
+  </option>
+</select>

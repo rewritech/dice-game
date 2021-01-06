@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { PlayerService } from '../../services/player.service'
+import { I18nService } from '../../services/i18n.service'
 import { Player } from '../../types'
 
 @Component({
@@ -12,10 +13,16 @@ export class LoginComponent implements OnInit {
   player: Player
   validationError = false
   invalidClass = ''
+  i18n: I18nService
 
   private playerId = localStorage.getItem('pId')
 
-  constructor(private router: Router, private playerService: PlayerService) {
+  constructor(
+    private router: Router,
+    private playerService: PlayerService,
+    private i18nService: I18nService
+  ) {
+    this.i18n = i18nService
     if (this.playerId) {
       this.router.navigate(['/'])
     }

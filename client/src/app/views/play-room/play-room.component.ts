@@ -5,6 +5,7 @@ import { SocketConnectService } from '../../services/socket-connect.service'
 import { DiceMapService } from '../../services/dice-map.service'
 import { RoomService } from '../../services/room.service'
 import { PlayerService } from '../../services/player.service'
+import { I18nService } from '../../services/i18n.service'
 
 @Component({
   selector: 'app-play-room',
@@ -19,6 +20,7 @@ export class PlayRoomComponent implements OnInit {
 
   room: Room
   player: Player
+  i18n: I18nService
   cardDisabled = false
   canCardSubmit = false
   startBtnDisableClass = 'disabled'
@@ -35,8 +37,11 @@ export class PlayRoomComponent implements OnInit {
     private diceMapService: DiceMapService,
     private roomService: RoomService,
     private playerService: PlayerService,
-    private socket: SocketConnectService
-  ) {}
+    private socket: SocketConnectService,
+    private i18nService: I18nService
+  ) {
+    this.i18n = i18nService
+  }
 
   ngOnInit(): void {
     this.roomService.getRoom(this.roomId).subscribe((getRoom) => {

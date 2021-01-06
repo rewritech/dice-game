@@ -22,6 +22,7 @@ import { ChatComponent } from './components/chat/chat.component'
 import { ChatMessageComponent } from './components/chat-message/chat-message.component'
 import { PlayerStatusComponent } from './components/player-status/player-status.component'
 import { CardComponent } from './components/card/card.component'
+import { SelectI18nComponent } from './components/select-i18n/select-i18n.component'
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { CardComponent } from './components/card/card.component'
     ChatMessageComponent,
     PlayerStatusComponent,
     CardComponent,
+    SelectI18nComponent,
   ],
   imports: [
     BrowserModule,

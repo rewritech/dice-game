@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { RoomService } from '../../services/room.service'
+import { I18nService } from '../../services/i18n.service'
 import { Room } from '../../types'
 
 @Component({
@@ -9,8 +10,14 @@ import { Room } from '../../types'
 })
 export class RoomsComponent implements OnInit {
   rooms: Room[]
+  i18n: I18nService
 
-  constructor(private roomService: RoomService) {}
+  constructor(
+    private roomService: RoomService,
+    private i18nService: I18nService
+  ) {
+    this.i18n = i18nService
+  }
 
   ngOnInit(): void {
     this.roomService.getRooms().subscribe((res) => {

@@ -1,8 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core'
-import { Router } from '@angular/router'
+import { Component, OnInit } from '@angular/core'
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap'
 import { PlayerService } from '../../services/player.service'
-import { Player, Room } from '../../types'
+import { I18nService } from '../../services/i18n.service'
+import { Player } from '../../types'
 
 @Component({
   selector: 'app-player-edit-modal',
@@ -11,15 +11,17 @@ import { Player, Room } from '../../types'
 })
 export class PlayerEditModalComponent implements OnInit {
   player: Player
+  i18n: I18nService
 
   private playerId = localStorage.getItem('pId')
 
   constructor(
     private config: NgbModalConfig,
     private modalService: NgbModal,
-    private router: Router,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private i18nService: I18nService
   ) {
+    this.i18n = i18nService
     // this.config.backdrop = 'static'
     // this.config.keyboard = false
   }

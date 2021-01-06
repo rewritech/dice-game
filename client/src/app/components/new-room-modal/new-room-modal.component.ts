@@ -4,6 +4,7 @@ import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap'
 import { DiceMapService } from '../../services/dice-map.service'
 import { RoomService } from '../../services/room.service'
 import { CardService } from '../../services/card.service'
+import { I18nService } from '../../services/i18n.service'
 import { Room } from '../../types'
 
 @Component({
@@ -13,6 +14,7 @@ import { Room } from '../../types'
 })
 export class NewRoomModalComponent implements OnInit {
   room: Room
+  i18n: I18nService
   validationError = false
   invalidClass = ''
 
@@ -24,8 +26,10 @@ export class NewRoomModalComponent implements OnInit {
     private router: Router,
     private roomService: RoomService,
     private diceMapService: DiceMapService,
-    private cardService: CardService
+    private cardService: CardService,
+    private i18nService: I18nService
   ) {
+    this.i18n = i18nService
     // this.config.backdrop = 'static'
     // this.config.keyboard = false
   }
