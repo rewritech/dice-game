@@ -11,13 +11,14 @@
       <input type="hidden" name="_roomId" [ngModel]="player._roomId">
       <div class="form-group">
         <label for="forPlayerName">{{i18n.get('nickName')}}</label>
-        <div class="input-group">
-          <input type="text" class="form-control" id="forPlayerName" name="name" [ngModel]="player.name">
-        </div>
+        <input type="text" class="form-control {{invalidClass}}" id="forPlayerName" name="name" [(ngModel)]="player.name">
+        <small class="text-danger float-left mb-3" *ngIf="validationError">
+          {{i18n.get('insertNickName')}}
+        </small>
       </div>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-outline-dark" (click)="modal.close()">{{i18n.get('change')}}</button>
+      <button type="submit" class="btn btn-primary">{{i18n.get('change')}}</button>
     </div>
   </form>
 </ng-template>

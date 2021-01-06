@@ -12,6 +12,8 @@ import { Player } from '../../types'
 export class PlayerEditModalComponent implements OnInit {
   player: Player
   i18n: I18nService
+  validationError = false
+  invalidClass = ''
 
   private playerId = localStorage.getItem('pId')
 
@@ -36,9 +38,16 @@ export class PlayerEditModalComponent implements OnInit {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
   }
 
-  onSubmit(form: Player): void {
-    this.playerService.editPlayer(form).subscribe(() => {
-      window.location.reload()
-    })
+  onSubmit(): void {
+    if (this.player.name.trim().length > 0) {
+      this.playerService.editPlayer(this.player).subscribe(() => {
+        this.modalService.dismissAll()
+        this.invalidClass = ''
+        this.validationError = false
+      })
+    } else {
+      this.validationError = true
+      this.invalidClass = 'border border-danger'
+    }
   }
 }
