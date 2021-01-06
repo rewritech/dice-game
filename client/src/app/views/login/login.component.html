@@ -1,5 +1,6 @@
-<div class="d-flex text-center h-100">
+<div class="d-flex text-center h-100 pb-10">
   <form class="form-signin" #f="ngForm" (ngSubmit)="onSubmit()">
+    <img class="mb-4" src="../../../assets/dice.svg" alt="" width="72" height="72">
     <h1 class="h3 mb-3 font-weight-normal text-white">다이스 맵 로그인</h1>
     <label for="forPlayerName" class="sr-only">닉네임</label>
     <input type="text" id="forPlayerName" class="form-control {{invalidClass}}" placeholder="닉네임 입력" name="name" [(ngModel)]="player.name">
