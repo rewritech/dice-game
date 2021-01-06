@@ -5,7 +5,9 @@
   </div>
   <div class="d-flex flex-column ml-auto mr-auto">
     <app-new-room-modal></app-new-room-modal>
-    <app-dashboard-button [buttonTitle]="'방 목록'" [linkPath]="'/rooms'"></app-dashboard-button>
+    <button class="btn btn-outline-info btn-lg mb-2 menu-width" routerLink="/rooms">
+      방 목록
+    </button>
     <app-how-to-play-modal></app-how-to-play-modal>
   </div>
 </div>
