@@ -10,6 +10,8 @@ import { Player } from '../../types'
 })
 export class LoginComponent implements OnInit {
   player: Player
+  validationError = false
+  invalidClass = ''
 
   private playerId = localStorage.getItem('pId')
 
@@ -31,10 +33,17 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  onSubmit(form: Player): void {
-    this.playerService.createPlayer(form).subscribe((res) => {
-      localStorage.setItem('pId', res._id)
-      this.router.navigate(['/'])
-    })
+  onSubmit(): void {
+    if (this.player.name.trim().length > 0) {
+      this.playerService.createPlayer(this.player).subscribe((res) => {
+        this.invalidClass = ''
+        this.validationError = false
+        localStorage.setItem('pId', res._id)
+        this.router.navigate(['/'])
+      })
+    } else {
+      this.validationError = true
+      this.invalidClass = 'border border-danger'
+    }
   }
 }

@@ -17,11 +17,13 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-outline-dark" (click)="modal.close()">등록</button>
+      <button type="submit" class="btn btn-outline-dark" (click)="modal.close()">변경</button>
     </div>
   </form>
 </ng-template>
 
-<button class="btn btn-secondary mb-2 ml-auto p-1" (click)="open(content)" *ngIf="player">
-  <h4 class="d-inline-block text-truncate player-name-width">닉네임({{player.name}}) 변경</h4>
+<button class="btn btn-info h-100 btn-font-size d-flex" (click)="open(content)" *ngIf="player">
+  <span class="d-inline-block text-truncate mt-auto mb-auto">닉네임(</span>
+  <span class="d-inline-block text-truncate mt-auto mb-auto player-name-width">{{player.name}}</span>
+  <span class="d-inline-block text-truncate mt-auto mb-auto">)변경</span>
 </button>

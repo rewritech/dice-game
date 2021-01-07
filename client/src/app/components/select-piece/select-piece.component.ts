@@ -13,6 +13,7 @@ import {
   faChessKing,
   IconName,
 } from '@fortawesome/free-solid-svg-icons'
+import { DiceMapService } from 'src/app/services/dice-map.service'
 import { SocketConnectService } from '../../services/socket-connect.service'
 import { Player, PieceBtn, Room } from '../../types'
 
@@ -35,7 +36,10 @@ export class SelectPieceComponent implements OnInit {
   kingPiece: PieceBtn
   queenPiece: PieceBtn
 
-  constructor(private socket: SocketConnectService) {}
+  constructor(
+    private socket: SocketConnectService,
+    private diceMapService: DiceMapService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -82,7 +86,10 @@ export class SelectPieceComponent implements OnInit {
         // 상대방이 선택한 스타팅 포인트 전부 비활성화
         if (
           p.coordinates &&
-          this.compare(p.coordinates, this.getCoordinate(this.position))
+          this.diceMapService.compare(
+            p.coordinates,
+            this.getCoordinate(this.position)
+          )
         ) {
           this.knightPiece.isActive = false
           this.rookPiece.isActive = false
@@ -100,9 +107,9 @@ export class SelectPieceComponent implements OnInit {
       case 'left-top':
         return [0, 0]
       case 'right-top':
-        return [9, 0]
-      case 'left-bottom':
         return [0, 9]
+      case 'left-bottom':
+        return [9, 0]
       case 'right-bottom':
         return [9, 9]
       default:
@@ -122,15 +129,10 @@ export class SelectPieceComponent implements OnInit {
     this.queenPiece = { isActive: true, selectedId: null, piece: faChessQueen }
   }
 
-  // 두 배열을 비교한다. 좌표 비교할 때 사용함
-  private compare(x: number[], y: number[]): boolean {
-    return JSON.stringify(x) === JSON.stringify(y)
-  }
-
   // 각 버튼의 isActive를 할당한다.
   // 만약 player의 좌표와 현재 좌표가 같다면 selectedId를 넣는다.
   private setActive(player: Player, isActive: boolean) {
-    const condition = this.compare(
+    const condition = this.diceMapService.compare(
       player.coordinates,
       this.getCoordinate(this.position)
     )

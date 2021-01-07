@@ -50,7 +50,8 @@ export class DiceMapService {
 
   createPieces(room: Room, disabled: boolean): Map[][] {
     const result: Map[][] = Array.from(Array(10), () => new Array(10))
-    const { players, map } = room
+    const { currentPlayer, players, map } = room
+    const blinkPlayer = players.find((p) => p._id === currentPlayer)
     const coordIcons = this.createCoordIcon(players)
     map.forEach((row, i) => {
       row.forEach((col, j) => {
@@ -58,10 +59,16 @@ export class DiceMapService {
           num: col,
           disabled,
           icon: coordIcons[[i, j].join('.')],
+          blink: this.compare([i, j], blinkPlayer.coordinates),
         }
       })
     })
     return result
+  }
+
+  // 두 배열을 비교한다. 좌표 비교할 때 사용함
+  compare(x: number[], y: number[]): boolean {
+    return JSON.stringify(x) === JSON.stringify(y)
   }
 
   private createCoordIcon(players: Player[]) {

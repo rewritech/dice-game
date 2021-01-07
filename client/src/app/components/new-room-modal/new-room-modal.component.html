@@ -1,0 +1,35 @@
+<ng-template #content let-modal>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">방 만들기</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')" tabindex="-1">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="forTitle">방제</label>
+        <input type="text" class="form-control {{invalidClass}}" id="forTitle" placeholder="님만 오면 출발" name="title" [(ngModel)]="room.title">
+        <small class="text-danger mb-3" *ngIf="validationError">
+          방제목을 입력하세요
+        </small>
+      </div>
+      <div class="form-group">
+        <label for="forPlayerLimit">인원제한</label>
+        <select class="form-control" id="forPlayerLimit" name="playerLimit" [(ngModel)]="room.playerLimit">
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="submit">등록</button>
+      <button class="btn btn-link" (click)="modal.close()">Cancel</button>
+    </div>
+  </form>
+</ng-template>
+
+<button class="btn btn-primary btn-lg mb-2 menu-width" (click)="open(content)">
+  방 만들기
+</button>

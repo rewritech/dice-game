@@ -1,10 +1,14 @@
 <app-header></app-header>
-<app-user-info></app-user-info>
-<div class="container">
-  <div class="row d-flex align-items-center justify-content-center h-100 m-5">
-    <img class="logo-size" src="../assets/logo.png" alt="">
+<div class="d-flex flex-column h-50">
+  <img class="mt-auto ml-auto mr-auto" src="../../../assets/dice.svg" alt="" width="72" height="72">
+  <div class="text-white d-flex justify-content-center mt-3 mb-4">
+    <h1>다이스 맵</h1>
   </div>
-  <app-dashboard-button [buttonTitle]="'NEW ROOM'" [linkPath]="'/rooms/new'"></app-dashboard-button>
-  <app-dashboard-button [buttonTitle]="'ROOMS'" [linkPath]="'/rooms'"></app-dashboard-button>
-  <app-dashboard-button [buttonTitle]="'HOW TO PLAY'" [linkPath]="'/how-to-play'"></app-dashboard-button>
+  <div class="d-flex flex-column ml-auto mr-auto">
+    <app-new-room-modal></app-new-room-modal>
+    <button class="btn btn-primary btn-lg mb-2 menu-width" routerLink="/rooms">
+      방 목록
+    </button>
+    <app-how-to-play-modal></app-how-to-play-modal>
+  </div>
 </div>

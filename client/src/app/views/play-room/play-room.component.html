@@ -1,5 +1,5 @@
 <div class="container" *ngIf="room">
-  <h1>{{room.title}}({{room.players.length}}/{{room.playerLimit}})</h1>
+  <h1 class="text-white">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</h1>
 
   <div class="background container" *ngIf="room.status === 'WAIT'">
     <div class="card bg-transparent" style="width: fit-content;">
@@ -26,7 +26,7 @@
       <div class="d-flex flex-column p-1 bg-dark fit-contents">
         <div class="d-flex" *ngFor="let piecesRow of pieces; index as i">
           <div *ngFor="let piece of piecesRow; index as j">
-            <app-dice [num]="piece.num" [disabled]="piece.disabled" [icon]="piece.icon" [coordinate]="[i, j]" [callBackOnClick]="callBackOnClick"></app-dice>
+            <app-dice [num]="piece.num" [disabled]="piece.disabled" [icon]="piece.icon" [blink]="piece.blink" [coordinate]="[i, j]" [callBackOnClick]="callBackOnClick"></app-dice>
           </div>
         </div>
       </div>
@@ -40,12 +40,12 @@
     <div class="bg-dark console-ui p-1">
       <div class="d-flex flex-column">
         <div *ngFor="let p of room.players.slice(0,2)">
-          <app-player-status [icon]="p.piece" [life]="p.life" [cards]="p.cards.length"></app-player-status>
+          <app-player-status [icon]="p.piece" [life]="p.life" [cards]="p.cards.length" [blink]="p._id === room.currentPlayer"></app-player-status>
         </div>
       </div>
       <div class="mr-1 d-flex flex-column">
         <div *ngFor="let p of room.players.slice(2,4)">
-          <app-player-status *ngIf="p" [icon]="p.piece" [life]="p.life" [cards]="p.cards.length"></app-player-status>
+          <app-player-status *ngIf="p" [icon]="p.piece" [life]="p.life" [cards]="p.cards.length" [blink]="p._id === room.currentPlayer"></app-player-status>
         </div>
       </div>
       <div class="border rounded border-white flex-fill h-100 overflow-auto d-flex p-1">

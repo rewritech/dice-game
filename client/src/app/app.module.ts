@@ -9,15 +9,13 @@ import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { PlayRoomComponent } from './views/play-room/play-room.component'
 import { DashboardComponent } from './views/dashboard/dashboard.component'
-import { NewRoomComponent } from './views/new-room/new-room.component'
 import { RoomsComponent } from './views/rooms/rooms.component'
-import { HowToPlayComponent } from './views/how-to-play/how-to-play.component'
+import { HowToPlayModalComponent } from './components/how-to-play-modal/how-to-play-modal.component'
 import { PlayerEditModalComponent } from './components/player-edit-modal/player-edit-modal.component'
-import { DashboardButtonComponent } from './components/dashboard-button/dashboard-button.component'
+import { NewRoomModalComponent } from './components/new-room-modal/new-room-modal.component'
 import { DiceComponent } from './components/dice/dice.component'
 import { ViewDiceComponent } from './components/view-dice/view-dice.component'
 import { LoginComponent } from './views/login/login.component'
-import { UserInfoComponent } from './components/user-info/user-info.component'
 import { SelectPieceComponent } from './components/select-piece/select-piece.component'
 import { HeaderComponent } from './components/header/header.component'
 import { ChatComponent } from './components/chat/chat.component'
@@ -31,15 +29,13 @@ import { DiceBoardComponent } from './components/dice-board/dice-board.component
     AppComponent,
     PlayRoomComponent,
     DashboardComponent,
-    NewRoomComponent,
     RoomsComponent,
-    HowToPlayComponent,
+    HowToPlayModalComponent,
     PlayerEditModalComponent,
-    DashboardButtonComponent,
+    NewRoomModalComponent,
     DiceComponent,
     ViewDiceComponent,
     LoginComponent,
-    UserInfoComponent,
     SelectPieceComponent,
     HeaderComponent,
     ChatComponent,

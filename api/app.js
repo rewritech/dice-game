@@ -163,6 +163,18 @@ io.of('/dice-map-room').on('connection', (socket) => {
     }
   });
 
+  socket.on('catch-player', async (value) => {
+    try {
+      console.log(`[${new Date()}]: catch-player`);
+      const player = value.player
+
+      await Player.updateOne({ _id: player._id }, { $set: { coordinates: player.initialCoordinates, life: player.life } });
+
+    } catch (e) {
+      console.error(`error: ${e}`);
+    }
+  });
+
   socket.on('leave', async (player) => {
     try {
       console.log(`[${new Date()}]: room leave`);
