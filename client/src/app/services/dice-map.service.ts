@@ -48,14 +48,6 @@ export class DiceMapService {
     return this.DICE_MAX
   }
 
-  getMapRow(): number {
-    return this.MAP_ROW
-  }
-
-  getMapCol(): number {
-    return this.MAP_COL
-  }
-
   createPieces(room: Room, disabled: boolean): Map[][] {
     const result: Map[][] = Array.from(Array(10), () => new Array(10))
     const { currentPlayer, players, map } = room
