@@ -30,6 +30,7 @@ export class LoginComponent implements OnInit {
       piece: null,
       cards: [],
       life: 3,
+      killedPlayer: 0,
     }
   }
 

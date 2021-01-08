@@ -17,10 +17,17 @@ export class ChatMessageComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    if (this.message._playerId === null) {
+    console.log('this.message.systemMsgStatus:'+this.message.systemMsgStatus)
+    if (this.message._playerId === null &&
+      this.message.systemMsgStatus === 'success') {
       this.kindOfMessage = 'SYSTEM'
       this.smallClass = 'ml-2 d-flex'
       this.textBlockClass = 'text-white bg-success w-100'
+    } else if (this.message._playerId === null &&
+      this.message.systemMsgStatus === 'danger') {
+      this.kindOfMessage = 'SYSTEM'
+      this.smallClass = 'ml-2 d-flex'
+      this.textBlockClass = 'text-white bg-danger w-100'
     } else if (this.message._playerId === this.playerId) {
       this.kindOfMessage = 'SELF'
       this.smallClass = 'mr-2 d-flex justify-content-end'
