@@ -1,8 +1,10 @@
-<div class="d-flex text-white">
-  <app-view-dice [num]="1"></app-view-dice> <span>X {{counter[1]}}</span>
-  <app-view-dice [num]="2"></app-view-dice> <span>X {{counter[2]}}</span>
-  <app-view-dice [num]="3"></app-view-dice> <span>X {{counter[3]}}</span>
-  <app-view-dice [num]="4"></app-view-dice> <span>X {{counter[4]}}</span>
-  <app-view-dice [num]="5"></app-view-dice> <span>X {{counter[5]}}</span>
-  <app-view-dice [num]="6"></app-view-dice> <span>X {{counter[6]}}</span>
+<div class="d-flex text-white justify-content-between">
+  <div class="d-flex"><app-view-dice [num]="1"></app-view-dice><span class="counter-size">X {{counter[1]}}</span></div>
+  <div class="d-flex"><app-view-dice [num]="2"></app-view-dice><span class="counter-size">X {{counter[2]}}</span></div>
+  <div class="d-flex"><app-view-dice [num]="3"></app-view-dice><span class="counter-size">X {{counter[3]}}</span></div>
+</div>
+<div class="d-flex text-white justify-content-between">
+  <div class="d-flex"><app-view-dice [num]="4"></app-view-dice><span class="counter-size">X {{counter[4]}}</span></div>
+  <div class="d-flex"><app-view-dice [num]="5"></app-view-dice><span class="counter-size">X {{counter[5]}}</span></div>
+  <div class="d-flex"><app-view-dice [num]="6"></app-view-dice><span class="counter-size">X {{counter[6]}}</span></div>
 </div>

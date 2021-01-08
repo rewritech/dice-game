@@ -13,14 +13,13 @@ export class DiceBoardComponent implements OnInit {
 
   constructor(private diceMapService: DiceMapService) {}
 
-  ngOnInit(): void {
-    this.updateDiceCount()
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(): void {
     this.updateDiceCount()
   }
+
   updateDiceCount(): void {
-    this.counter = this.diceMapService.getCounter()
+    this.counter = this.diceMapService.getCounter(this.room.map)
   }
 }

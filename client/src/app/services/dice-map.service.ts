@@ -27,13 +27,19 @@ export class DiceMapService {
       Object.values(this.counter).filter((n: number) => n < this.MIN_COUNT)
         .length > 0
     ) {
-      this.initializeCounter()
+      this.counter = this.initializeCounter()
       this.newMap()
     }
   }
 
-  getCounter(): Counter {
-    return this.counter
+  getCounter(map: number[][]): Counter {
+    const result: Counter = this.initializeCounter()
+    map.forEach((row) => {
+      row.forEach((col) => {
+        result[col] += 1
+      })
+    })
+    return result
   }
 
   getDiceMap(): number[][] {
@@ -80,8 +86,7 @@ export class DiceMapService {
   }
 
   private initializeCounter(): Counter {
-    this.counter = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 }
-    return this.counter
+    return { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 }
   }
 
   // create random number between 1 and 6
@@ -96,33 +101,8 @@ export class DiceMapService {
       for (let j = 0; j < this.MAP_COL; j += 1) {
         const randomNumber = this.createRandomNumber()
         this.diceMap[i][j] = randomNumber
-        this.counting(randomNumber)
+        this.counter[randomNumber] += 1
       }
-    }
-  }
-
-  private counting(num: number) {
-    switch (num) {
-      case 1:
-        this.counter[1] += 1
-        break
-      case 2:
-        this.counter[2] += 1
-        break
-      case 3:
-        this.counter[3] += 1
-        break
-      case 4:
-        this.counter[4] += 1
-        break
-      case 5:
-        this.counter[5] += 1
-        break
-      case 6:
-        this.counter[6] += 1
-        break
-      default:
-        break
     }
   }
 }
