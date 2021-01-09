@@ -48,7 +48,7 @@ socketServer.listen(socketPort, () => {
   console.log(`started on port: ${socketPort}`);
 });
 
-// ==================== socket connect ====================
+// function
 async function broadcastRoom (roomId) {
   const room = await Room.findOne({ _id: roomId, deleted: false }).populate('players');
   io.of("/dice-map-room").to(`room-${roomId}`).emit(`changeRoomInfo-${roomId}`, room);
@@ -67,11 +67,16 @@ function joinMsg(arr) {
   return arr.join('&')
 }
 async function refreshRooms(socket) {
-  const rooms = await Room.find({ deleted: false }, { __v: 0, map: 0, currentPlayer: 0, cardDeck: 0, deleted: 0 }).populate('players');
+  const rooms = await Room.find({ status: 'WAIT', deleted: false }, { __v: 0, map: 0, currentPlayer: 0, cardDeck: 0, deleted: 0 }).populate('players');
   rooms.forEach((r) => r.players = new Array(r.players.length))
   socket.broadcast.emit("refresh-rooms", rooms)
 }
+async function deleteRoom(player) {
+  await Room.updateOne({ _id: player._roomId }, { $set: { deleted: true } });
+  await Message.deleteMany({ _roomId: player._roomId })
+}
 
+// ==================== socket connect ====================
 io.of('/dice-map-room').on('connection', (socket) => {
   console.log(`[${new Date()}]: user socket connected`);
 
@@ -174,25 +179,30 @@ io.of('/dice-map-room').on('connection', (socket) => {
     }
   });
 
-  socket.on('leave', async (value) => {
+  socket.on('leave', async (player) => {
     try {
       console.log(`[${new Date()}]: room leave`);
-      const player = value.player
-      const playerLength = value.room ? value.room.players.length : 1
 
-      // DB 업데이트
+      // 1. room의 player를 내보냄
       await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id } });
       const room = await Room.findOne({ _id: player._roomId }, { map: 0 })
 
-      // player가 1명 남거나 없으면 삭제한다.
-      if (room && room.players.length <= 1 && room.status !== 'WAIT') {
-        await Room.updateOne({ _id: player._roomId }, { $set: { deleted: true } });
-        // messages 삭제
-        await Message.deleteMany({ _roomId: player._roomId })
-      } else if (room && room.players.length > 0 && room.status === 'WAIT') {
-        await Room.updateOne({ _id: player._roomId }, { $set: { currentPlayer: room.players[0]._id } });
+      if (room.status === 'WAIT') {
+        if (room.players.length === 0) {
+          // 4. 대기방 0명인 경유 삭제한다.
+          deleteRoom(player)
+        } else {
+          // 2. 대기방에서 방장이 나가면 방장 교체
+          await Room.updateOne({ _id: player._roomId }, { $set: { currentPlayer: room.players[0]._id } });
+        }
       } else {
-        await Room.updateOne({ _id: player._roomId }, { $set: { playerLimit: playerLength - 1 } });
+        if (room.players.length < 2) {
+          // 5. 게임중 1명 남게 되면 방 삭제한다.
+          deleteRoom(player)
+        } else {
+          // 6. 게임중 떠나면 playerLimit가 줄어든다.
+          await Room.updateOne({ _id: player._roomId }, { $set: { playerLimit: room.players.length - 1 } });
+        }
       }
 
       await Player.updateOne({ _id: player._id }, {
@@ -215,7 +225,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
       console.error(`error: ${e}`);
     } finally {
       // 웹소켓 룸에서 나옴
-      socket.leave(`room-${value.player._roomId}`);
+      socket.leave(`room-${player._roomId}`);
       refreshRooms(socket)
       // socket.disconnect(true);
     }

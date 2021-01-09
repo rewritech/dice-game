@@ -98,7 +98,7 @@ export class PlayRoomComponent implements OnInit {
   }
 
   leave(): void {
-    this.socket.emit('leave', { player: this.player, room: this.room })
+    this.socket.emit('leave', this.player)
     // this.router.navigate(['/rooms'])
   }
 
@@ -189,12 +189,13 @@ export class PlayRoomComponent implements OnInit {
   private socketOnChangeRoom(roomId: number): void {
     // websocket room에서 데이터 전송 받기 위한 연결
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
-      if (!newRoom) {
-        this.router.navigate(['/rooms'])
-      } else {
-        this.room = newRoom
-        this.player = newRoom.players.find((p) => p._id === this.playerId)
-        this.cardDisabled = !this.roomService.checkMyTurn(this.player, this.room) // 내턴이면 카드 활성화
+      this.room = newRoom
+      this.player = newRoom?.players?.find((p) => p._id === this.playerId)
+      if (this.room && this.player) {
+        this.cardDisabled = !this.roomService.checkMyTurn(
+          this.player,
+          this.room
+        ) // 내턴이면 카드 활성화
         this.pieces = this.diceMapService.createPieces(
           this.room,
           !this.roomService.checkMyTurn(this.player, this.room)
@@ -206,6 +207,8 @@ export class PlayRoomComponent implements OnInit {
         ) {
           this.startBtnDisableClass = ''
         }
+      } else {
+        this.router.navigate(['/rooms'])
       }
     })
   }
