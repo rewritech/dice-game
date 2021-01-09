@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { RoomService } from '../../services/room.service'
 import { I18nService } from '../../services/i18n.service'
+import { SocketConnectService } from '../../services/socket-connect.service'
 import { Room } from '../../types'
 
 @Component({
@@ -14,12 +15,19 @@ export class RoomsComponent implements OnInit {
 
   constructor(
     private roomService: RoomService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private socket: SocketConnectService
   ) {
     this.i18n = i18nService
   }
 
   ngOnInit(): void {
+    // websocket 연결
+    this.socket.connect()
+    this.socket.on<Room[]>(`refresh-rooms`, (rooms: Room[]) => {
+      this.rooms = rooms
+    })
+
     this.roomService.getRooms().subscribe((res) => {
       this.rooms = res
     })

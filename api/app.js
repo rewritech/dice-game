@@ -66,6 +66,11 @@ async function broadcastSystemMessage (roomId, systemMsgStatus, content) {
 function joinMsg(arr) {
   return arr.join('&')
 }
+async function refreshRooms(socket) {
+  const rooms = await Room.find({ deleted: false }, { __v: 0, map: 0, currentPlayer: 0, cardDeck: 0, deleted: 0 }).populate('players');
+  rooms.forEach((r) => r.players = new Array(r.players.length))
+  socket.broadcast.emit("refresh-rooms", rooms)
+}
 
 io.of('/dice-map-room').on('connection', (socket) => {
   console.log(`[${new Date()}]: user socket connected`);
@@ -81,6 +86,8 @@ io.of('/dice-map-room').on('connection', (socket) => {
       broadcastSystemMessage(player._roomId, 'success', joinMsg([player.name, 'joinRoomMessage']));
     } catch (e) {
       console.error(`error: ${e}`);
+    } finally {
+      refreshRooms(socket)
     }
   });
 
@@ -174,18 +181,18 @@ io.of('/dice-map-room').on('connection', (socket) => {
       const playerLength = value.room ? value.room.players.length : 1
 
       // DB 업데이트
-      // await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id } });
-      await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id }, $set: { playerLimit: playerLength - 1 } });
+      await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id } });
       const room = await Room.findOne({ _id: player._roomId }, { map: 0 })
 
       // player가 1명 남거나 없으면 삭제한다.
-      if (room && room.players.length <= 1) {
+      if (room && room.players.length <= 1 && room.status !== 'WAIT') {
         await Room.updateOne({ _id: player._roomId }, { $set: { deleted: true } });
         // messages 삭제
         await Message.deleteMany({ _roomId: player._roomId })
-      } else {
-        // 다음사람을 방장으로 선정
+      } else if (room && room.players.length > 0 && room.status === 'WAIT') {
         await Room.updateOne({ _id: player._roomId }, { $set: { currentPlayer: room.players[0]._id } });
+      } else {
+        await Room.updateOne({ _id: player._roomId }, { $set: { playerLimit: playerLength - 1 } });
       }
 
       await Player.updateOne({ _id: player._id }, {
@@ -209,7 +216,8 @@ io.of('/dice-map-room').on('connection', (socket) => {
     } finally {
       // 웹소켓 룸에서 나옴
       socket.leave(`room-${value.player._roomId}`);
-      socket.disconnect(true);
+      refreshRooms(socket)
+      // socket.disconnect(true);
     }
   });
 

@@ -13,9 +13,12 @@ export class SocketConnectService {
   // constructor() {}
 
   connect(): void {
-    this.socket = socketIO.io(this.wsBaseUrl, {
-      transports: ['websocket'],
-    })
+    // socket이 연결 안된 경우만 새로 연결함
+    if (!this.socket?.connected) {
+      this.socket = socketIO.io(this.wsBaseUrl, {
+        transports: ['websocket'],
+      })
+    }
   }
 
   on<T>(key: string, func: (value: T) => void): void {
