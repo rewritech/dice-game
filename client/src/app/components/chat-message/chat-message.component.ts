@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core'
+import { I18nService } from '../../services/i18n.service'
 import { Message } from '../../types'
 
 @Component({
@@ -13,8 +14,11 @@ export class ChatMessageComponent implements OnInit {
   kindOfMessage: 'OTHERS' | 'SELF' | 'SYSTEM'
   textBlockClass: string
   smallClass: string
+  i18n: I18nService
 
-  constructor() {}
+  constructor(private i18nService: I18nService) {
+    this.i18n = i18nService
+  }
 
   ngOnInit(): void {
     const { _playerId, systemMsgStatus } = this.message
@@ -44,5 +48,12 @@ export class ChatMessageComponent implements OnInit {
     ).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(
       date.getSeconds()
     ).padStart(2, '0')}`
+  }
+
+  convertI18nMessage(msg: string): string {
+    return msg
+      .split('&')
+      .map((m) => this.i18n.get(m) || m)
+      .join('')
   }
 }

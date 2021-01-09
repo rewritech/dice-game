@@ -49,20 +49,22 @@ socketServer.listen(socketPort, () => {
 });
 
 // ==================== socket connect ====================
-async function broadcastRoom (socket, roomId) {
+async function broadcastRoom (roomId) {
   const room = await Room.findOne({ _id: roomId, deleted: false }).populate('players');
   io.of("/dice-map-room").to(`room-${roomId}`).emit(`changeRoomInfo-${roomId}`, room);
 }
-async function broadcastRoomMessage (socket, roomId) {
+async function broadcastRoomMessage (roomId) {
   const messages = await Message.find({ _roomId: roomId });
   io.of("/dice-map-room").to(`room-${roomId}`).emit(`chat-room-${roomId}`, messages);
 }
-async function broadcastSystemMessage (socket, roomId, systemMsgStatus, content) {
-  console.log('systemMsgSatu:'+systemMsgStatus);
+async function broadcastSystemMessage (roomId, systemMsgStatus, content) {
   const message = new Message({ _roomId: roomId, _playerId: null, playerName: 'System', systemMsgStatus: systemMsgStatus, sendedAt: new Date(), content });
   await message.save();
   // Socket room 갱신
-  broadcastRoomMessage(socket, roomId);
+  broadcastRoomMessage(roomId);
+}
+function joinMsg(arr) {
+  return arr.join('&')
 }
 
 io.of('/dice-map-room').on('connection', (socket) => {
@@ -75,8 +77,8 @@ io.of('/dice-map-room').on('connection', (socket) => {
       // websocket room 연결
       socket.join(`room-${player._roomId}`);
       // Socket room 갱신
-      broadcastRoom(socket, player._roomId);
-      broadcastSystemMessage(socket, player._roomId, 'success', `${player.name}님이 참가하셨습니다.`);
+      broadcastRoom(player._roomId);
+      broadcastSystemMessage(player._roomId, 'success', joinMsg([player.name, 'joinRoomMessage']));
     } catch (e) {
       console.error(`error: ${e}`);
     }
@@ -88,8 +90,8 @@ io.of('/dice-map-room').on('connection', (socket) => {
       // DB room 갱신
       await Room.updateOne({ _id: shuffledRoom._id }, { $set: { map: shuffledRoom.map } });
       // Socket room 갱신
-      broadcastRoom(socket, shuffledRoom._id);
-      broadcastSystemMessage(socket, shuffledRoom._id, 'success', '맵이 변경되었습니다.');
+      broadcastRoom(shuffledRoom._id);
+      broadcastSystemMessage(shuffledRoom._id, 'success', 'shuffleMapMessage');
     } catch (e) {
       console.error(`error: ${e}`);
     }
@@ -99,15 +101,9 @@ io.of('/dice-map-room').on('connection', (socket) => {
     try {
       console.log(`[${new Date()}]: select-piece`);
       // DB room 갱신
-      await Player.updateOne({ _id: player._id }, {
-        $set: {
-          piece: player.piece,
-          coordinates: player.coordinates,
-          initialCoordinates: player.initialCoordinates
-        }
-      });
+      await Player.updateOne({ _id: player._id }, { $set: player });
       // Socket room 갱신
-      broadcastRoom(socket, player._roomId);
+      broadcastRoom(player._roomId);
     } catch (e) {
       console.error(`error: ${e}`);
     }
@@ -122,11 +118,11 @@ io.of('/dice-map-room').on('connection', (socket) => {
       player.cards = player.cards.concat(newCards)
 
       // DB room 갱신
-      await Room.updateOne({ _id: room._id }, { $set: { status: room.status, playerLimit: room.playerLimit, cardDeck: room.cardDeck } });
-      await Player.updateOne({ _id: player._id }, { $set: { cards: player.cards } });
+      await Room.updateOne({ _id: room._id }, { $set: room });
+      await Player.updateOne({ _id: player._id }, { $set: player });
       // Socket room 갱신
-      broadcastRoom(socket, room._id);
-      broadcastSystemMessage(socket, room._id, 'success', '게임을 시작합니다.');
+      broadcastRoom(room._id);
+      broadcastSystemMessage(room._id, 'success', 'gameStartMessage');
     } catch (e) {
       console.error(`error: ${e}`);
     }
@@ -139,7 +135,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
       const player = value.player
 
       // DB room 갱신
-      await Player.updateOne({ _id: player._id }, { $set: { coordinates: player.coordinates, cards: player.cards, killedPlayer: player.killedPlayer } });
+      await Player.updateOne({ _id: player._id }, { $set: player });
 
       // 카드 분배
       // unused에 카드가 2장 미만이면 used의 카드를 다시 가져온다.
@@ -149,16 +145,11 @@ io.of('/dice-map-room').on('connection', (socket) => {
       }
       const newCards = room.cardDeck.unused.splice(0, 2)
       await Player.updateOne({ _id: room.currentPlayer }, { $push: { cards: newCards } });
-      await Room.updateOne({ _id: room._id }, {
-        $set: {
-          currentPlayer: room.currentPlayer,
-          cardDeck: room.cardDeck
-        }
-      });
+      await Room.updateOne({ _id: room._id }, { $set: room });
       const newCurrentPlayer = await Player.findOne({ _id: room.currentPlayer })
       // Socket room 갱신
-      broadcastRoom(socket, room._id);
-      broadcastSystemMessage(socket, room._id, 'success', `${player.name}님의 턴이 종료되었습니다.<br/>${newCurrentPlayer.name}님의 턴입니다.`);
+      broadcastRoom(room._id);
+      broadcastSystemMessage(room._id, 'success', joinMsg([player.name, 'changeTurn1Message', newCurrentPlayer.name, 'changeTurn2Message']));
     } catch (e) {
       console.error(`error: ${e}`);
     }
@@ -168,32 +159,33 @@ io.of('/dice-map-room').on('connection', (socket) => {
     try {
       console.log(`[${new Date()}]: catch-player`);
 
-      await Player.updateOne({ _id: player._id }, { $set: { coordinates: player.initialCoordinates, life: player.life } });
+      await Player.updateOne({ _id: player._id }, { $set: player });
 
-      broadcastSystemMessage(socket, player._roomId, 'danger', `${player.name}님의 말이 잡혔습니다.`);
+      broadcastSystemMessage(player._roomId, 'danger', joinMsg([player.name, 'catchedMessage']));
     } catch (e) {
       console.error(`error: ${e}`);
     }
   });
 
-  socket.on('leave', async (player) => {
+  socket.on('leave', async (value) => {
     try {
       console.log(`[${new Date()}]: room leave`);
-      console.log(player);
+      const player = value.player
+      const playerLength = value.room ? value.room.players.length : 1
+
       // DB 업데이트
-      await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id } });
+      // await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id } });
+      await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id }, $set: { playerLimit: playerLength - 1 } });
+      const room = await Room.findOne({ _id: player._roomId }, { map: 0 })
 
-      const room = await Room.findOne({ _id: player._roomId, deleted: false }, { map: 0 })
-      // WAIT 상태에서 방장이 나가면 다음사람을 방장으로 선정
-      if (room && String(room.currentPlayer) === player._id && room.status === 'WAIT' && room.players > 0) {
-        await Room.updateOne({ _id: player._roomId }, { $set: { currentPlayer: room.players[0]._id } });
-      }
-
-      // player가 없으면 삭제한다.
-      if (room && room.players.length < 1) {
+      // player가 1명 남거나 없으면 삭제한다.
+      if (room && room.players.length <= 1) {
         await Room.updateOne({ _id: player._roomId }, { $set: { deleted: true } });
         // messages 삭제
         await Message.deleteMany({ _roomId: player._roomId })
+      } else {
+        // 다음사람을 방장으로 선정
+        await Room.updateOne({ _id: player._roomId }, { $set: { currentPlayer: room.players[0]._id } });
       }
 
       await Player.updateOne({ _id: player._id }, {
@@ -207,16 +199,16 @@ io.of('/dice-map-room').on('connection', (socket) => {
         }
       });
 
-      if(player._roomId > 0) {
+      if(player._roomId > 0 && room.players.length > 0) {
         // Socket room 갱신
-        broadcastRoom(socket, player._roomId);
-        broadcastSystemMessage(socket, player._roomId, 'success', `${player.name}님이 떠나셨습니다.`);
-        // 웹소켓 룸에서 나옴
-        socket.leave(`room-${player._roomId}`);
+        broadcastRoom(player._roomId);
+        broadcastSystemMessage(player._roomId, 'success', joinMsg([player.name, 'leaveRoomMessage']));
       }
     } catch (e) {
       console.error(`error: ${e}`);
     } finally {
+      // 웹소켓 룸에서 나옴
+      socket.leave(`room-${value.player._roomId}`);
       socket.disconnect(true);
     }
   });
@@ -229,7 +221,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
       const newMessage = new Message({ playerName: player.name, sendedAt: new Date(), ...message });
       await newMessage.save();
       // Socket room 갱신
-      broadcastRoomMessage(socket, message._roomId);
+      broadcastRoomMessage(message._roomId);
     } catch (e) {
       console.error(`error: ${e}`);
     }

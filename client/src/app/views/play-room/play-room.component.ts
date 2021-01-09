@@ -106,7 +106,7 @@ export class PlayRoomComponent implements OnInit {
   }
 
   leave(): void {
-    this.socket.emit<Player>('leave', this.player)
+    this.socket.emit('leave', { player: this.player, room: this.room })
     // this.router.navigate(['/rooms'])
   }
 

@@ -38,9 +38,10 @@ export const i18n = {
     joinRoomMessage: 'participated.',
     shuffleMapMessage: 'Map has been changed.',
     gameStartMessage: 'Start the game',
-    changeTurn1Message: 'turn is over.<br/>',
+    changeTurn1Message: ' turn is over.<br/>',
     changeTurn2Message: "'s turn.",
     leaveRoomMessage: 'is gone.',
+    catchedMessage: 'is catched.',
   },
   jp: {
     loginButton: 'ログイン',
@@ -83,6 +84,7 @@ export const i18n = {
     changeTurn1Message: 'さんのターンが終了しました。<br/>',
     changeTurn2Message: 'さんのターンです。',
     leaveRoomMessage: 'さんが去りました。',
+    catchedMessage: 'さんが捕まえました。',
   },
   ko: {
     loginButton: '로그인',
@@ -125,5 +127,6 @@ export const i18n = {
     changeTurn1Message: '님의 턴이 종료되었습니다.<br/>',
     changeTurn2Message: '님의 턴입니다.',
     leaveRoomMessage: '님이 떠나셨습니다.',
+    catchedMessage: '님의 말이 잡혔습니다.',
   },
 }

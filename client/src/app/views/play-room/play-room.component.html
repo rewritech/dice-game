@@ -1,4 +1,4 @@
-<div class="container" *ngIf="room">
+<div class="" *ngIf="room">
   <h1 class="text-white">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</h1>
 
   <div class="background container" *ngIf="room.status === 'WAIT'">
@@ -51,7 +51,7 @@
         <app-card *ngFor="let card of player.cards; index as i" [num]="card" [index]="i" [selected]="isSelectedCard(card, i)" [disabled]="cardDisabled" [callBackUnselectCard]="callBackUnselectCard" [callBackSelectCard]="callBackSelectCard"></app-card>
       </div>
       <button class="card-submit-size btn btn-primary h-100 ml-1 {{canCardSubmit ? '' : 'disabled cursor-unset'}}" (click)="cardSubmit()">
-        <h2>{{i18n.get('card')}}<br/>{{i18n.get('submit')}}</h2>
+        <span class="submit-font-size">{{i18n.get('card')}}<br/>{{i18n.get('submit')}}</span>
       </button>
     </div>
   </div>
