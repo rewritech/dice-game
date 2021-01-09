@@ -137,6 +137,8 @@ io.of('/dice-map-room').on('connection', (socket) => {
       broadcastSystemMessage(room._id, 'success', 'gameStartMessage');
     } catch (e) {
       console.error(`error: ${e}`);
+    } finally {
+      refreshRooms(socket)
     }
   });
 

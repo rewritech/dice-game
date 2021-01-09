@@ -98,8 +98,7 @@ export class PlayRoomComponent implements OnInit {
   }
 
   leave(): void {
-    this.socket.emit('leave', this.player)
-    // this.router.navigate(['/rooms'])
+    if (this.player) this.socket.emit('leave', this.player)
   }
 
   selectCard(selectedCard: SelectedCard): void {
@@ -190,7 +189,9 @@ export class PlayRoomComponent implements OnInit {
     // websocket room에서 데이터 전송 받기 위한 연결
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
       this.room = newRoom
-      this.player = newRoom?.players?.find((p) => p._id === this.playerId)
+      if (newRoom) {
+        this.player = newRoom.players.find((p) => p._id === this.playerId)
+      }
       if (this.room && this.player) {
         this.cardDisabled = !this.roomService.checkMyTurn(
           this.player,
