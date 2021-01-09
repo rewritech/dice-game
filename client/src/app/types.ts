@@ -9,6 +9,7 @@ export type Player = {
   piece: IconDefinition | null
   cards: number[]
   life: number
+  killedPlayer: number
 }
 
 export type Room = {
@@ -36,6 +37,7 @@ export type Message = {
   _id?: string
   _roomId: number
   _playerId: string
+  systemMsgStatus: string
   playerName?: string
   content: string
   sendedAt?: string

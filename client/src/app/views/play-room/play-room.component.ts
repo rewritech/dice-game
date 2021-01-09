@@ -177,9 +177,8 @@ export class PlayRoomComponent implements OnInit {
         this.room.players[targetIndex].coordinates = this.room.players[
           targetIndex
         ].initialCoordinates
-        this.socket.emit('catch-player', {
-          player: this.room.players[targetIndex],
-        })
+        this.player.killedPlayer += 1
+        this.socket.emit('catch-player', this.room.players[targetIndex])
       }
 
       this.pieces = this.diceMapService.createPieces(

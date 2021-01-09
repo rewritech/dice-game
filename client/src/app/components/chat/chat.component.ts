@@ -31,6 +31,7 @@ export class ChatComponent implements OnInit {
     this.message = {
       _roomId: this.roomId,
       _playerId: this.playerId,
+      systemMsgStatus: '',
       content: '',
     }
   }
