@@ -1,4 +1,4 @@
-<div class="" *ngIf="room">
+<div class="container" *ngIf="room">
   <h1 class="text-white">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</h1>
 
   <div class="background container" *ngIf="room.status === 'WAIT'">
@@ -20,8 +20,8 @@
       </div>
     </div>
   </div>
-  <div class="d-flex">
-    <div class="pr-0 mr-2">
+  <div class="d-flex justify-content-between">
+    <div class="mr-2">
       <div class="d-flex flex-column p-1 bg-dark fit-contents">
         <div class="d-flex" *ngFor="let piecesRow of pieces; index as i">
           <div *ngFor="let piece of piecesRow; index as j">
@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="col border bg-dark p-2">
+    <div class="border bg-dark p-2 w-100">
       <h4 class="mt-1 text-white d-inline-block text-truncate player-name-width" title="{{player.name}}">{{i18n.get('player')}}({{player.name}})</h4>
       <app-chat></app-chat>
     </div>
