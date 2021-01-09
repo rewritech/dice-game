@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap'
+import { I18nService } from '../../services/i18n.service'
 
 @Component({
   selector: 'app-how-to-play-modal',
@@ -7,7 +8,14 @@ import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap'
   styleUrls: ['./how-to-play-modal.component.scss'],
 })
 export class HowToPlayModalComponent implements OnInit {
-  constructor(private config: NgbModalConfig, private modalService: NgbModal) {
+  i18n: I18nService
+
+  constructor(
+    private config: NgbModalConfig,
+    private modalService: NgbModal,
+    private i18nService: I18nService
+  ) {
+    this.i18n = i18nService
     // this.config.backdrop = 'static'
     // this.config.keyboard = false
   }

@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const MessageSchema = mongoose.Schema({
   _roomId : { type: Number, ref: 'Room' },
   _playerId : { type: Schema.Types.ObjectId, ref: 'Player' },
+  systemMsgStatus: String,
   playerName: String,
   content: String,
   sendedAt: Date,

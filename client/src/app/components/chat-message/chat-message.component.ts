@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core'
+import { I18nService } from '../../services/i18n.service'
 import { Message } from '../../types'
 
 @Component({
@@ -13,15 +14,20 @@ export class ChatMessageComponent implements OnInit {
   kindOfMessage: 'OTHERS' | 'SELF' | 'SYSTEM'
   textBlockClass: string
   smallClass: string
+  i18n: I18nService
 
-  constructor() {}
+  constructor(private i18nService: I18nService) {
+    this.i18n = i18nService
+  }
 
   ngOnInit(): void {
-    if (this.message._playerId === null) {
+    const { _playerId, systemMsgStatus } = this.message
+
+    if (_playerId === null) {
       this.kindOfMessage = 'SYSTEM'
       this.smallClass = 'ml-2 d-flex'
-      this.textBlockClass = 'text-white bg-success w-100'
-    } else if (this.message._playerId === this.playerId) {
+      this.textBlockClass = `text-white bg-${systemMsgStatus} w-100`
+    } else if (_playerId === this.playerId) {
       this.kindOfMessage = 'SELF'
       this.smallClass = 'mr-2 d-flex justify-content-end'
       this.textBlockClass = 'text-white ml-auto w-75 bg-primary'
@@ -42,5 +48,12 @@ export class ChatMessageComponent implements OnInit {
     ).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(
       date.getSeconds()
     ).padStart(2, '0')}`
+  }
+
+  convertI18nMessage(msg: string): string {
+    return msg
+      .split('&')
+      .map((m) => this.i18n.get(m) || m)
+      .join('')
   }
 }

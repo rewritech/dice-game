@@ -5,6 +5,7 @@ import { SocketConnectService } from '../../services/socket-connect.service'
 import { DiceMapService } from '../../services/dice-map.service'
 import { RoomService } from '../../services/room.service'
 import { PlayerService } from '../../services/player.service'
+import { I18nService } from '../../services/i18n.service'
 
 @Component({
   selector: 'app-play-room',
@@ -19,6 +20,7 @@ export class PlayRoomComponent implements OnInit {
 
   room: Room
   player: Player
+  i18n: I18nService
   cardDisabled = false
   canCardSubmit = false
   startBtnDisableClass = 'disabled'
@@ -35,8 +37,11 @@ export class PlayRoomComponent implements OnInit {
     private diceMapService: DiceMapService,
     private roomService: RoomService,
     private playerService: PlayerService,
-    private socket: SocketConnectService
-  ) {}
+    private socket: SocketConnectService,
+    private i18nService: I18nService
+  ) {
+    this.i18n = i18nService
+  }
 
   ngOnInit(): void {
     this.roomService.getRoom(this.roomId).subscribe((getRoom) => {
@@ -78,14 +83,6 @@ export class PlayRoomComponent implements OnInit {
     this.leave()
   }
 
-  // 자식에서 room을 변경한 것을 적용함
-  changeRoom($event: Room): void {
-    this.room = { ...$event }
-    if (this.roomService.checkCanStart(this.player, this.room)) {
-      this.startBtnDisableClass = ''
-    }
-  }
-
   shuffle(): void {
     this.diceMapService.createNewMap()
     this.room.map = this.diceMapService.getDiceMap()
@@ -101,7 +98,7 @@ export class PlayRoomComponent implements OnInit {
   }
 
   leave(): void {
-    this.socket.emit<Player>('leave', this.player)
+    this.socket.emit('leave', this.player)
     // this.router.navigate(['/rooms'])
   }
 
@@ -172,9 +169,8 @@ export class PlayRoomComponent implements OnInit {
         this.room.players[targetIndex].coordinates = this.room.players[
           targetIndex
         ].initialCoordinates
-        this.socket.emit('catch-player', {
-          player: this.room.players[targetIndex],
-        })
+        this.player.killedPlayer += 1
+        this.socket.emit('catch-player', this.room.players[targetIndex])
       }
 
       this.pieces = this.diceMapService.createPieces(
@@ -193,20 +189,26 @@ export class PlayRoomComponent implements OnInit {
   private socketOnChangeRoom(roomId: number): void {
     // websocket room에서 데이터 전송 받기 위한 연결
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
-      if (!newRoom) this.router.navigate(['/rooms'])
       this.room = newRoom
-      this.player = newRoom.players.find((p) => p._id === this.playerId)
-      this.cardDisabled = !this.roomService.checkMyTurn(this.player, this.room) // 내턴이면 카드 활성화
-      this.pieces = this.diceMapService.createPieces(
-        this.room,
-        !this.roomService.checkMyTurn(this.player, this.room)
-      )
-      // 스타트 버튼 활성화 조건
-      if (
-        this.room.status === 'WAIT' &&
-        this.roomService.checkCanStart(this.player, this.room)
-      ) {
-        this.startBtnDisableClass = ''
+      this.player = newRoom?.players?.find((p) => p._id === this.playerId)
+      if (this.room && this.player) {
+        this.cardDisabled = !this.roomService.checkMyTurn(
+          this.player,
+          this.room
+        ) // 내턴이면 카드 활성화
+        this.pieces = this.diceMapService.createPieces(
+          this.room,
+          !this.roomService.checkMyTurn(this.player, this.room)
+        )
+        // 스타트 버튼 활성화 조건
+        if (
+          this.room.status === 'WAIT' &&
+          this.roomService.checkCanStart(this.player, this.room)
+        ) {
+          this.startBtnDisableClass = ''
+        }
+      } else {
+        this.router.navigate(['/rooms'])
       }
     })
   }

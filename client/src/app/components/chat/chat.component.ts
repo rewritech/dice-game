@@ -1,9 +1,10 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
-import { MessageService } from 'src/app/services/message.service'
-import { SocketConnectService } from 'src/app/services/socket-connect.service'
-import { Message } from 'src/app/types'
+import { MessageService } from '../../services/message.service'
+import { I18nService } from '../../services/i18n.service'
+import { SocketConnectService } from '../../services/socket-connect.service'
+import { Message } from '../../types'
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -13,6 +14,7 @@ export class ChatComponent implements OnInit {
   planeIcon = faPaperPlane
   message: Message
   messages: Message[]
+  i18n: I18nService
 
   private roomId = +this.route.snapshot.paramMap.get('id')
   playerId = localStorage.getItem('pId')
@@ -22,11 +24,14 @@ export class ChatComponent implements OnInit {
   constructor(
     private socket: SocketConnectService,
     private route: ActivatedRoute,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private i18nService: I18nService
   ) {
+    this.i18n = i18nService
     this.message = {
       _roomId: this.roomId,
       _playerId: this.playerId,
+      systemMsgStatus: '',
       content: '',
     }
   }

@@ -1,6 +1,6 @@
 <ng-template #content let-modal>
   <div class="modal-header">
-    <span class="modal-title" id="modal-basic-title">게임 룰</span>
+    <span class="modal-title" id="modal-basic-title">{{i18n.get('gameRole')}}</span>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')" tabindex="-1">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -12,22 +12,22 @@
       href="https://comic.naver.com/bestChallenge/detail.nhn?titleId=734597&no=8"
       target="_blank"
         >
-        자작 보드게임 동아리 - 다이스맵
+        {{i18n.get('original')}}
       </a>
       <ul>
-        <li>플레이어 수 : 2 ~ 4인</li>
-        <li>매 턴 카드 2장 뽑기</li>
-        <li>턴 종료 시 무조건 한 장 낼 것</li>
-        <li>제출한 주사위에 해당하는 셀은 무제한 이동가능</li>
-        <li>(단, 동서남북 연속적으로 붙어있는 셀인 경우)</li>
-        <li>생명은 3개, 0이 되면 탈락</li>
-        <li>최종 1명이 남을 때 까지</li>
-        <li>1 턴당 시간 제한 1분</li>
+        <li>{{i18n.get('role1')}}</li>
+        <li>{{i18n.get('role2')}}</li>
+        <li>{{i18n.get('role3')}}</li>
+        <li>{{i18n.get('role4')}}</li>
+        <li>{{i18n.get('role5')}}</li>
+        <li>{{i18n.get('role6')}}</li>
+        <li>{{i18n.get('role7')}}</li>
+        <li>{{i18n.get('role8')}}</li>
       </ul>
     </div>
   </div>
 </ng-template>
 
 <button class="btn btn-primary btn-lg mb-2 menu-width" (click)="open(content)">
-  게임 룰
+  {{i18n.get('gameRole')}}
 </button>

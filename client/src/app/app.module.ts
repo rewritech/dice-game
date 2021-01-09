@@ -23,6 +23,7 @@ import { ChatMessageComponent } from './components/chat-message/chat-message.com
 import { PlayerStatusComponent } from './components/player-status/player-status.component'
 import { CardComponent } from './components/card/card.component'
 import { DiceBoardComponent } from './components/dice-board/dice-board.component'
+import { SelectI18nComponent } from './components/select-i18n/select-i18n.component'
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { DiceBoardComponent } from './components/dice-board/dice-board.component
     PlayerStatusComponent,
     CardComponent,
     DiceBoardComponent,
+    SelectI18nComponent,
   ],
   imports: [
     BrowserModule,

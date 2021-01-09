@@ -1,7 +1,7 @@
 <ng-template #content let-modal>
   <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Player</h4>
+      <h4 class="modal-title" id="modal-basic-title">{{i18n.get('player')}}</h4>
       <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')" tabindex="-1">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -10,20 +10,21 @@
       <input type="hidden" name="_id" [ngModel]="player._id">
       <input type="hidden" name="_roomId" [ngModel]="player._roomId">
       <div class="form-group">
-        <label for="forPlayerName">닉네임</label>
-        <div class="input-group">
-          <input type="text" class="form-control" id="forPlayerName" name="name" [ngModel]="player.name">
-        </div>
+        <label for="forPlayerName">{{i18n.get('nickName')}}</label>
+        <input type="text" class="form-control {{invalidClass}}" id="forPlayerName" name="name" [(ngModel)]="player.name">
+        <small class="text-danger float-left mb-3" *ngIf="validationError">
+          {{i18n.get('insertNickName')}}
+        </small>
       </div>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-outline-dark" (click)="modal.close()">변경</button>
+      <button type="submit" class="btn btn-primary">{{i18n.get('change')}}</button>
     </div>
   </form>
 </ng-template>
 
-<button class="btn btn-info h-100 btn-font-size d-flex" (click)="open(content)" *ngIf="player">
-  <span class="d-inline-block text-truncate mt-auto mb-auto">닉네임(</span>
+<button class="btn btn-info h-100 d-flex" (click)="open(content)" *ngIf="player">
+  <span class="d-inline-block text-truncate mt-auto mb-auto">{{i18n.get('nickName')}}(</span>
   <span class="d-inline-block text-truncate mt-auto mb-auto player-name-width">{{player.name}}</span>
-  <span class="d-inline-block text-truncate mt-auto mb-auto">)변경</span>
+  <span class="d-inline-block text-truncate mt-auto mb-auto">){{i18n.get('change')}}</span>
 </button>

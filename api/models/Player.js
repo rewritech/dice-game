@@ -8,6 +8,7 @@ const PlayerSchema = mongoose.Schema({
   piece: { icon: [], prefix: String, iconName: String },
   cards: [],
   life: Number,
+  killedPlayer: Number,
 });
 
 module.exports = mongoose.model('Player', PlayerSchema);

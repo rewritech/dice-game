@@ -4,25 +4,25 @@
   <div class="background container" *ngIf="room.status === 'WAIT'">
     <div class="card bg-transparent" style="width: fit-content;">
       <div class="card-header border-white">
-        <h1 class="text-white">시작 위치와 말 선택</h1>
+        <h1 class="text-white">{{i18n.get('selectPositionAndPiece')}}</h1>
       </div>
       <div class="card-body border-white">
         <div class="row row-cols-2">
           <div class="col border border-white p-0" *ngFor="let position of positions">
-            <app-select-piece [position]="position" [player]="player" [room]="room" (roomChange)="changeRoom($event)"></app-select-piece>
+            <app-select-piece [position]="position" [player]="player" [room]="room"></app-select-piece>
           </div>
         </div>
       </div>
       <app-dice-board [room]="room"></app-dice-board>
       <div class="card-footer d-flex justify-content-end border-white">
-        <button class="btn btn-secondary" routerLink="/rooms">LEAVE ROOM</button>
-        <button class="btn btn-info ml-2" (click)="shuffle()">SHUFFLE</button>
-        <button class="btn btn-info ml-2 {{startBtnDisableClass}}" (click)="start()">GAME START</button>
+        <button class="btn btn-secondary" routerLink="/rooms">{{i18n.get('leaveRoom')}}</button>
+        <button class="btn btn-info ml-2" (click)="shuffle()">{{i18n.get('shuffle')}}</button>
+        <button class="btn btn-info ml-2 {{startBtnDisableClass}}" (click)="start()">{{i18n.get('gameStart')}}</button>
       </div>
     </div>
   </div>
-  <div class="d-flex">
-    <div class="pr-0 mr-2">
+  <div class="d-flex justify-content-between">
+    <div class="mr-2">
       <div class="d-flex flex-column p-1 bg-dark fit-contents">
         <div class="d-flex" *ngFor="let piecesRow of pieces; index as i">
           <div *ngFor="let piece of piecesRow; index as j">
@@ -31,8 +31,8 @@
         </div>
       </div>
     </div>
-    <div class="col border bg-dark p-2">
-      <h4 class="mt-1 text-white d-inline-block text-truncate player-name-width" title="{{player.name}}">플레이어({{player.name}})</h4>
+    <div class="border bg-dark p-2 w-100">
+      <h4 class="mt-1 text-white d-inline-block text-truncate player-name-width" title="{{player.name}}">{{i18n.get('player')}}({{player.name}})</h4>
       <app-chat></app-chat>
     </div>
   </div>
@@ -52,7 +52,7 @@
         <app-card *ngFor="let card of player.cards; index as i" [num]="card" [index]="i" [selected]="isSelectedCard(card, i)" [disabled]="cardDisabled" [callBackUnselectCard]="callBackUnselectCard" [callBackSelectCard]="callBackSelectCard"></app-card>
       </div>
       <button class="card-submit-size btn btn-primary h-100 ml-1 {{canCardSubmit ? '' : 'disabled cursor-unset'}}" (click)="cardSubmit()">
-        <h2>카드<br/>제출</h2>
+        <span class="submit-font-size">{{i18n.get('card')}}<br/>{{i18n.get('submit')}}</span>
       </button>
     </div>
   </div>

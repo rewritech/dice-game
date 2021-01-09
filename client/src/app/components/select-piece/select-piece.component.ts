@@ -13,7 +13,7 @@ import {
   faChessKing,
   IconName,
 } from '@fortawesome/free-solid-svg-icons'
-import { DiceMapService } from 'src/app/services/dice-map.service'
+import { DiceMapService } from '../../services/dice-map.service'
 import { SocketConnectService } from '../../services/socket-connect.service'
 import { Player, PieceBtn, Room } from '../../types'
 
@@ -26,7 +26,6 @@ export class SelectPieceComponent implements OnInit {
   @Input() position: string
   @Input() player: Player
   @Input() room: Room
-  @Output() roomChange = new EventEmitter<Room>()
 
   private defaultBtnClass = 'btn-outline-light'
   private disableBtnClass = 'disabled cursor-unset'
@@ -55,7 +54,6 @@ export class SelectPieceComponent implements OnInit {
       this.player.piece = pieceBtn.piece
       const player = this.room.players.find((p) => p._id === this.player._id)
       this.room.players[this.room.players.indexOf(player)] = this.player
-      this.roomChange.emit(this.room)
       this.socket.emit<Player>('select-piece', this.player)
     }
   }
