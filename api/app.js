@@ -164,16 +164,13 @@ io.of('/dice-map-room').on('connection', (socket) => {
     }
   });
 
-  socket.on('catch-player', async (value) => {
+  socket.on('catch-player', async (player) => {
     try {
       console.log(`[${new Date()}]: catch-player`);
-      const player = value.player
-      const room = value.room
 
       await Player.updateOne({ _id: player._id }, { $set: { coordinates: player.initialCoordinates, life: player.life } });
 
-      broadcastRoom(socket, room._id);
-      broadcastSystemMessage(socket, room._id, 'danger', `${player.name}님의 말이 잡혔습니다.`);
+      broadcastSystemMessage(socket, player._roomId, 'danger', `${player.name}님의 말이 잡혔습니다.`);
     } catch (e) {
       console.error(`error: ${e}`);
     }
