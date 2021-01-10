@@ -49,9 +49,9 @@ socketServer.listen(socketPort, () => {
 });
 
 // function
-async function broadcastRoom (roomId) {
+async function broadcastRoom (roomId, key=`changeRoomInfo-${roomId}`) {
   const room = await Room.findOne({ _id: roomId, deleted: false }).populate('players');
-  io.of("/dice-map-room").to(`room-${roomId}`).emit(`changeRoomInfo-${roomId}`, room);
+  io.of("/dice-map-room").to(`room-${roomId}`).emit(key, room);
 }
 async function broadcastRoomMessage (roomId) {
   const messages = await Message.find({ _roomId: roomId });
@@ -133,7 +133,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
       await Room.updateOne({ _id: room._id }, { $set: room });
       await Player.updateOne({ _id: player._id }, { $set: player });
       // Socket room 갱신
-      broadcastRoom(room._id);
+      broadcastRoom(room._id, `start-game-${room._id}`);
       broadcastSystemMessage(room._id, 'success', 'gameStartMessage');
     } catch (e) {
       console.error(`error: ${e}`);
@@ -157,10 +157,13 @@ io.of('/dice-map-room').on('connection', (socket) => {
         room.cardDeck.unused = room.cardDeck.unused.concat(room.cardDeck.used)
         room.cardDeck.used = []
       }
-      const newCards = room.cardDeck.unused.splice(0, 2)
-      await Player.updateOne({ _id: room.currentPlayer }, { $push: { cards: newCards } });
-      await Room.updateOne({ _id: room._id }, { $set: room });
+
       const newCurrentPlayer = await Player.findOne({ _id: room.currentPlayer })
+      const newCards = room.cardDeck.unused.splice(0, 2)
+      newCards.reverse().forEach((c) => newCurrentPlayer.cards.unshift(c))
+
+      await Player.updateOne({ _id: room.currentPlayer }, { $set: { cards: newCurrentPlayer.cards } });
+      await Room.updateOne({ _id: room._id }, { $set: room });
       // Socket room 갱신
       broadcastRoom(room._id);
       broadcastSystemMessage(room._id, 'success', joinMsg([player.name, 'changeTurn1Message', newCurrentPlayer.name, 'changeTurn2Message']));

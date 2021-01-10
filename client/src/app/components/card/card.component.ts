@@ -1,10 +1,23 @@
 import { Component, Input, OnInit } from '@angular/core'
+import { trigger, style, animate, transition } from '@angular/animations'
 import { SelectedCard } from '../../types'
 
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
+  animations: [
+    trigger('cardAnimate', [
+      transition(':enter', [
+        style({ transform: `translateX(-1000%)` }),
+        animate('0.8s'),
+      ]),
+      // transition(':leave', [
+      //   style({ transform: `translateX(200%)` }),
+      //   animate('0.5s'),
+      // ]),
+    ]),
+  ],
 })
 export class CardComponent implements OnInit {
   @Input() callBackSelectCard: (selectedCard: SelectedCard) => void

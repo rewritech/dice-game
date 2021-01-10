@@ -3,5 +3,5 @@
   <span>({{formatDate(message.sendedAt)}})</span>
 </small>
 <div class="mb-1 p-2 rounded {{textBlockClass}}">
-  <span class="m-2 text-break" [innerHTML]="convertI18nMessage(message.content)"></span>
+  <span class="text-break" [innerHTML]="convertI18nMessage(message.content)"></span>
 </div>

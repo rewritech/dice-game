@@ -153,10 +153,10 @@ export class PlayRoomComponent implements OnInit {
   move(x: number, y: number): void {
     // 카드 제출하기 전에는 눌러도 반응이 없어야 한다.
     if (this.canMove) {
+      this.isDisableAnimate = true
       this.canMove = false
       this.cardDisabled = true // 카드 비활성화
       this.player.coordinates = [x, y] // player.coordnates 갱신
-
       this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
 
       // 적플레이어를 잡으면 라이프 -1, 말 위치 초기화
@@ -190,20 +190,14 @@ export class PlayRoomComponent implements OnInit {
   private socketOnChangeRoom(roomId: number): void {
     // websocket room에서 데이터 전송 받기 위한 연결
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
+      this.isDisableAnimate = true
       this.room = newRoom
       if (newRoom) {
         this.player = newRoom.players.find((p) => p._id === this.playerId)
       }
       if (this.room && this.player) {
-        if (this.room.status === 'PLAYING') this.isDisableAnimate = false
-        this.cardDisabled = !this.roomService.checkMyTurn(
-          this.player,
-          this.room
-        ) // 내턴이면 카드 활성화
-        this.pieces = this.diceMapService.createPieces(
-          this.room,
-          !this.roomService.checkMyTurn(this.player, this.room)
-        )
+        // 내턴이면 카드 활성화
+        this.buildCard()
         // 스타트 버튼 활성화 조건
         if (
           this.room.status === 'WAIT' &&
@@ -215,5 +209,21 @@ export class PlayRoomComponent implements OnInit {
         this.router.navigate(['/rooms'])
       }
     })
+    // 게임 시작 시 단한번 실행
+    this.socket.on<Room>(`start-game-${roomId}`, (newRoom: Room) => {
+      this.isDisableAnimate = false
+      this.room = newRoom
+      this.player = newRoom.players.find((p) => p._id === this.playerId)
+      // 내턴이면 카드 활성화
+      this.buildCard()
+    })
+  }
+
+  private buildCard(): void {
+    this.cardDisabled = !this.roomService.checkMyTurn(this.player, this.room)
+    this.pieces = this.diceMapService.createPieces(
+      this.room,
+      !this.roomService.checkMyTurn(this.player, this.room)
+    )
   }
 }

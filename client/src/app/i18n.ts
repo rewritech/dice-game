@@ -17,7 +17,7 @@ export const i18n = {
     noRooms: 'THERE ARE NO ROOMS',
     insert: 'OK',
     cancel: 'CANCEL',
-    selectPositionAndPiece: 'SELECT STARTING POSITION AND PIECE',
+    selectPositionAndPiece: 'SELECT POSITION AND PIECE',
     leaveRoom: 'LEAVE',
     shuffle: 'SUFFLE MAP',
     gameStart: 'GAME START',
