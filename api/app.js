@@ -53,6 +53,10 @@ async function broadcastRoom (roomId, key=`changeRoomInfo-${roomId}`) {
   const room = await Room.findOne({ _id: roomId, deleted: false }).populate('players');
   io.of("/dice-map-room").to(`room-${roomId}`).emit(key, room);
 }
+async function broadcastRoomWithoutMe (socket, roomId, key=`changeRoomInfo-${roomId}`) {
+  const room = await Room.findOne({ _id: roomId, deleted: false }).populate('players');
+  socket.in(`room-${roomId}`).emit(key, room);
+}
 async function broadcastRoomMessage (roomId) {
   const messages = await Message.find({ _roomId: roomId });
   io.of("/dice-map-room").to(`room-${roomId}`).emit(`chat-room-${roomId}`, messages);
@@ -121,19 +125,18 @@ io.of('/dice-map-room').on('connection', (socket) => {
     }
   });
 
-  socket.on('game-start', async (room) => {
+  socket.on('game-start', async (value) => {
     try {
       console.log(`[${new Date()}]: game-start`);
-      // 카드 분배
-      const player = await Player.findOne({ _id: room.currentPlayer })
-      const newCards = room.cardDeck.unused.splice(0, 2)
-      player.cards = player.cards.concat(newCards)
+      const player = value.player
+      const room = value.room
 
       // DB room 갱신
       await Room.updateOne({ _id: room._id }, { $set: room });
+      // await Room.updateOne({ _id: room._id }, { $set: { ...room, status: 'PLAYING', playerLimit: room.players.length } });
       await Player.updateOne({ _id: player._id }, { $set: player });
       // Socket room 갱신
-      broadcastRoom(room._id, `start-game-${room._id}`);
+      broadcastRoomWithoutMe(socket, room._id, `start-game-${room._id}`);
       broadcastSystemMessage(room._id, 'success', 'gameStartMessage');
     } catch (e) {
       console.error(`error: ${e}`);

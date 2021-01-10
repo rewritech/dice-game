@@ -21,7 +21,7 @@ export class PlayRoomComponent implements OnInit {
   room: Room
   player: Player
   i18n: I18nService
-  isDisableAnimate = true
+  isDisableAnimate: boolean
   cardDisabled = false
   canCardSubmit = false
   startBtnDisableClass = 'disabled'
@@ -71,6 +71,7 @@ export class PlayRoomComponent implements OnInit {
               this.socketOnChangeRoom(this.roomId)
               // websocket room에 join
               this.socket.emit<Player>('join-room', this.player)
+              this.isDisableAnimate = false
             })
         })
       } else {
@@ -97,7 +98,14 @@ export class PlayRoomComponent implements OnInit {
       this.room.status = 'PLAYING'
       this.room.playerLimit = this.room.players.length
       this.isDisableAnimate = false
-      this.socket.emit<Room>('game-start', this.room)
+
+      const newCards = this.room.cardDeck.unused.splice(0, 2)
+      this.player.cards = this.player.cards.concat(newCards)
+
+      this.socket.emit('game-start', {
+        player: this.player,
+        room: this.room,
+      })
     }
   }
 

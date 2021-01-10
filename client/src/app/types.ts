@@ -64,3 +64,11 @@ export type Counter = {
 }
 
 export type Locale = 'ko' | 'en' | 'jp'
+
+export type AnimationOption = {
+  value: string
+  params: {
+    x: number
+    y: number
+  }
+}
