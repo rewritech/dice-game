@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core'
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core'
 import {
   faChessKnight,
   faChessRook,
@@ -40,7 +33,9 @@ export class SelectPieceComponent implements OnInit {
     private diceMapService: DiceMapService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // onInit
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.initializeBtnClass()

@@ -16,9 +16,11 @@ export class CardComponent implements OnInit {
 
   disabledClass: string
 
-  constructor() {}
+  // constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // onInit
+  }
 
   ngOnChanges(): void {
     this.disabledClass =

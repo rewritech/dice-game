@@ -21,10 +21,12 @@ export class SelectI18nComponent implements OnInit {
     this.default = this.i18nService.getLocale()
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // onInit
+  }
 
-  onChange($event): void {
-    this.default = $event.target.value
+  onChange(value: Locale): void {
+    this.default = value
     this.i18nService.changeLocale(this.default)
   }
 }

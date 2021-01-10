@@ -13,5 +13,7 @@ export class DashboardComponent implements OnInit {
     this.i18n = i18nService
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // onInit
+  }
 }

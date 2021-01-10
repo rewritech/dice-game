@@ -14,7 +14,7 @@ export class PlayerStatusComponent implements OnInit {
 
   blinkClass: string
 
-  constructor() {}
+  // constructor() {}
 
   ngOnInit(): void {
     this.blinkClass = this.blink ? 'blinking' : ''

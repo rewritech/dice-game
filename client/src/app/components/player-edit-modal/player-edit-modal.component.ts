@@ -34,7 +34,7 @@ export class PlayerEditModalComponent implements OnInit {
     })
   }
 
-  open(content: any): void {
+  open(content: HTMLElement): void {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
   }
 

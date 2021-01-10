@@ -25,7 +25,7 @@ export class DiceComponent implements OnInit {
   blinkClass: string
   disabledClass: string
 
-  constructor() {}
+  // constructor() {}
 
   ngOnInit(): void {
     this.blinkClass = this.blink ? 'blinking' : ''

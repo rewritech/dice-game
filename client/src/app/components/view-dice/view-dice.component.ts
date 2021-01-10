@@ -18,7 +18,9 @@ export class ViewDiceComponent implements OnInit {
     'btn-primary',
   ]
 
-  constructor() {}
+  // constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // onInit
+  }
 }

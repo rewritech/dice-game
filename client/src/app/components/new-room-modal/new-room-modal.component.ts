@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap'
 import { DiceMapService } from '../../services/dice-map.service'
@@ -51,7 +51,7 @@ export class NewRoomModalComponent implements OnInit {
     }
   }
 
-  open(content: any): void {
+  open(content: HTMLElement): void {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
   }
 

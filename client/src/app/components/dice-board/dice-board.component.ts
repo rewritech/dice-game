@@ -13,7 +13,9 @@ export class DiceBoardComponent implements OnInit {
 
   constructor(private diceMapService: DiceMapService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // onInit
+  }
 
   ngOnChanges(): void {
     this.updateDiceCount()
