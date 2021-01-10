@@ -1,11 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core'
+import { trigger, style, animate, transition } from '@angular/animations'
 import { Player, Room, SelectedCard } from '../../types'
 import { I18nService } from '../../services/i18n.service'
 
 @Component({
   selector: 'app-console',
   templateUrl: './console.component.html',
-  styleUrls: ['./console.component.scss']
+  styleUrls: ['./console.component.scss'],
+  animations: [
+    trigger('cardLeaveAnimate', [
+      transition(':leave', [
+        animate('1s'),
+        style({ transform: `translateY(-100%)` }),
+      ]),
+    ]),
+  ],
 })
 export class ConsoleComponent implements OnInit {
   @Input() room: Room

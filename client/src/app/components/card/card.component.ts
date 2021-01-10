@@ -10,12 +10,8 @@ import { SelectedCard } from '../../types'
     trigger('cardAnimate', [
       transition(':enter', [
         style({ transform: `translateX(-1000%)` }),
-        animate('0.8s'),
+        animate('1s'),
       ]),
-      // transition(':leave', [
-      //   style({ transform: `translateX(200%)` }),
-      //   animate('0.5s'),
-      // ]),
     ]),
   ],
 })

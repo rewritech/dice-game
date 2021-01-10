@@ -27,6 +27,7 @@
       [disabled]="cardDisabled"
       [callBackUnselectCard]="callBackUnselectCard"
       [callBackSelectCard]="callBackSelectCard"
+      @cardLeaveAnimate
     ></app-card>
   </div>
   <button class="card-submit-size btn btn-primary h-100 ml-1 {{canCardSubmit ? '' : 'disabled cursor-unset'}}" (click)="callBackCardSubmit()">
