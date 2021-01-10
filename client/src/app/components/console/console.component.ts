@@ -10,7 +10,7 @@ import { I18nService } from '../../services/i18n.service'
   animations: [
     trigger('cardLeaveAnimate', [
       transition(':leave', [
-        animate('1s'),
+        animate('0.3s'),
         style({ transform: `translateY(-100%)` }),
       ]),
     ]),
