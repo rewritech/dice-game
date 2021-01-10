@@ -21,6 +21,7 @@ export class PlayRoomComponent implements OnInit {
   room: Room
   player: Player
   i18n: I18nService
+  isDisableAnimate = true
   cardDisabled = false
   canCardSubmit = false
   startBtnDisableClass = 'disabled'
@@ -93,6 +94,7 @@ export class PlayRoomComponent implements OnInit {
     if (this.roomService.checkCanStart(this.player, this.room)) {
       this.room.status = 'PLAYING'
       this.room.playerLimit = this.room.players.length
+      this.isDisableAnimate = false
       this.socket.emit<Room>('game-start', this.room)
     }
   }
@@ -193,6 +195,7 @@ export class PlayRoomComponent implements OnInit {
         this.player = newRoom.players.find((p) => p._id === this.playerId)
       }
       if (this.room && this.player) {
+        if (this.room.status === 'PLAYING') this.isDisableAnimate = false
         this.cardDisabled = !this.roomService.checkMyTurn(
           this.player,
           this.room

@@ -1,10 +1,19 @@
 import { Component, OnInit, Input } from '@angular/core'
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons'
+import { trigger, style, animate, transition } from '@angular/animations'
 
 @Component({
   selector: 'app-dice',
   templateUrl: './dice.component.html',
   styleUrls: ['./dice.component.scss'],
+  animations: [
+    trigger('insert', [
+      transition(':enter', [
+        style({ transform: `translate(-200%, -200%) rotate(360deg)` }),
+        animate('2s ease-out'),
+      ]),
+    ]),
+  ],
 })
 export class DiceComponent implements OnInit {
   @Input() num: number

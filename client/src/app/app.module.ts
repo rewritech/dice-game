@@ -4,6 +4,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import { FormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { AppRoutingModule } from './app-routing.module'
 
 import { AppComponent } from './app.component'
@@ -47,12 +48,13 @@ import { SelectI18nComponent } from './components/select-i18n/select-i18n.compon
     SelectI18nComponent,
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
-    NgbModule,
+    BrowserAnimationsModule,
+    BrowserModule,
     FormsModule,
-    HttpClientModule,
     FontAwesomeModule,
+    HttpClientModule,
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
