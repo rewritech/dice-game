@@ -25,8 +25,8 @@
       [index]="i"
       [selected]="isSelectedCard(card, i)"
       [disabled]="cardDisabled"
-      [callBackUnselectCard]="unselectCard"
-      [callBackSelectCard]="selectCard"
+      [callBackUnselectCard]="callBackUnselectCard"
+      [callBackSelectCard]="callBackSelectCard"
     ></app-card>
   </div>
   <button class="card-submit-size btn btn-primary h-100 ml-1 {{canCardSubmit ? '' : 'disabled cursor-unset'}}" (click)="callBackCardSubmit()">

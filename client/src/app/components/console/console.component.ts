@@ -17,9 +17,6 @@ export class ConsoleComponent implements OnInit {
   @Input() callBackSelectCard: (sc: SelectedCard) => void
   @Input() callBackCardSubmit: () => void
 
-  unselectCard = (sc: SelectedCard): void => this.callBackUnselectCard(sc)
-  selectCard = (sc: SelectedCard): void => this.callBackSelectCard(sc)
-
   i18n: I18nService
 
   constructor(private i18nService: I18nService) {

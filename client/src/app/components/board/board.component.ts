@@ -11,8 +11,6 @@ export class BoardComponent implements OnInit {
   @Input() isDisableAnimate: boolean
   @Input() callBackOnClick: (x: number, y: number) => void
 
-  callBack = (x: number, y: number): void => this.callBackOnClick(x, y)
-
   // constructor() {}
 
   ngOnInit(): void {
