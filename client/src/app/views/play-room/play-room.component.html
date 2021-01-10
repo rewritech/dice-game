@@ -2,58 +2,30 @@
   <h1 class="text-white">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</h1>
 
   <div class="d-flex justify-content-between">
-    <div class="background container" *ngIf="room.status === 'WAIT'">
-      <div class="card bg-transparent" style="width: fit-content;">
-        <div class="card-header border-white">
-          <h1 class="text-white">{{i18n.get('selectPositionAndPiece')}}</h1>
-        </div>
-        <div class="card-body border-white">
-          <div class="row row-cols-2">
-            <div class="col border border-white p-0" *ngFor="let position of positions">
-              <app-select-piece [position]="position" [player]="player" [room]="room"></app-select-piece>
-            </div>
-          </div>
-        </div>
-        <app-dice-board [room]="room"></app-dice-board>
-        <div class="card-footer d-flex justify-content-end border-white">
-          <button class="btn btn-secondary" routerLink="/rooms">{{i18n.get('leaveRoom')}}</button>
-          <button class="btn btn-info ml-2" (click)="shuffle()">{{i18n.get('shuffle')}}</button>
-          <button class="btn btn-info ml-2 {{startBtnDisableClass}}" (click)="start()">{{i18n.get('gameStart')}}</button>
-        </div>
-      </div>
-    </div>
-    <div class="mr-2" *ngIf="room.status !== 'WAIT'">
-      <div class="d-flex flex-column p-1 bg-dark fit-contents">
-        <div class="d-flex" *ngFor="let piecesRow of pieces; index as i">
-          <div *ngFor="let piece of piecesRow; index as j"  [@.disabled]="isDisableAnimate">
-            <app-dice [num]="piece.num" [disabled]="piece.disabled" [icon]="piece.icon" [blink]="piece.blink" [coordinate]="[i, j]" [callBackOnClick]="callBackOnClick"></app-dice>
-          </div>
-        </div>
-      </div>
-    </div>
+    <app-waiting-room *ngIf="room.status === 'WAIT'" [room]="room"
+      [player]="player"
+      [startBtnDisableClass]="startBtnDisableClass"
+      [callBackShuffle]="callBackShuffle"
+      [callBackStart]="callBackStart"
+    ></app-waiting-room>
+    <app-board *ngIf="room.status !== 'WAIT'"
+      [isDisableAnimate]="isDisableAnimate"
+      [pieces]="pieces"
+      [callBackOnClick]="callBackOnClick"
+    ></app-board>
     <div class="border bg-dark p-2 w-100">
       <h4 class="mt-1 text-white d-inline-block text-truncate player-name-width" title="{{player.name}}">{{i18n.get('player')}}({{player.name}})</h4>
       <app-chat></app-chat>
     </div>
   </div>
-  <div *ngIf="room.status === 'PLAYING'">
-    <div class="bg-dark console-ui p-1">
-      <div class="d-flex flex-column">
-        <div *ngFor="let p of room.players.slice(0,2)">
-          <app-player-status [icon]="p.piece" [life]="p.life" [cards]="p.cards.length" [blink]="p._id === room.currentPlayer"></app-player-status>
-        </div>
-      </div>
-      <div class="mr-1 d-flex flex-column">
-        <div *ngFor="let p of room.players.slice(2,4)">
-          <app-player-status *ngIf="p" [icon]="p.piece" [life]="p.life" [cards]="p.cards.length" [blink]="p._id === room.currentPlayer"></app-player-status>
-        </div>
-      </div>
-      <div class="border rounded border-white flex-fill h-100 overflow-auto d-flex p-1">
-        <app-card *ngFor="let card of player.cards; index as i" [num]="card" [index]="i" [selected]="isSelectedCard(card, i)" [disabled]="cardDisabled" [callBackUnselectCard]="callBackUnselectCard" [callBackSelectCard]="callBackSelectCard"></app-card>
-      </div>
-      <button class="card-submit-size btn btn-primary h-100 ml-1 {{canCardSubmit ? '' : 'disabled cursor-unset'}}" (click)="cardSubmit()">
-        <span class="submit-font-size">{{i18n.get('card')}}<br/>{{i18n.get('submit')}}</span>
-      </button>
-    </div>
-  </div>
+  <app-console *ngIf="room.status === 'PLAYING'"
+    [room]="room"
+    [player]="player"
+    [selectedCards]="selectedCards"
+    [canCardSubmit]="canCardSubmit"
+    [cardDisabled]="cardDisabled"
+    [callBackUnselectCard]="callBackUnselectCard"
+    [callBackSelectCard]="callBackSelectCard"
+    [callBackCardSubmit]="callBackCardSubmit"
+  ></app-console>
 </div>

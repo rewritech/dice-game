@@ -25,6 +25,9 @@ import { PlayerStatusComponent } from './components/player-status/player-status.
 import { CardComponent } from './components/card/card.component'
 import { DiceBoardComponent } from './components/dice-board/dice-board.component'
 import { SelectI18nComponent } from './components/select-i18n/select-i18n.component'
+import { WaitingRoomComponent } from './components/waiting-room/waiting-room.component'
+import { BoardComponent } from './components/board/board.component'
+import { ConsoleComponent } from './components/console/console.component'
 
 @NgModule({
   declarations: [
@@ -46,6 +49,9 @@ import { SelectI18nComponent } from './components/select-i18n/select-i18n.compon
     CardComponent,
     DiceBoardComponent,
     SelectI18nComponent,
+    WaitingRoomComponent,
+    BoardComponent,
+    ConsoleComponent,
   ],
   imports: [
     AppRoutingModule,

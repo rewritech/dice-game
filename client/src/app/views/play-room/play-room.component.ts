@@ -25,12 +25,14 @@ export class PlayRoomComponent implements OnInit {
   cardDisabled = false
   canCardSubmit = false
   startBtnDisableClass = 'disabled'
-  positions = ['left-top', 'right-top', 'left-bottom', 'right-bottom']
   pieces: Map[][]
   selectedCards: SelectedCard[] = []
   callBackOnClick = (x: number, y: number): void => this.move(x, y)
   callBackSelectCard = (sc: SelectedCard): void => this.selectCard(sc)
   callBackUnselectCard = (sc: SelectedCard): void => this.unselectCard(sc)
+  callBackShuffle = (): void => this.shuffle()
+  callBackStart = (): void => this.start()
+  callBackCardSubmit = (): void => this.cardSubmit()
 
   constructor(
     private route: ActivatedRoute,

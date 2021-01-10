@@ -1,0 +1,35 @@
+<div class="bg-dark console-ui p-1">
+  <div class="d-flex flex-column">
+    <div *ngFor="let p of room.players.slice(0,2)">
+      <app-player-status
+        [icon]="p.piece"
+        [life]="p.life"
+        [cards]="p.cards.length"
+        [blink]="p._id === room.currentPlayer"
+      ></app-player-status>
+    </div>
+  </div>
+  <div class="mr-1 d-flex flex-column">
+    <div *ngFor="let p of room.players.slice(2,4)">
+      <app-player-status *ngIf="p"
+        [icon]="p.piece"
+        [life]="p.life"
+        [cards]="p.cards.length"
+        [blink]="p._id === room.currentPlayer"
+      ></app-player-status>
+    </div>
+  </div>
+  <div class="border rounded border-white flex-fill h-100 overflow-auto d-flex p-1">
+    <app-card *ngFor="let card of player.cards; index as i"
+      [num]="card"
+      [index]="i"
+      [selected]="isSelectedCard(card, i)"
+      [disabled]="cardDisabled"
+      [callBackUnselectCard]="unselectCard"
+      [callBackSelectCard]="selectCard"
+    ></app-card>
+  </div>
+  <button class="card-submit-size btn btn-primary h-100 ml-1 {{canCardSubmit ? '' : 'disabled cursor-unset'}}" (click)="callBackCardSubmit()">
+    <span class="submit-font-size">{{i18n.get('card')}}<br/>{{i18n.get('submit')}}</span>
+  </button>
+</div>
