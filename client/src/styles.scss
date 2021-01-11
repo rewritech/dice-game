@@ -30,21 +30,39 @@ body {
 }
 
 .blinking{
-	-webkit-animation:blink 1.5s ease-in-out infinite alternate;
-    -moz-animation:blink 1.5s ease-in-out infinite alternate;
-    animation:blink 1.5s ease-in-out infinite alternate;
+  -webkit-animation:blink 1.5s ease-in-out infinite alternate;
+  -moz-animation:blink 1.5s ease-in-out infinite alternate;
+  animation:blink 1.5s ease-in-out infinite alternate;
 }
 @-webkit-keyframes blink{
-    0% {opacity:0.1;}
-    100% {opacity:1;}
+  0% {opacity:0.4;}
+  100% {opacity:1;}
 }
 @-moz-keyframes blink{
-    0% {opacity:0.1;}
-    100% {opacity:1;}
+  0% {opacity:0.4;}
+  100% {opacity:1;}
 }
 @keyframes blink{
-    0% {opacity:0.1;}
-    100% {opacity:1;}
+  0% {opacity:0.4;}
+  100% {opacity:1;}
+}
+
+.blinking-dice {
+  -webkit-animation:blinkdice 1.5s ease-in-out infinite alternate;
+  -moz-animation:blinkdice 1.5s ease-in-out infinite alternate;
+  animation:blinkdice 1.5s ease-in-out infinite alternate;
+}
+@-webkit-keyframes blinkdice {
+  0% {color:white;}
+  100% {color:black;}
+}
+@-moz-keyframes blinkdice{
+  0% {color:white;}
+  100% {color:black;}
+}
+@keyframes blinkdice {
+  0% {color:white;}
+  100% {color:black;}
 }
 
 .menu-width {
