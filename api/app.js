@@ -53,28 +53,34 @@ async function broadcastRoom (roomId, key=`changeRoomInfo-${roomId}`) {
   const room = await Room.findOne({ _id: roomId, deleted: false }).populate('players');
   io.of("/dice-map-room").to(`room-${roomId}`).emit(key, room);
 }
+
 async function broadcastRoomWithoutMe (socket, roomId, key=`changeRoomInfo-${roomId}`) {
   const room = await Room.findOne({ _id: roomId, deleted: false }).populate('players');
   socket.in(`room-${roomId}`).emit(key, room);
 }
+
 async function broadcastRoomMessage (roomId) {
   const messages = await Message.find({ _roomId: roomId });
   io.of("/dice-map-room").to(`room-${roomId}`).emit(`chat-room-${roomId}`, messages);
 }
+
 async function broadcastSystemMessage (roomId, systemMsgStatus, content) {
   const message = new Message({ _roomId: roomId, _playerId: null, playerName: 'System', systemMsgStatus: systemMsgStatus, sendedAt: new Date(), content });
   await message.save();
   // Socket room 갱신
   broadcastRoomMessage(roomId);
 }
+
 function joinMsg(arr) {
   return arr.join('&')
 }
+
 async function refreshRooms(socket) {
   const rooms = await Room.find({ status: 'WAIT', deleted: false }, { __v: 0, map: 0, currentPlayer: 0, cardDeck: 0, deleted: 0 }).populate('players');
   rooms.forEach((r) => r.players = new Array(r.players.length))
   socket.broadcast.emit("refresh-rooms", rooms)
 }
+
 async function deleteRoom(player) {
   await Room.updateOne({ _id: player._roomId }, { $set: { deleted: true } });
   await Message.deleteMany({ _roomId: player._roomId })
@@ -168,7 +174,9 @@ io.of('/dice-map-room').on('connection', (socket) => {
       await Player.updateOne({ _id: room.currentPlayer }, { $set: { cards: newCurrentPlayer.cards } });
       await Room.updateOne({ _id: room._id }, { $set: room });
       // Socket room 갱신
-      broadcastRoom(room._id);
+      const newRoom = await Room.findOne({ _id: room._id, deleted: false }).populate('players');
+      socket.in(`room-${room._id}`).emit(`change-turn-${room._id}`, { room: newRoom, coord: value.prevCoord});
+
       broadcastSystemMessage(room._id, 'success', joinMsg([player.name, 'changeTurn1Message', newCurrentPlayer.name, 'changeTurn2Message']));
     } catch (e) {
       console.error(`error: ${e}`);
