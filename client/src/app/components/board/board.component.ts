@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { Map } from '../../types'
+import { AnimationOption, Map } from '../../types'
 
 @Component({
   selector: 'app-board',
@@ -10,6 +10,7 @@ export class BoardComponent implements OnInit {
   @Input() pieces: Map[][]
   @Input() isDisableAnimate: boolean
   @Input() callBackOnClick: (x: number, y: number) => void
+  @Input() moveConfig: AnimationOption
 
   // constructor() {}
 
