@@ -8,9 +8,8 @@ import { AnimationOption, Map } from '../../types'
 })
 export class BoardComponent implements OnInit {
   @Input() pieces: Map[][]
-  @Input() isDisableAnimate: boolean
   @Input() callBackOnClick: (x: number, y: number) => void
-  @Input() moveConfig: AnimationOption
+  @Input() aniConfig: AnimationOption
 
   // constructor() {}
 

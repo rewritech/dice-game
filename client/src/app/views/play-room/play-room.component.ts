@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Map, Player, Room, SelectedCard } from '../../types'
+import { AnimationOption, Map, Player, Room, SelectedCard } from '../../types'
 import { SocketConnectService } from '../../services/socket-connect.service'
 import { DiceMapService } from '../../services/dice-map.service'
 import { RoomService } from '../../services/room.service'
@@ -21,7 +21,7 @@ export class PlayRoomComponent implements OnInit {
   room: Room
   player: Player
   i18n: I18nService
-  isDisableAnimate: boolean
+  aniConfig: AnimationOption
   cardDisabled = false
   canCardSubmit = false
   startBtnDisableClass = 'disabled'
@@ -71,7 +71,6 @@ export class PlayRoomComponent implements OnInit {
               this.socketOnChangeRoom(this.roomId)
               // websocket room에 join
               this.socket.emit<Player>('join-room', this.player)
-              this.isDisableAnimate = false
             })
         })
       } else {
@@ -97,7 +96,8 @@ export class PlayRoomComponent implements OnInit {
     if (this.roomService.checkCanStart(this.player, this.room)) {
       this.room.status = 'PLAYING'
       this.room.playerLimit = this.room.players.length
-      this.isDisableAnimate = false
+
+      this.aniConfig = { value: 'insert', params: { x: 0, y: 0 } }
 
       const newCards = this.room.cardDeck.unused.splice(0, 2)
       this.player.cards = this.player.cards.concat(newCards)
@@ -163,7 +163,7 @@ export class PlayRoomComponent implements OnInit {
   move(x: number, y: number): void {
     // 카드 제출하기 전에는 눌러도 반응이 없어야 한다.
     if (this.canMove) {
-      this.isDisableAnimate = true
+      this.aniConfig = null
       this.canMove = false
       this.cardDisabled = true // 카드 비활성화
       this.player.coordinates = [x, y] // player.coordnates 갱신
@@ -200,7 +200,7 @@ export class PlayRoomComponent implements OnInit {
   private socketOnChangeRoom(roomId: number): void {
     // websocket room에서 데이터 전송 받기 위한 연결
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
-      this.isDisableAnimate = true
+      this.aniConfig = null
       this.room = newRoom
       if (newRoom) {
         this.player = newRoom.players.find((p) => p._id === this.playerId)
@@ -221,9 +221,9 @@ export class PlayRoomComponent implements OnInit {
     })
     // 게임 시작 시 단한번 실행
     this.socket.on<Room>(`start-game-${roomId}`, (newRoom: Room) => {
-      this.isDisableAnimate = false
       this.room = newRoom
       this.player = newRoom.players.find((p) => p._id === this.playerId)
+      this.aniConfig = { value: 'insert', params: { x: 0, y: 0 } }
       // 내턴이면 카드 활성화
       this.buildCard()
     })

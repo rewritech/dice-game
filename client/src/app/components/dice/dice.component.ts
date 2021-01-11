@@ -10,7 +10,7 @@ import { AnimationOption } from '../../types'
   animations: [
     trigger('insertAnimate', [
       transition(
-        '* => create',
+        '* => insert',
         [
           style({ transform: `translate({{x}}%, {{y}}%) rotate(360deg)` }),
           animate('2s ease-out'),
@@ -25,7 +25,7 @@ import { AnimationOption } from '../../types'
       transition(
         '* => move',
         [
-          style({ transform: `translate({{x}}%, {{y}}%) rotate(360deg)` }),
+          style({ transform: `translate({{x}}%, {{y}}%)` }),
           animate('2s ease-out'),
         ],
         { params: { x: 0, y: 0 } }
@@ -40,7 +40,7 @@ export class DiceComponent implements OnInit {
   @Input() blink: boolean
   @Input() coordinate: [number, number]
   @Input() callBackOnClick: (x: number, y: number) => void
-  @Input() moveConfig: AnimationOption
+  @Input() aniConfig: AnimationOption
 
   colors = [
     'btn-success',
@@ -53,7 +53,8 @@ export class DiceComponent implements OnInit {
   blinkClass: string
   iconColorClass: string
   disabledClass: string
-  insertConfig: AnimationOption
+  insertConfig: AnimationOption = null
+  moveConfig: AnimationOption = null
 
   // constructor() {}
 
@@ -61,12 +62,16 @@ export class DiceComponent implements OnInit {
     this.blinkClass = this.blink ? 'blinking-dice' : ''
     this.iconColorClass = this.blink ? '' : 'icon-color'
     this.disabledClass = this.disabled ? 'disabled cursor-unset' : ''
-    this.insertConfig = {
-      value: 'create',
-      params: {
-        x: this.randomCoordinate(),
-        y: this.randomCoordinate(),
-      },
+    if (this.aniConfig?.value === 'insert') {
+      this.insertConfig = {
+        value: 'insert',
+        params: {
+          x: this.randomCoordinate(),
+          y: this.randomCoordinate(),
+        },
+      }
+    } else {
+      this.moveConfig = this.aniConfig
     }
   }
 
