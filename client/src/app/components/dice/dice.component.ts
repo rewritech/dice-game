@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core'
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons'
-import { trigger, style, animate, transition, state } from '@angular/animations'
+import { trigger, style, animate, transition } from '@angular/animations'
 import { AnimationOption } from '../../types'
+import { DiceMapService } from '../../services/dice-map.service'
 
 @Component({
   selector: 'app-dice',
@@ -13,20 +14,17 @@ import { AnimationOption } from '../../types'
         '* => insert',
         [
           style({ transform: `translate({{x}}%, {{y}}%) rotate(360deg)` }),
-          animate('2s ease-out'),
+          animate('1s ease-out'),
         ],
         { params: { x: -200, y: -200 } }
       ),
     ]),
     trigger('moveAnimate', [
-      // state('move', style({ transform: `translate({{x}}px, {{y}}px)` }), {
-      //   params: { x: 0, y: 0 },
-      // }),
       transition(
         '* => move',
         [
           style({ transform: `translate({{x}}%, {{y}}%)` }),
-          animate('2s ease-out'),
+          animate('0.5s ease-out'),
         ],
         { params: { x: 0, y: 0 } }
       ),
@@ -56,7 +54,7 @@ export class DiceComponent implements OnInit {
   insertConfig: AnimationOption = null
   moveConfig: AnimationOption = null
 
-  // constructor() {}
+  constructor(private diceMapService: DiceMapService) {}
 
   ngOnInit(): void {
     this.blinkClass = this.blink ? 'blinking-dice' : ''
@@ -70,7 +68,10 @@ export class DiceComponent implements OnInit {
           y: this.randomCoordinate(),
         },
       }
-    } else {
+    } else if (
+      this.aniConfig?.value === 'move' &&
+      this.diceMapService.compare(this.coordinate, this.aniConfig.target)
+    ) {
       this.moveConfig = this.aniConfig
     }
   }

@@ -71,4 +71,5 @@ export type AnimationOption = {
     x: number
     y: number
   }
+  target?: [number, number]
 }

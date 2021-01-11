@@ -175,9 +175,9 @@ io.of('/dice-map-room').on('connection', (socket) => {
       await Room.updateOne({ _id: room._id }, { $set: room });
       // Socket room 갱신
       const newRoom = await Room.findOne({ _id: room._id, deleted: false }).populate('players');
-      socket.in(`room-${room._id}`).emit(`change-turn-${room._id}`, { room: newRoom, coord: value.prevCoord});
+      socket.in(`room-${room._id}`).emit(`change-turn-${room._id}`, { room: newRoom, aniConfig: value.aniConfig});
 
-      broadcastSystemMessage(room._id, 'success', joinMsg([player.name, 'changeTurn1Message', newCurrentPlayer.name, 'changeTurn2Message']));
+      broadcastSystemMessage(room._id, 'success', joinMsg([player.name, 'changeTurnMessage1', newCurrentPlayer.name, 'changeTurnMessage2']));
     } catch (e) {
       console.error(`error: ${e}`);
     }

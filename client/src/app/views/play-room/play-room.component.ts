@@ -170,6 +170,7 @@ export class PlayRoomComponent implements OnInit {
       this.aniConfig = {
         value: 'move',
         params: { x: 100 * moveTo[0], y: 100 * moveTo[1] },
+        target: [x, y],
       }
 
       this.player.coordinates = [x, y] // player.coordnates 갱신
@@ -195,7 +196,7 @@ export class PlayRoomComponent implements OnInit {
         !this.roomService.checkMyTurn(this.player, this.room)
       )
       this.socket.emit('change-turn', {
-        prevCoord: moveTo,
+        aniConfig: this.aniConfig,
         player: this.player,
         room: this.room,
       })
@@ -239,13 +240,10 @@ export class PlayRoomComponent implements OnInit {
     })
     // 턴 변경시
     this.socket.on(`change-turn-${this.room._id}`, (value: any) => {
-      const { room, coord } = value
+      const { room, aniConfig } = value
       this.room = room
       this.player = room.players.find((p) => p._id === this.playerId)
-      this.aniConfig = {
-        value: 'move',
-        params: { x: 50 * coord[0], y: 50 * coord[1] },
-      }
+      this.aniConfig = aniConfig
       // 내턴이면 카드 활성화
       this.buildCard()
     })
