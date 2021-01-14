@@ -153,10 +153,16 @@ export class PlayRoomComponent implements OnInit {
         (_, i) => !targetIndexes.includes(i)
       )
       this.room.cardDeck.used = this.room.cardDeck.used.concat(targetCards)
-      this.selectedCards = []
 
       // TODO: 맵에 이동가능 아이콘 표시
+      const selectedNums = this.selectedCards.map((card) => card.num)
+      this.diceMapService.getAccessibleArea(
+        this.room.map,
+        selectedNums,
+        this.player.coordinates
+      )
       // TODO: emit
+      this.selectedCards = []
     }
   }
 

@@ -105,4 +105,93 @@ export class DiceMapService {
       }
     }
   }
+
+  getAccessibleArea(
+    map: number[][],
+    cards: number[],
+    coordinates: number[]
+  ): boolean[][] {
+    const rowIdx = coordinates[0]
+    const colIdx = coordinates[1]
+
+    const accessibles = this.getAccessibles(map, cards)
+    const accessibleDiceArea = Array.from(
+      Array(this.MAP_ROW),
+      () => new Array(this.MAP_COL)
+    )
+
+    this.checkAround(accessibleDiceArea, accessibles, rowIdx, colIdx)
+
+    // 자기자리 이동 가능
+    accessibles[rowIdx][colIdx] = true
+
+    // printMap(accessibleDiceArea)
+
+    return accessibleDiceArea
+  }
+
+  private getAccessibles(inputMap: number[][], cards: number[]): boolean[][] {
+    const result = Array.from(
+      Array(this.MAP_ROW),
+      () => new Array(this.MAP_COL)
+    )
+
+    for (let r = 0; r < this.MAP_ROW; r += 1) {
+      for (let c = 0; c < this.MAP_COL; c += 1) {
+        const diceNum = inputMap[r][c]
+        const accessible = cards.includes(diceNum)
+        result[r][c] = accessible
+      }
+    }
+
+    return result
+  }
+
+  private checkAround(
+    accessibleDiceArea: boolean[][],
+    accessibleMap: boolean[][],
+    rowIdx: number,
+    colIdx: number
+  ): void {
+    // 다이스 부재?
+    if (rowIdx < 0 || rowIdx > 9 || colIdx < 0 || colIdx > 9) {
+      return
+    }
+
+    // 검사 완료?
+    const checked = typeof accessibleDiceArea[rowIdx][colIdx] === 'boolean'
+    if (checked) {
+      return
+    }
+
+    //  이동 가능?
+    const checkedAccessible = accessibleMap[rowIdx][colIdx]
+    // eslint-disable-next-line no-param-reassign
+    accessibleDiceArea[rowIdx][colIdx] = checkedAccessible
+    if (!checkedAccessible) {
+      return
+    }
+
+    this.checkAround(accessibleDiceArea, accessibleMap, rowIdx - 1, colIdx)
+    this.checkAround(accessibleDiceArea, accessibleMap, rowIdx + 1, colIdx)
+    this.checkAround(accessibleDiceArea, accessibleMap, rowIdx, colIdx + 1)
+    this.checkAround(accessibleDiceArea, accessibleMap, rowIdx, colIdx - 1)
+  }
+
+  private printMap(inputMap): void {
+    for (let i = 0; i < this.MAP_ROW; i += 1) {
+      let str = ''
+      for (let j = 0; j < this.MAP_COL; j += 1) {
+        let el = inputMap[i][j]
+        el = el === true ? (el += ' ') : el
+        el = el === undefined ? '-----' : el
+        str += el
+        str += ' '
+      }
+      // eslint-disable-next-line no-console
+      console.log(str)
+    }
+    // eslint-disable-next-line no-console
+    console.log('')
+  }
 }
