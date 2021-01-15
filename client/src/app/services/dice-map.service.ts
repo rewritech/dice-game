@@ -106,11 +106,10 @@ export class DiceMapService {
     }
   }
 
-  getAccessibleArea(
-    map: number[][],
-    cards: number[],
-    coordinates: number[]
-  ): boolean[][] {
+  getAccessibleArea(room: Room, cards: number[], player: Player): boolean[][] {
+    const { map } = room
+
+    const { coordinates } = player
     const rowIdx = coordinates[0]
     const colIdx = coordinates[1]
 
@@ -122,9 +121,28 @@ export class DiceMapService {
 
     this.checkAround(accessibleDiceArea, accessibles, rowIdx, colIdx)
 
-    // 자기자리 이동 가능
+    // 현재 자리 이동 가능
     accessibles[rowIdx][colIdx] = true
 
+    // 타 플레이어 시작점 이동 불가
+    const { initialCoordinates } = player
+    const otherInitialCoordinates = room.players.map((p) => {
+      const someInitialCoordinates = p.initialCoordinates
+      if (
+        someInitialCoordinates[0] === initialCoordinates[0] &&
+        someInitialCoordinates[1] === initialCoordinates[1]
+      ) {
+        return false
+      }
+
+      return someInitialCoordinates
+    })
+
+    otherInitialCoordinates.forEach((someInitialCoordinates) => {
+      const r = someInitialCoordinates[0]
+      const c = someInitialCoordinates[1]
+      accessibles[r][c] = false
+    })
     // printMap(accessibleDiceArea)
 
     return accessibleDiceArea

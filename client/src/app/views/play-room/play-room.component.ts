@@ -157,9 +157,9 @@ export class PlayRoomComponent implements OnInit {
       // TODO: 맵에 이동가능 아이콘 표시
       const selectedNums = this.selectedCards.map((card) => card.num)
       this.diceMapService.getAccessibleArea(
-        this.room.map,
+        this.room,
         selectedNums,
-        this.player.coordinates
+        this.player
       )
       // TODO: emit
       this.selectedCards = []
