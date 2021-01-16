@@ -93,6 +93,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
   socket.on('join-room', async (player) => {
     try {
       console.log(`[${new Date()}]: room-${player._roomId} join`);
+      await Message.deleteMany({ _roomId: player._roomId })
       await Player.updateOne({ _id: player._id }, {
         $set: {
           _roomId: player._roomId,
