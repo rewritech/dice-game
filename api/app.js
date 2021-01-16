@@ -160,18 +160,10 @@ io.of('/dice-map-room').on('connection', (socket) => {
       // DB room 갱신
       await Player.updateOne({ _id: player._id }, { $set: player });
 
-      // 카드 분배
-      // unused에 카드가 2장 미만이면 used의 카드를 다시 가져온다.
-      if (room.cardDeck.unused.length < 2) {
-        room.cardDeck.unused = room.cardDeck.unused.concat(room.cardDeck.used)
-        room.cardDeck.used = []
-      }
-
       const newCurrentPlayer = await Player.findOne({ _id: room.currentPlayer })
-      const newCards = room.cardDeck.unused.splice(0, 2)
-      newCards.reverse().forEach((c) => newCurrentPlayer.cards.unshift(c))
+      const nextPlayer = room.players.find((p) => p._id === room.currentPlayer)
 
-      await Player.updateOne({ _id: room.currentPlayer }, { $set: { cards: newCurrentPlayer.cards } });
+      await Player.updateOne({ _id: room.currentPlayer }, { $set: nextPlayer });
       await Room.updateOne({ _id: room._id }, { $set: room });
       // Socket room 갱신
       const newRoom = await Room.findOne({ _id: room._id, deleted: false }).populate('players');
@@ -228,6 +220,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
           initialCoordinates: null,
           cards: [],
           piece: {icon: []},
+          killedPlayer: 0,
           life: 3
         }
       });

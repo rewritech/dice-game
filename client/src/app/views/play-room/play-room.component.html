@@ -14,7 +14,9 @@
       [aniConfig]="aniConfig"
     ></app-board>
     <div class="border bg-dark p-2 w-100">
-      <h4 class="mt-1 text-white d-inline-block text-truncate player-name-width" title="{{player.name}}">{{i18n.get('player')}}({{player.name}})</h4>
+      <h4 class="mt-1 text-white d-inline-block text-truncate player-name-width" title="{{player.name}}">
+        {{i18n.get('player')}}({{player.name}}) {{(time / 1000).toFixed(2)}}
+      </h4>
       <app-chat></app-chat>
     </div>
   </div>
