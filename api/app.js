@@ -209,7 +209,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
           deleteRoom(player)
         } else {
           // 6. 게임중 떠나면 playerLimit가 줄어든다.
-          await Room.updateOne({ _id: player._roomId }, { $set: { playerLimit: room.players.length - 1 } });
+          await Room.updateOne({ _id: player._roomId }, { $set: { playerLimit: room.players.length } });
         }
       }
 

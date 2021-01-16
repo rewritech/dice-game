@@ -112,6 +112,19 @@ export class PlayRoomComponent implements OnInit {
   leave(): void {
     if (this.player) {
       this.initializeTimer()
+
+      // 지금 내턴이라면 다른 사람에게 턴을 넘긴다.
+      if (this.roomService.checkMyTurn(this.player, this.room)) {
+        this.aniConfig = null
+        this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
+        this.distributeCard() // 카드 분배
+        this.socket.emit('change-turn', {
+          aniConfig: this.aniConfig,
+          player: this.player,
+          room: this.room,
+        })
+      }
+
       this.socket.emit('leave', this.player)
     }
   }

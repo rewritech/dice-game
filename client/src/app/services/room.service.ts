@@ -47,7 +47,11 @@ export class RoomService {
 
   // FOR PLAY-ROOM =================================================
   checkMyTurn(player: Player, room: Room): boolean {
-    return player._id === room.currentPlayer
+    try {
+      return player._id === room.currentPlayer
+    } catch {
+      return false
+    }
   }
 
   checkReadyToStart(room: Room): boolean {
