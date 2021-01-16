@@ -34,9 +34,20 @@ const refreshRooms = async function (socket) {
   socket.broadcast.emit("refresh-rooms", rooms)
 }
 
-const deleteRoom = async function (roomId) {
-  await Room.updateOne({ _id: roomId }, { $set: { deleted: true } });
-  await Message.deleteMany({ _roomId: roomId })
+const deleteRoom = async function (room) {
+  await Player.updateMany({ _roomId: room._id }, {
+    $set: {
+      _roomId: 0,
+      coordinates: null,
+      initialCoordinates: null,
+      cards: [],
+      piece: {icon: []},
+      killedPlayer: 0,
+      life: 3
+    }
+  })
+  await Room.updateOne({ _id: room._id }, { $set: { deleted: true } });
+  await Message.deleteMany({ _roomId: room._id })
 }
 
 const sendMessage = async function (io, message) {
@@ -44,7 +55,7 @@ const sendMessage = async function (io, message) {
   const player = await Player.findOne({ _id: message._playerId })
   const newMessage = new Message({ playerName: player.name, sendedAt: new Date(), ...message });
   await newMessage.save();
-  common.broadcastRoomMessage(io, message._roomId);
+  broadcastRoomMessage(io, message._roomId);
 }
 
 module.exports = {

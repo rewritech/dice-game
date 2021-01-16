@@ -224,6 +224,7 @@ export class PlayRoomComponent implements OnInit {
         this.buildCard() // 내턴이면 카드 활성화
         this.enableStartBtn() // 스타트 버튼 활성화
       } else {
+        this.initializeTimer()
         this.router.navigate(['/rooms'])
       }
     })
