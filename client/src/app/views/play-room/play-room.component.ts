@@ -10,6 +10,7 @@ import { I18nService } from '../../services/i18n.service'
 const ONE_MINITE = 60000
 const NEW_DECK = 4
 const ADD_DECK = 2
+
 @Component({
   selector: 'app-play-room',
   templateUrl: './play-room.component.html',
@@ -118,7 +119,11 @@ export class PlayRoomComponent implements OnInit {
       this.initializeTimer()
 
       // 지금 내턴이라면 다른 사람에게 턴을 넘긴다.
-      if (this.roomService.checkMyTurn(this.player, this.room)) {
+      if (
+        this.room.status === 'PLAYING' &&
+        this.room.players.length > 1 &&
+        this.roomService.checkMyTurn(this.player, this.room)
+      ) {
         this.aniConfig = null
         this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
         this.distributeCard() // 카드 분배

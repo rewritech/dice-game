@@ -92,10 +92,10 @@ io.of('/dice-map-room').on('connection', (socket) => {
 
   socket.on('join-room', async (player) => {
     try {
-      // console.log(player);
       console.log(`[${new Date()}]: room-${player._roomId} join`);
       await Player.updateOne({ _id: player._id }, {
         $set: {
+          _roomId: player._roomId,
           coordinates: null,
           initialCoordinates: null,
           cards: [],
