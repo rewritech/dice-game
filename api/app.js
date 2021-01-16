@@ -94,6 +94,16 @@ io.of('/dice-map-room').on('connection', (socket) => {
     try {
       // console.log(player);
       console.log(`[${new Date()}]: room-${player._roomId} join`);
+      await Player.updateOne({ _id: player._id }, {
+        $set: {
+          coordinates: null,
+          initialCoordinates: null,
+          cards: [],
+          piece: {icon: []},
+          killedPlayer: 0,
+          life: 3
+        }
+      });
       // websocket room 연결
       socket.join(`room-${player._roomId}`);
       // Socket room 갱신
@@ -131,16 +141,16 @@ io.of('/dice-map-room').on('connection', (socket) => {
     }
   });
 
-  socket.on('game-start', async (value) => {
+  socket.on('game-start', async (room) => {
     try {
       console.log(`[${new Date()}]: game-start`);
-      const player = value.player
-      const room = value.room
+
+      room.players.forEach(async (p) => {
+        await Player.updateOne({ _id: p._id }, { $set: p });
+      })
 
       // DB room 갱신
       await Room.updateOne({ _id: room._id }, { $set: room });
-      // await Room.updateOne({ _id: room._id }, { $set: { ...room, status: 'PLAYING', playerLimit: room.players.length } });
-      await Player.updateOne({ _id: player._id }, { $set: player });
       // Socket room 갱신
       broadcastRoomWithoutMe(socket, room._id, `start-game-${room._id}`);
       broadcastSystemMessage(room._id, 'success', 'gameStartMessage');
@@ -195,7 +205,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
       await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id } });
       const room = await Room.findOne({ _id: player._roomId }, { map: 0 })
 
-      if (room.status === 'WAIT') {
+      if (!!room && room.status === 'WAIT') {
         if (room.players.length === 0) {
           // 4. 대기방 0명인 경유 삭제한다.
           deleteRoom(player)
@@ -225,7 +235,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
         }
       });
 
-      if(player._roomId > 0 && room.players.length > 0) {
+      if(player._roomId > 0 && !!room && room.players.length > 0) {
         // Socket room 갱신
         broadcastRoom(player._roomId);
         broadcastSystemMessage(player._roomId, 'success', joinMsg([player.name, 'leaveRoomMessage']));

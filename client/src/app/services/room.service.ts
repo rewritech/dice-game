@@ -54,10 +54,17 @@ export class RoomService {
     }
   }
 
+  // 말 선택한 플레이어 수가 2명 이상일 경우
+  // 내가 선택했는지
   checkReadyToStart(room: Room): boolean {
-    return room.players.filter((p) => p.coordinates).length > 1
+    const currentPlayer = room.players.find((p) => p._id === room.currentPlayer)
+    return (
+      room.players.filter((p) => p.coordinates).length > 1 &&
+      !!currentPlayer.coordinates
+    )
   }
 
+  // 내턴 && 말 선택 플레이어 2명 이상
   checkCanStart(player: Player, room: Room): boolean {
     return this.checkMyTurn(player, room) && this.checkReadyToStart(room)
   }

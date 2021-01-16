@@ -8,6 +8,8 @@ import { PlayerService } from '../../services/player.service'
 import { I18nService } from '../../services/i18n.service'
 
 const ONE_MINITE = 60000
+const NEW_DECK = 4
+const ADD_DECK = 2
 @Component({
   selector: 'app-play-room',
   templateUrl: './play-room.component.html',
@@ -95,16 +97,18 @@ export class PlayRoomComponent implements OnInit {
     if (this.roomService.checkCanStart(this.player, this.room)) {
       this.room.status = 'PLAYING'
       this.room.playerLimit = this.room.players.length
-
       this.aniConfig = { value: 'insert', params: { x: 0, y: 0 } }
 
-      const newCards = this.room.cardDeck.unused.splice(0, 2)
-      this.player.cards = this.player.cards.concat(newCards)
+      // 초기 카드 분배
+      for (let i = 0; i < this.room.players.length; i += 1) {
+        const spNum =
+          this.player._id === this.room.players[i]._id
+            ? NEW_DECK + ADD_DECK
+            : NEW_DECK
+        this.room.players[i].cards = this.room.cardDeck.unused.splice(0, spNum)
+      }
 
-      this.socket.emit('game-start', {
-        player: this.player,
-        room: this.room,
-      })
+      this.socket.emit('game-start', this.room)
       this.startTimer()
     }
   }
@@ -208,9 +212,8 @@ export class PlayRoomComponent implements OnInit {
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
       this.aniConfig = null
       this.room = newRoom
-      if (newRoom) {
-        this.player = newRoom.players.find((p) => p._id === this.playerId)
-      }
+      this.player =
+        newRoom && newRoom.players.find((p) => p._id === this.playerId)
 
       if (this.room && this.player) {
         this.buildCard() // 내턴이면 카드 활성화
@@ -339,13 +342,15 @@ export class PlayRoomComponent implements OnInit {
       this.roomService.checkCanStart(this.player, this.room)
     ) {
       this.startBtnDisableClass = ''
+    } else {
+      this.startBtnDisableClass = 'disabled'
     }
   }
 
   // 카드 분배
   private distributeCard(): void {
     // unused에 카드가 2장 미만이면 used의 카드를 다시 가져온다.
-    if (this.room.cardDeck.unused.length < 2) {
+    if (this.room.cardDeck.unused.length < ADD_DECK) {
       this.room.cardDeck.unused = this.room.cardDeck.unused.concat(
         this.room.cardDeck.used
       )
@@ -355,7 +360,7 @@ export class PlayRoomComponent implements OnInit {
     const nextPlayer = this.room.players.find(
       (p) => p._id === this.room.currentPlayer
     )
-    const newCards = this.room.cardDeck.unused.splice(0, 2)
+    const newCards = this.room.cardDeck.unused.splice(0, ADD_DECK)
     newCards.reverse()
     newCards.forEach((c) => nextPlayer.cards.unshift(c))
   }
