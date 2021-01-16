@@ -7,7 +7,7 @@ import { RoomService } from '../../services/room.service'
 import { PlayerService } from '../../services/player.service'
 import { I18nService } from '../../services/i18n.service'
 
-const ONE_MINITE = 10000
+const ONE_MINITE = 60000
 @Component({
   selector: 'app-play-room',
   templateUrl: './play-room.component.html',
@@ -252,6 +252,7 @@ export class PlayRoomComponent implements OnInit {
     this.initializeTimer()
     this.canMove = false
     this.canCardSubmit = false
+    this.aniConfig = null
 
     this.selectedCards = []
     this.room.cardDeck.used = this.room.cardDeck.used.concat(

@@ -30,9 +30,9 @@ body {
 }
 
 .blinking{
-  -webkit-animation:blink 1.5s ease-in-out infinite alternate;
-  -moz-animation:blink 1.5s ease-in-out infinite alternate;
-  animation:blink 1.5s ease-in-out infinite alternate;
+  -webkit-animation:blink 0.5s infinite alternate;
+  -moz-animation:blink 0.5s infinite alternate;
+  animation:blink 0.5s infinite alternate;
 }
 @-webkit-keyframes blink{
   0% {opacity:0.4;}
@@ -48,9 +48,9 @@ body {
 }
 
 .blinking-dice {
-  -webkit-animation:blinkdice 1.5s ease-in-out infinite alternate;
-  -moz-animation:blinkdice 1.5s ease-in-out infinite alternate;
-  animation:blinkdice 1.5s ease-in-out infinite alternate;
+  -webkit-animation:blinkdice 0.5s infinite alternate;
+  -moz-animation:blinkdice 0.5s infinite alternate;
+  animation:blinkdice 0.5s infinite alternate;
 }
 @-webkit-keyframes blinkdice {
   0% {color:white;}
