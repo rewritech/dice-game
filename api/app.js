@@ -9,9 +9,11 @@ const port = process.env.PORT || 3000;
 const socketPort = process.env.SOCKET_PORT || 3001;
 const api = require('./routes/api');
 const mongoose = require('mongoose');
-const Room = require('./models/Room');
-const Player = require('./models/Player');
 const Message = require('./models/Message');
+const commonFnc = require('./socketFunctions/common');
+const waitFnc = require('./socketFunctions/wait');
+const playingFnc = require('./socketFunctions/playing');
+const endFnc = require('./socketFunctions/end');
 
 // ==================== DB ====================
 const username = process.env.MONGO_INITDB_ROOT_USERNAME
@@ -29,6 +31,8 @@ const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'DB connection error:'));
 db.once('open', () => console.log('DB connection successful'));
+
+Message.deleteMany({})
 
 // ==================== Server ====================
 app.use(bodyParser.json());
@@ -48,83 +52,23 @@ socketServer.listen(socketPort, () => {
   console.log(`started on port: ${socketPort}`);
 });
 
-// function
-async function broadcastRoom (roomId, key=`changeRoomInfo-${roomId}`) {
-  const room = await Room.findOne({ _id: roomId, deleted: false }).populate('players');
-  io.of("/dice-map-room").to(`room-${roomId}`).emit(key, room);
-}
-
-async function broadcastRoomWithoutMe (socket, roomId, key=`changeRoomInfo-${roomId}`) {
-  const room = await Room.findOne({ _id: roomId, deleted: false }).populate('players');
-  socket.in(`room-${roomId}`).emit(key, room);
-}
-
-async function broadcastRoomMessage (roomId) {
-  const messages = await Message.find({ _roomId: roomId });
-  io.of("/dice-map-room").to(`room-${roomId}`).emit(`chat-room-${roomId}`, messages);
-}
-
-async function broadcastSystemMessage (roomId, systemMsgStatus, content) {
-  const message = new Message({ _roomId: roomId, _playerId: null, playerName: 'System', systemMsgStatus: systemMsgStatus, sendedAt: new Date(), content });
-  await message.save();
-  // Socket room 갱신
-  broadcastRoomMessage(roomId);
-}
-
-function joinMsg(arr) {
-  return arr.join('&')
-}
-
-async function refreshRooms(socket) {
-  const rooms = await Room.find({ status: 'WAIT', deleted: false }, { __v: 0, map: 0, currentPlayer: 0, cardDeck: 0, deleted: 0 }).populate('players');
-  rooms.forEach((r) => r.players = new Array(r.players.length))
-  socket.broadcast.emit("refresh-rooms", rooms)
-}
-
-async function deleteRoom(player) {
-  await Room.updateOne({ _id: player._roomId }, { $set: { deleted: true } });
-  await Message.deleteMany({ _roomId: player._roomId })
-}
-
 // ==================== socket connect ====================
 io.of('/dice-map-room').on('connection', (socket) => {
   console.log(`[${new Date()}]: user socket connected`);
 
   socket.on('join-room', async (player) => {
     try {
-      console.log(`[${new Date()}]: room-${player._roomId} join`);
-      await Message.deleteMany({ _roomId: player._roomId })
-      await Player.updateOne({ _id: player._id }, {
-        $set: {
-          _roomId: player._roomId,
-          coordinates: null,
-          initialCoordinates: null,
-          cards: [],
-          piece: {icon: []},
-          killedPlayer: 0,
-          life: 3
-        }
-      });
-      // websocket room 연결
-      socket.join(`room-${player._roomId}`);
-      // Socket room 갱신
-      broadcastRoom(player._roomId);
-      broadcastSystemMessage(player._roomId, 'success', joinMsg([player.name, 'joinRoomMessage']));
+      await waitFnc.joinRoom(io, socket, player)
     } catch (e) {
       console.error(`error: ${e}`);
     } finally {
-      refreshRooms(socket)
+      commonFnc.refreshRooms(socket)
     }
   });
 
   socket.on('shuffle-map', async (shuffledRoom) => {
     try {
-      console.log(`[${new Date()}]: room shuffle`);
-      // DB room 갱신
-      await Room.updateOne({ _id: shuffledRoom._id }, { $set: { map: shuffledRoom.map } });
-      // Socket room 갱신
-      broadcastRoom(shuffledRoom._id);
-      broadcastSystemMessage(shuffledRoom._id, 'success', 'shuffleMapMessage');
+      await waitFnc.shuffleMap(io, shuffledRoom)
     } catch (e) {
       console.error(`error: ${e}`);
     }
@@ -132,11 +76,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
 
   socket.on('select-piece', async (player) => {
     try {
-      console.log(`[${new Date()}]: select-piece`);
-      // DB room 갱신
-      await Player.updateOne({ _id: player._id }, { $set: player });
-      // Socket room 갱신
-      broadcastRoom(player._roomId);
+      await waitFnc.selectPiece(io, player)
     } catch (e) {
       console.error(`error: ${e}`);
     }
@@ -144,43 +84,17 @@ io.of('/dice-map-room').on('connection', (socket) => {
 
   socket.on('game-start', async (room) => {
     try {
-      console.log(`[${new Date()}]: game-start`);
-
-      room.players.forEach(async (p) => {
-        await Player.updateOne({ _id: p._id }, { $set: p });
-      })
-
-      // DB room 갱신
-      await Room.updateOne({ _id: room._id }, { $set: room });
-      // Socket room 갱신
-      broadcastRoomWithoutMe(socket, room._id, `start-game-${room._id}`);
-      broadcastSystemMessage(room._id, 'success', 'gameStartMessage');
+      await waitFnc.gameStart(io, socket, room)
     } catch (e) {
       console.error(`error: ${e}`);
     } finally {
-      refreshRooms(socket)
+      commonFnc.refreshRooms(socket)
     }
   });
 
   socket.on('change-turn', async (value) => {
     try {
-      console.log(`[${new Date()}]: change-turn`);
-      const room = value.room
-      const player = value.player
-
-      // DB room 갱신
-      await Player.updateOne({ _id: player._id }, { $set: player });
-
-      const newCurrentPlayer = await Player.findOne({ _id: room.currentPlayer })
-      const nextPlayer = room.players.find((p) => p._id === room.currentPlayer)
-
-      await Player.updateOne({ _id: room.currentPlayer }, { $set: nextPlayer });
-      await Room.updateOne({ _id: room._id }, { $set: room });
-      // Socket room 갱신
-      const newRoom = await Room.findOne({ _id: room._id, deleted: false }).populate('players');
-      socket.in(`room-${room._id}`).emit(`change-turn-${room._id}`, { room: newRoom, aniConfig: value.aniConfig});
-
-      broadcastSystemMessage(room._id, 'success', joinMsg([player.name, 'changeTurnMessage1', newCurrentPlayer.name, 'changeTurnMessage2']));
+      await playingFnc.changeTurn(io, socket, value)
     } catch (e) {
       console.error(`error: ${e}`);
     }
@@ -188,11 +102,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
 
   socket.on('catch-player', async (player) => {
     try {
-      console.log(`[${new Date()}]: catch-player`);
-
-      await Player.updateOne({ _id: player._id }, { $set: player });
-
-      broadcastSystemMessage(player._roomId, 'danger', joinMsg([player.name, 'catchedMessage']));
+      await playingFnc.catchPlayer(io, player)
     } catch (e) {
       console.error(`error: ${e}`);
     }
@@ -200,66 +110,20 @@ io.of('/dice-map-room').on('connection', (socket) => {
 
   socket.on('leave', async (player) => {
     try {
-      console.log(`[${new Date()}]: room leave`);
-
-      // 1. room의 player를 내보냄
-      await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id } });
-      const room = await Room.findOne({ _id: player._roomId }, { map: 0 })
-
-      if (!!room && room.status === 'WAIT') {
-        if (room.players.length === 0) {
-          // 4. 대기방 0명인 경유 삭제한다.
-          deleteRoom(player)
-        } else {
-          // 2. 대기방에서 방장이 나가면 방장 교체
-          await Room.updateOne({ _id: player._roomId }, { $set: { currentPlayer: room.players[0]._id } });
-        }
-      } else {
-        if (room.players.length < 2) {
-          // 5. 게임중 1명 남게 되면 방 삭제한다.
-          deleteRoom(player)
-        } else {
-          // 6. 게임중 떠나면 playerLimit가 줄어든다.
-          await Room.updateOne({ _id: player._roomId }, { $set: { playerLimit: room.players.length } });
-        }
-      }
-
-      await Player.updateOne({ _id: player._id }, {
-        $set: {
-          _roomId: 0,
-          coordinates: null,
-          initialCoordinates: null,
-          cards: [],
-          piece: {icon: []},
-          killedPlayer: 0,
-          life: 3
-        }
-      });
-
-      if(player._roomId > 0 && !!room && room.players.length > 0) {
-        // Socket room 갱신
-        broadcastRoom(player._roomId);
-        broadcastSystemMessage(player._roomId, 'success', joinMsg([player.name, 'leaveRoomMessage']));
-      }
+      await endFnc.leave(io, player)
     } catch (e) {
       console.error(`error: ${e}`);
     } finally {
       // 웹소켓 룸에서 나옴
       socket.leave(`room-${player._roomId}`);
-      refreshRooms(socket)
+      commonFnc.refreshRooms(socket)
       // socket.disconnect(true);
     }
   });
 
   socket.on('send-message', async (message) => {
     try {
-      console.log(`[${new Date()}]: send-message`);
-      // DB message 등록
-      const player = await Player.findOne({ _id: message._playerId })
-      const newMessage = new Message({ playerName: player.name, sendedAt: new Date(), ...message });
-      await newMessage.save();
-      // Socket room 갱신
-      broadcastRoomMessage(message._roomId);
+      await commonFnc.sendMessage(io, message)
     } catch (e) {
       console.error(`error: ${e}`);
     }
