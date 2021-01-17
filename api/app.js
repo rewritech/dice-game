@@ -14,6 +14,8 @@ const commonFnc = require('./socketFunctions/common');
 const waitFnc = require('./socketFunctions/wait');
 const playingFnc = require('./socketFunctions/playing');
 const endFnc = require('./socketFunctions/end');
+const Player = require('./models/Player');
+const Room = require('./models/Room');
 
 // ==================== DB ====================
 const username = process.env.MONGO_INITDB_ROOT_USERNAME
@@ -32,8 +34,6 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'DB connection error:'));
 db.once('open', () => console.log('DB connection successful'));
 
-Message.deleteMany({})
-
 // ==================== Server ====================
 app.use(bodyParser.json());
 app.use((req, res, next) => {
@@ -44,8 +44,13 @@ app.use((req, res, next) => {
 });
 app.use('/api', api);
 
-server.listen(port, () => {
+server.listen(port, async () => {
   console.log(`started on port: ${port}`);
+  if(process.env.NODE_ENV === 'production') {
+    await Room.deleteMany({})
+    await Player.deleteMany({})
+    await Message.deleteMany({})
+  }
 });
 
 socketServer.listen(socketPort, () => {
