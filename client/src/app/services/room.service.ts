@@ -75,6 +75,7 @@ export class RoomService {
   checkCanJoinRoom(room: Room, playerId: string): boolean {
     return (
       room &&
+      room.status === 'WAIT' &&
       (room.players.filter((p) => p._id === playerId).length === 1 ||
         room.players.length < room.playerLimit)
     )
