@@ -11,6 +11,8 @@ import { environment } from '../../environments/environment'
 })
 export class RoomService {
   private apiBaseUrl = environment.apiBaseUrl
+  private NEW_DECK = 4
+  private ADD_DECK = 2
 
   constructor(private http: HttpClient) {}
 
@@ -72,7 +74,7 @@ export class RoomService {
   // 1. room이 존재함
   // 2. 이미 방에 속한 플레이어 인 경우
   // 3. 방에 빈자리가 있는 경우
-  checkCanJoinRoom(room: Room, playerId: string): boolean {
+  canJoinRoom(room: Room, playerId: string): boolean {
     return (
       room &&
       room.status === 'WAIT' &&
@@ -87,6 +89,30 @@ export class RoomService {
     const index = players.findIndex((p) => p._id === currentPlayer) + 1
     const nextIndex = index === players.length ? 0 : index
     return players[nextIndex]._id
+  }
+
+  distributeCard(room: Room): Room {
+    const nRoom = { ...room }
+    // unused에 카드가 2장 미만이면 used의 카드를 다시 가져온다.
+    if (nRoom.cardDeck.unused.length < this.ADD_DECK) {
+      nRoom.cardDeck.unused = nRoom.cardDeck.unused.concat(nRoom.cardDeck.used)
+      nRoom.cardDeck.used = []
+    }
+
+    const nextPlayer = nRoom.players.find((p) => p._id === nRoom.currentPlayer)
+    const newCards = nRoom.cardDeck.unused.splice(0, this.ADD_DECK)
+    newCards.reverse()
+    newCards.forEach((c) => nextPlayer.cards.unshift(c))
+
+    return nRoom
+  }
+
+  newDeckNum(): number {
+    return this.NEW_DECK
+  }
+
+  addDeckNum(): number {
+    return this.ADD_DECK
   }
 
   // PRIVATE =================================================

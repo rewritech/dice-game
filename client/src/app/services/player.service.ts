@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { Router } from '@angular/router'
 import { HttpClient } from '@angular/common/http'
 import { Observable, of } from 'rxjs'
 import { catchError } from 'rxjs/operators'
@@ -10,8 +11,30 @@ import { environment } from '../../environments/environment'
 })
 export class PlayerService {
   private apiBaseUrl = environment.apiBaseUrl
+  private playerId = sessionStorage.getItem('pId')
+  private player: Player
 
-  constructor(private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient) {}
+
+  checkPlayer(): void {
+    this.getPlayer(this.playerId).subscribe((player) => {
+      if (player) {
+        this.set(player)
+      } else {
+        sessionStorage.removeItem('pId')
+        this.router.navigate(['/login'])
+      }
+    })
+  }
+
+  set(player: Player): void {
+    sessionStorage.setItem('pId', player._id)
+    this.player = player
+  }
+
+  get(): Player {
+    return this.player
+  }
 
   createPlayer(player: Player): Observable<Player> {
     return this.http

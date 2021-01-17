@@ -43,10 +43,10 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     if (this.player.name.trim().length > 0) {
-      this.playerService.createPlayer(this.player).subscribe((res) => {
+      this.playerService.createPlayer(this.player).subscribe((player) => {
         this.invalidClass = ''
         this.validationError = false
-        sessionStorage.setItem('pId', res._id)
+        this.playerService.set(player)
         this.router.navigate(['/'])
       })
     } else {

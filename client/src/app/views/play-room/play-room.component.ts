@@ -8,8 +8,6 @@ import { PlayerService } from '../../services/player.service'
 import { I18nService } from '../../services/i18n.service'
 
 const ONE_MINITE = 60000
-const NEW_DECK = 4
-const ADD_DECK = 2
 
 @Component({
   selector: 'app-play-room',
@@ -21,6 +19,8 @@ export class PlayRoomComponent implements OnInit {
   private roomId = +this.route.snapshot.paramMap.get('id')
   private playerId = sessionStorage.getItem('pId')
   private canMove = false
+  private NEW_DECK = 4
+  private ADD_DECK = 2
 
   room: Room
   player: Player
@@ -51,33 +51,27 @@ export class PlayRoomComponent implements OnInit {
     private i18nService: I18nService
   ) {
     this.i18n = i18nService
+    this.NEW_DECK = this.roomService.newDeckNum()
+    this.ADD_DECK = this.roomService.addDeckNum()
   }
 
   ngOnInit(): void {
+    this.player = this.playerService.get()
     this.roomService.getRoom(this.roomId).subscribe((getRoom) => {
-      // websocket 연결
       this.socket.connect()
-      if (this.roomService.checkCanJoinRoom(getRoom, this.playerId)) {
-        this.playerService.getPlayer(this.playerId).subscribe((player) => {
-          this.player = player
-          // DB에 player추가
-          this.roomService
-            .addPlayerToRoom(this.roomId, this.player)
-            .subscribe((room) => {
-              this.room = room
-              this.player._roomId = this.room._id
-              this.buildCard()
-              // websocket 연결
-              this.socketOnChangeRoom(this.roomId)
-              this.socketOnStartGame(this.roomId)
-              this.socketOnChangeTurn(this.roomId)
-              // websocket room에 join
-              this.socket.emit<Player>('join-room', this.player)
-            })
-        })
+      if (this.player && this.roomService.canJoinRoom(getRoom, this.playerId)) {
+        this.roomService
+          .addPlayerToRoom(this.roomId, this.player)
+          .subscribe((room) => {
+            this.room = room
+            this.player._roomId = this.room._id
+            this.buildCard()
+            this.socketOnChangeRoom(this.roomId)
+            this.socketOnStartGame(this.roomId)
+            this.socketOnChangeTurn(this.roomId)
+            this.socket.emit<Player>('join-room', this.player)
+          })
       } else {
-        // 1. roomid가 데이터에 없는 경우
-        // 2. 방에 속하지 않은 플레이어 인데 방에 빈자리가 없는 경우
         this.router.navigate([`/rooms`])
       }
     })
@@ -104,8 +98,8 @@ export class PlayRoomComponent implements OnInit {
       for (let i = 0; i < this.room.players.length; i += 1) {
         const spNum =
           this.player._id === this.room.players[i]._id
-            ? NEW_DECK + ADD_DECK
-            : NEW_DECK
+            ? this.NEW_DECK + this.ADD_DECK
+            : this.NEW_DECK
         this.room.players[i].cards = this.room.cardDeck.unused.splice(0, spNum)
       }
 
@@ -126,7 +120,7 @@ export class PlayRoomComponent implements OnInit {
       ) {
         this.aniConfig = null
         this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
-        this.distributeCard() // 카드 분배
+        this.room = this.roomService.distributeCard(this.room) // 카드 분배
         this.socket.emit('change-turn', {
           aniConfig: this.aniConfig,
           player: this.player,
@@ -196,7 +190,7 @@ export class PlayRoomComponent implements OnInit {
       this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
       this.catch(x, y) // 적플레이어를 잡으면 라이프 -1, 말 위치 초기화
       this.buildCard() // 말이동 적용
-      this.distributeCard() // 카드 분배
+      this.room = this.roomService.distributeCard(this.room) // 카드 분배
       this.socket.emit('change-turn', {
         aniConfig: this.aniConfig,
         player: this.player,
@@ -246,14 +240,17 @@ export class PlayRoomComponent implements OnInit {
   // change-turn
   // 자신을 제외한 모든 유저
   private socketOnChangeTurn(roomId: number): void {
-    this.socket.on(`change-turn-${roomId}`, (value: any) => {
-      const { room, aniConfig } = value
-      this.room = room
-      this.player = room.players.find((p) => p._id === this.playerId)
-      this.aniConfig = aniConfig
-      this.buildCard() // 내턴이면 카드 활성화
-      this.startTimer() // 타이머 시작
-    })
+    this.socket.on(
+      `change-turn-${roomId}`,
+      (value: { room: Room; aniConfig: AnimationOption }) => {
+        const { room, aniConfig } = value
+        this.room = room
+        this.player = room.players.find((p) => p._id === this.playerId)
+        this.aniConfig = aniConfig
+        this.buildCard() // 내턴이면 카드 활성화
+        this.startTimer() // 타이머 시작
+      }
+    )
   }
 
   private startTimer() {
@@ -282,7 +279,7 @@ export class PlayRoomComponent implements OnInit {
     )
     this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
     this.buildCard()
-    this.distributeCard()
+    this.room = this.roomService.distributeCard(this.room)
 
     this.socket.emit('change-turn', {
       aniConfig: this.aniConfig,
@@ -351,23 +348,5 @@ export class PlayRoomComponent implements OnInit {
     } else {
       this.startBtnDisableClass = 'disabled'
     }
-  }
-
-  // 카드 분배
-  private distributeCard(): void {
-    // unused에 카드가 2장 미만이면 used의 카드를 다시 가져온다.
-    if (this.room.cardDeck.unused.length < ADD_DECK) {
-      this.room.cardDeck.unused = this.room.cardDeck.unused.concat(
-        this.room.cardDeck.used
-      )
-      this.room.cardDeck.used = []
-    }
-
-    const nextPlayer = this.room.players.find(
-      (p) => p._id === this.room.currentPlayer
-    )
-    const newCards = this.room.cardDeck.unused.splice(0, ADD_DECK)
-    newCards.reverse()
-    newCards.forEach((c) => nextPlayer.cards.unshift(c))
   }
 }

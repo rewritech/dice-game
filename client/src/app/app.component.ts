@@ -14,12 +14,7 @@ export class AppComponent {
 
   constructor(private router: Router, private playerService: PlayerService) {
     if (this.playerId) {
-      this.playerService.getPlayer(this.playerId).subscribe((player) => {
-        if (!player) {
-          sessionStorage.removeItem('pId')
-          this.router.navigate(['/login'])
-        }
-      })
+      this.playerService.checkPlayer()
     } else {
       this.router.navigate(['/login'])
     }
