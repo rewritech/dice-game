@@ -17,7 +17,7 @@ export class ChatComponent implements OnInit {
   i18n: I18nService
 
   private roomId = +this.route.snapshot.paramMap.get('id')
-  playerId = localStorage.getItem('pId')
+  playerId = sessionStorage.getItem('pId')
 
   @ViewChild('scrollMe') private chatRef: ElementRef
 

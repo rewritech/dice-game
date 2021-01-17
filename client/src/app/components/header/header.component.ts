@@ -9,7 +9,7 @@ import { I18nService } from '../../services/i18n.service'
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  private playerId = localStorage.getItem('pId')
+  private playerId = sessionStorage.getItem('pId')
   i18n: I18nService
 
   constructor(
@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
 
   logout(): void {
     this.playerService.deletePlayer(this.playerId).subscribe(() => {
-      localStorage.removeItem('pId')
+      sessionStorage.removeItem('pId')
       this.router.navigate(['/login'])
     })
   }

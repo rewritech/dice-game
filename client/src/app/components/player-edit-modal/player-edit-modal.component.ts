@@ -15,7 +15,7 @@ export class PlayerEditModalComponent implements OnInit {
   validationError = false
   invalidClass = ''
 
-  private playerId = localStorage.getItem('pId')
+  private playerId = sessionStorage.getItem('pId')
 
   constructor(
     private config: NgbModalConfig,

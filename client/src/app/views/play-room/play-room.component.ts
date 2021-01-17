@@ -19,7 +19,7 @@ const ADD_DECK = 2
 export class PlayRoomComponent implements OnInit {
   private CARD_SELECT_LIMIT = 3
   private roomId = +this.route.snapshot.paramMap.get('id')
-  private playerId = localStorage.getItem('pId')
+  private playerId = sessionStorage.getItem('pId')
   private canMove = false
 
   room: Room

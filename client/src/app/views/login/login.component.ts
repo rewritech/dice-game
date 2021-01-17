@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   invalidClass = ''
   i18n: I18nService
 
-  private playerId = localStorage.getItem('pId')
+  private playerId = sessionStorage.getItem('pId')
 
   constructor(
     private router: Router,
@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
       this.playerService.createPlayer(this.player).subscribe((res) => {
         this.invalidClass = ''
         this.validationError = false
-        localStorage.setItem('pId', res._id)
+        sessionStorage.setItem('pId', res._id)
         this.router.navigate(['/'])
       })
     } else {
