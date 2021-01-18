@@ -7,6 +7,9 @@ const changeTurn = async function (io, socket, value) {
   const room = value.room
   const player = value.player
 
+  const prevRoom = await Room.findOne({ _id: room._id, deleted: false }).populate('players');
+  const usedCard = room.cardDeck.used.slice(prevRoom.cardDeck.used.length).join(', ')
+
   // DB room 갱신
   await Player.updateOne({ _id: player._id }, { $set: player });
 
@@ -19,7 +22,7 @@ const changeTurn = async function (io, socket, value) {
   const newRoom = await Room.findOne({ _id: room._id, deleted: false }).populate('players');
   socket.in(`room-${room._id}`).emit(`change-turn-${room._id}`, { room: newRoom, aniConfig: value.aniConfig});
 
-  common.broadcastSystemMessage(io, room._id, 'success', common.joinMsg([player.name, 'changeTurnMessage1', newCurrentPlayer.name, 'changeTurnMessage2']));
+  common.broadcastSystemMessage(io, room._id, 'success', common.joinMsg([player.name, 'changeTurnMessage1', usedCard, 'changeTurnMessage2', 'changeTurnMessage3', newCurrentPlayer.name, 'changeTurnMessage4']));
 }
 
 const catchPlayer = async function (io, player) {
