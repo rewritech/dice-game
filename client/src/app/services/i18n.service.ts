@@ -9,13 +9,13 @@ export class I18nService {
   private locale: Locale
 
   constructor() {
-    const cookieLocale = localStorage.getItem('dice-map-locale') || 'ko'
+    const cookieLocale = sessionStorage.getItem('dice-map-locale') || 'ko'
     this.changeLocale(cookieLocale as Locale)
   }
 
   changeLocale(locale: Locale): void {
     this.locale = locale
-    localStorage.setItem('dice-map-locale', this.locale)
+    sessionStorage.setItem('dice-map-locale', this.locale)
   }
 
   getLocale(): Locale {
