@@ -35,6 +35,10 @@ export class NewRoomModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //
+  }
+
+  open(content: HTMLElement): void {
     this.diceMapService.createNewMap()
     this.cardService.createNewCardDeck()
     this.room = {
@@ -49,9 +53,6 @@ export class NewRoomModalComponent implements OnInit {
         used: [],
       },
     }
-  }
-
-  open(content: HTMLElement): void {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
   }
 

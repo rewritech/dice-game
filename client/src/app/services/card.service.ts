@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core'
-import { DiceMapService } from './dice-map.service'
 
 @Injectable({
   providedIn: 'root',
@@ -9,35 +8,23 @@ export class CardService {
 
   private cardDeck: number[]
 
-  constructor(private diceMapService: DiceMapService) {}
+  // constructor() {}
 
   createNewCardDeck(): void {
-    const diceMin = this.diceMapService.getDiceMin()
-    const diceMax = this.diceMapService.getDiceMax()
-    const newCardDec = []
-
+    this.cardDeck = []
     for (let s = 0; s < this.CARD_SET; s += 1) {
-      for (let i = diceMin; i <= diceMax; i += 1) {
-        newCardDec.push(i)
-      }
+      this.cardDeck.push(...this.shuffle([1, 2, 3, 4, 5, 6]))
     }
-
-    this.cardDeck = this.suffle(newCardDec)
   }
 
-  private suffle(arr: number[]): number[] {
+  private shuffle(arr: number[]): number[] {
     const result = arr.slice()
-    const arrLen = result.length
 
-    let currentIdx = arrLen - 1
-    while (currentIdx >= 0) {
-      const randomIdx = Math.floor(Math.random() * (arrLen - 1))
-
-      const tempVal = result[currentIdx]
-      result[currentIdx] = arr[randomIdx]
-      result[randomIdx] = tempVal
-
-      currentIdx -= 1
+    for (let i = result.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1))
+      const t = result[i]
+      result[i] = result[j]
+      result[j] = t
     }
 
     return result

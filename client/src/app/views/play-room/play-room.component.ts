@@ -19,7 +19,7 @@ export class PlayRoomComponent implements OnInit {
   private roomId = +this.route.snapshot.paramMap.get('id')
   private playerId = sessionStorage.getItem('pId')
   private canMove = false
-  private NEW_DECK = 4
+  private NEW_DECK = 3
   private ADD_DECK = 2
 
   room: Room
@@ -113,9 +113,10 @@ export class PlayRoomComponent implements OnInit {
       this.initializeTimer()
 
       // 지금 내턴이라면 다른 사람에게 턴을 넘긴다.
+      // 플레이어가 3명이상인 경우에
       if (
         this.room.status === 'PLAYING' &&
-        this.room.players.length > 1 &&
+        this.room.players.length > 2 &&
         this.roomService.checkMyTurn(this.player, this.room)
       ) {
         this.aniConfig = null
