@@ -191,15 +191,30 @@ export class PlayRoomComponent implements OnInit {
         this.socket.emit('catch-player', this.room.players[targetIndex])
       }
 
-      this.pieces = this.diceMapService.createPieces(
-        this.room,
-        !this.roomService.checkMyTurn(this.player, this.room)
+      // 게임종료 판단 (추후 ngOnChanges나 ngDoCheck로 변경할수도있음)
+      const endGame = !!this.room.players.find(
+        (p) =>
+        p.killedPlayer === 5 ||
+        p.life === 0
       )
-      this.socket.emit('change-turn', {
-        aniConfig: this.aniConfig,
-        player: this.player,
-        room: this.room,
-      })
+
+      if (endGame) {
+        this.room.status = 'END'
+        this.socket.emit('end-game', {
+          player: this.player,
+          room: this.room,
+        })
+      } else {
+        this.pieces = this.diceMapService.createPieces(
+          this.room,
+          !this.roomService.checkMyTurn(this.player, this.room)
+        )
+        this.socket.emit('change-turn', {
+          aniConfig: this.aniConfig,
+          player: this.player,
+          room: this.room,
+        })
+      }
     }
   }
 
@@ -246,6 +261,13 @@ export class PlayRoomComponent implements OnInit {
       this.aniConfig = aniConfig
       // 내턴이면 카드 활성화
       this.buildCard()
+    })
+    // 게임 종료시
+    this.socket.on(`end-game-${this.room._id}`, (value: any) => {
+      const { room, aniConfig } = value
+      this.room = room
+//      this.player = room.players.find((p) => p._id === this.playerId)
+      this.aniConfig = aniConfig
     })
   }
 

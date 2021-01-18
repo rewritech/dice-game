@@ -42,6 +42,7 @@ export const i18n = {
     changeTurnMessage2: "'s turn.",
     leaveRoomMessage: ' is gone.',
     catchedMessage: ' is catched.',
+    gameEndMessage: ' won the game.',
   },
   jp: {
     loginButton: 'ログイン',
@@ -85,6 +86,7 @@ export const i18n = {
     changeTurnMessage2: 'さんのターンです。',
     leaveRoomMessage: 'さんが去りました。',
     catchedMessage: 'さんが捕まえました。',
+    gameEndMessage: 'さんが勝利しました。',
   },
   ko: {
     loginButton: '로그인',
@@ -128,5 +130,6 @@ export const i18n = {
     changeTurnMessage2: '님의 턴입니다.',
     leaveRoomMessage: '님이 떠나셨습니다.',
     catchedMessage: '님의 말이 잡혔습니다.',
+    gameEndMessage: '님이 승리하셨습니다.',
   },
 }

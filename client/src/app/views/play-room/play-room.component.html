@@ -28,4 +28,8 @@
     [callBackSelectCard]="callBackSelectCard"
     [callBackCardSubmit]="callBackCardSubmit"
   ></app-console>
+  <app-end-game-modal *ngIf="room.status === 'END'"
+  [room]="room"
+  [player]="player"
+  ></app-end-game-modal>
 </div>

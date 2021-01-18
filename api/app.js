@@ -195,6 +195,24 @@ io.of('/dice-map-room').on('connection', (socket) => {
     }
   });
 
+  socket.on('end-game', async (value) => {
+    try {
+      console.log(`[${new Date()}]: end-game`);
+      const player = value.player;
+      const room = value.room;
+
+      // DB room 갱신
+      await Player.updateOne({ _id: player._id }, { $set: player });
+      await Room.updateOne({ _id: room._id }, { $set: room });
+      const newRoom = await Room.findOne({ _id: room._id, deleted: false }).populate('players');
+      socket.in(`room-${room._id}`).emit(`end-game-${room._id}`, { room: newRoom, aniConfig: value.aniConfig});
+
+      broadcastSystemMessage(player._roomId, 'success', 'gameEndMessage');
+    } catch (e) {
+      console.error(`error: ${e}`);
+    }
+  });
+
   socket.on('leave', async (player) => {
     try {
       console.log(`[${new Date()}]: room leave`);
