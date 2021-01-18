@@ -3,7 +3,7 @@ const Room = require('../models/Room');
 const Player = require('../models/Player');
 
 const changeTurn = async function (io, socket, value) {
-  console.log(`[${new Date()}]: change-turn`);
+  console.log(`[${new Date().toISOString()}]: change-turn`);
   const room = value.room
   const player = value.player
 
@@ -26,7 +26,7 @@ const changeTurn = async function (io, socket, value) {
 }
 
 const catchPlayer = async function (io, player) {
-  console.log(`[${new Date()}]: catch-player`);
+  console.log(`[${new Date().toISOString()}]: catch-player`);
   await Player.updateOne({ _id: player._id }, { $set: player });
   common.broadcastSystemMessage(io, player._roomId, 'danger', common.joinMsg([player.name, 'catchedMessage']));
 }

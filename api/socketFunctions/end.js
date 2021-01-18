@@ -3,7 +3,7 @@ const Room = require('../models/Room');
 const Player = require('../models/Player');
 
 const leave = async function (io, player) {
-  console.log(`[${new Date()}]: room leave ${player._id}`);
+  console.log(`[${new Date().toISOString()}]: room leave ${player._id}`);
 
   // 1. room의 player를 내보냄
   await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id } });

@@ -9,7 +9,7 @@ const Message = require('../models/Message');
  * 방의 메세지 가져오기
  */
 router.get('/messages/:roomId', async (req, res) => {
-  console.log(`[${new Date()}]: GET messages in room-${req.params.roomId}`);
+  console.log(`[${new Date().toISOString()}]: GET messages in room-${req.params.roomId}`);
   const messages = await Message.find({ _roomId: req.params.roomId });
   res.json(messages);
 });
@@ -19,7 +19,7 @@ router.get('/messages/:roomId', async (req, res) => {
  * 전체 방 리스트 가져오기
  */
 router.get('/rooms', async (req, res) => {
-  console.log(`[${new Date()}]: GET rooms`);
+  console.log(`[${new Date().toISOString()}]: GET rooms`);
   const rooms = await Room.find({ status: 'WAIT', deleted: false }, { __v: 0, map: 0, currentPlayer: 0, cardDeck: 0, deleted: 0 }).populate('players');
   rooms.forEach((r) => r.players = new Array(r.players.length))
   res.json(rooms);
@@ -30,7 +30,7 @@ router.get('/rooms', async (req, res) => {
  * 새로운 방 만들기
  */
 router.post('/rooms', async (req, res) => {
-  console.log(`[${new Date()}]: POST rooms`);
+  console.log(`[${new Date().toISOString()}]: POST rooms`);
   const roomCount = await Room.countDocuments();
   const newRoom = new Room({ _id: roomCount + 1, deleted: false, ...req.body });
   const savedRoom = await newRoom.save();
@@ -42,7 +42,7 @@ router.post('/rooms', async (req, res) => {
  * 방에 플레이어 추가하기
  */
 router.put('/rooms/:id', async (req, res) => {
-  console.log(`[${new Date()}]: PUT add player to room ${req.params.id}`);
+  console.log(`[${new Date().toISOString()}]: PUT add player to room ${req.params.id}`);
   // DB room에 유저 추가(중복체크)
   const roomInPlayer = await Room.findOne({ _id: req.params.id, deleted: false, players: { $in: req.body._id } });
   if (!roomInPlayer) {
@@ -59,7 +59,7 @@ router.put('/rooms/:id', async (req, res) => {
  * 방 정보 가져오기
  */
 router.get('/rooms/:id', async (req, res) => {
-  console.log(`[${new Date()}]: GET rooms/${req.params.id}`);
+  console.log(`[${new Date().toISOString()}]: GET rooms/${req.params.id}`);
   const room = await Room.findOne({ _id: req.params.id, deleted: false }).populate('players');
   res.json(room);
 });
@@ -69,7 +69,7 @@ router.get('/rooms/:id', async (req, res) => {
  * 방 삭제
  */
 router.delete('/rooms/:id', async (req, res) => {
-  console.log(`[${new Date()}]: DELETE rooms/${req.params.id}`);
+  console.log(`[${new Date().toISOString()}]: DELETE rooms/${req.params.id}`);
   await Room.updateOne({ _id: req.params.id }, { $set: { deleted: true } });
   res.json(`deleted room ${req.params.id}`);
 });
@@ -79,7 +79,7 @@ router.delete('/rooms/:id', async (req, res) => {
  * 특정 플레이어 정보 가져오기
  */
 router.get('/players/:id', async (req, res) => {
-  console.log(`[${new Date()}]: GET player/${req.params.id}`);
+  console.log(`[${new Date().toISOString()}]: GET player/${req.params.id}`);
   const player = await Player.findOne({ _id: req.params.id });
   res.json(player);
 });
@@ -89,7 +89,7 @@ router.get('/players/:id', async (req, res) => {
  * 플레이어 추가하기
  */
 router.post('/players', async (req, res) => {
-  console.log(`[${new Date()}]: POST players ${req.body._roomId}`);
+  console.log(`[${new Date().toISOString()}]: POST players ${req.body._roomId}`);
 
   const newPlayer = new Player(req.body);
   await newPlayer.save();
@@ -101,7 +101,7 @@ router.post('/players', async (req, res) => {
  * 플레이어 이름 변경하기
  */
 router.put('/players/:id', async (req, res) => {
-  console.log(`[${new Date()}]: PUT players ${req.body._roomId}`);
+  console.log(`[${new Date().toISOString()}]: PUT players ${req.body._roomId}`);
   await Player.updateOne({ _id: req.params.id }, { $set: { name: req.body.name } });
   const player = await Player.findOne({ _id: req.params.id })
   res.json(player);
@@ -112,7 +112,7 @@ router.put('/players/:id', async (req, res) => {
  * 플레이어 삭제
  */
 router.delete('/players/:id', async (req, res) => {
-  console.log(`[${new Date()}]: DELETE players/${req.params.id}`);
+  console.log(`[${new Date().toISOString()}]: DELETE players/${req.params.id}`);
   await Player.deleteOne({ _id: req.params.id });
   res.json(`deleted players ${req.params.id}`);
 });

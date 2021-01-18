@@ -59,7 +59,7 @@ socketServer.listen(socketPort, () => {
 
 // ==================== socket connect ====================
 io.of('/dice-map-room').on('connection', (socket) => {
-  console.log(`[${new Date()}]: user socket connected`);
+  console.log(`[${new Date().toISOString()}]: user socket connected`);
 
   socket.on('join-room', async (player) => {
     try {
@@ -135,10 +135,10 @@ io.of('/dice-map-room').on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log(`[${new Date()}]: user socket disconnected`);
+    console.log(`[${new Date().toISOString()}]: user socket disconnected`);
   });
 
   socket.on('error', () => {
-    console.log(`[${new Date()}]: error`);
+    console.log(`[${new Date().toISOString()}]: error`);
   });
 });
