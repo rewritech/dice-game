@@ -11,7 +11,7 @@
       <input type="hidden" name="_roomId" [ngModel]="player._roomId">
       <div class="form-group">
         <label for="forPlayerName">{{i18n.get('nickName')}}</label>
-        <input type="text" class="form-control {{invalidClass}}" id="forPlayerName" name="name" [(ngModel)]="player.name">
+        <input type="text" class="form-control {{invalidClass}}" id="forPlayerName" name="name" [ngModel]="player.name">
         <small class="text-danger float-left mb-3" *ngIf="validationError">
           {{i18n.get('insertNickName')}}
         </small>

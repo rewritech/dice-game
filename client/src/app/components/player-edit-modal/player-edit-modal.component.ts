@@ -38,8 +38,9 @@ export class PlayerEditModalComponent implements OnInit {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
   }
 
-  onSubmit(): void {
-    if (this.player.name.trim().length > 0) {
+  onSubmit(value: Player): void {
+    if (value.name.trim().length > 0) {
+      this.player.name = value.name
       this.playerService.editPlayer(this.player).subscribe(() => {
         this.modalService.dismissAll()
         this.invalidClass = ''
