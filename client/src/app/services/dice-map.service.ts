@@ -142,7 +142,7 @@ export class DiceMapService {
     notSelectedCards: number[],
     x: number,
     y: number,
-    isFirst: boolean,
+    isFirst: boolean
   ): void {
     // out of range
     if (x < 0 || x > 9 || y < 0 || y > 9) return
