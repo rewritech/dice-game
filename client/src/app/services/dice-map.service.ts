@@ -112,16 +112,12 @@ export class DiceMapService {
 
     // 일단 모두 true(비활성화)인 Map[][] 만든다.
     const pieces = this.createPieces(room, true)
-    // 선택카드 반전시킨다.
-    const notSelectedCards = [1, 2, 3, 4, 5, 6].filter(
-      (n) => !cards.includes(n)
-    )
     // 시작 좌표 설정
     const startX = coordinates[0]
     const startY = coordinates[1]
 
     // 이동가능 좌표 설정
-    this.checkAround(pieces, notSelectedCards, startX, startY, true)
+    this.checkAround(pieces, cards, startX, startY, true)
 
     // 모든 플레이어 시작점 이동 불가
     room.players.forEach((plr) => {
@@ -138,7 +134,7 @@ export class DiceMapService {
 
   private checkAround(
     pieces: Map[][],
-    notSelectedCards: number[],
+    cards: number[],
     x: number,
     y: number,
     isFirst: boolean
@@ -152,7 +148,7 @@ export class DiceMapService {
     if (piece.checked) return
 
     //  이동 가능?
-    const checkedAccessible = notSelectedCards.includes(piece.num)
+    const checkedAccessible = !cards.includes(piece.num)
     // eslint-disable-next-line no-param-reassign
     pieces[x][y].disabled = checkedAccessible
     // eslint-disable-next-line no-param-reassign
@@ -161,9 +157,9 @@ export class DiceMapService {
     // 이동 불가라면 종료
     if (!isFirst && checkedAccessible) return
 
-    this.checkAround(pieces, notSelectedCards, x - 1, y, false)
-    this.checkAround(pieces, notSelectedCards, x + 1, y, false)
-    this.checkAround(pieces, notSelectedCards, x, y + 1, false)
-    this.checkAround(pieces, notSelectedCards, x, y - 1, false)
+    this.checkAround(pieces, cards, x - 1, y, false)
+    this.checkAround(pieces, cards, x + 1, y, false)
+    this.checkAround(pieces, cards, x, y + 1, false)
+    this.checkAround(pieces, cards, x, y - 1, false)
   }
 }
