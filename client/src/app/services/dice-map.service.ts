@@ -66,6 +66,7 @@ export class DiceMapService {
           disabled,
           icon: coordIcons[[i, j].join('.')],
           blink: this.compare([i, j], blinkPlayer.coordinates),
+          checked: false,
         }
       })
     })
@@ -106,110 +107,64 @@ export class DiceMapService {
     }
   }
 
-  getAccessibleArea(room: Room, cards: number[], player: Player): boolean[][] {
-    const { map } = room
+  getAccessibleArea(room: Room, cards: number[], player: Player): Map[][] {
+    const { coordinates, initialCoordinates } = player
 
-    const { coordinates } = player
-    const rowIdx = coordinates[0]
-    const colIdx = coordinates[1]
-
-    const accessibles = this.getAccessibles(map, cards)
-    const accessibleDiceArea = Array.from(
-      Array(this.MAP_ROW),
-      () => new Array(this.MAP_COL)
+    // 일단 모두 true(비활성화)인 Map[][] 만든다.
+    const pieces = this.createPieces(room, true)
+    // 선택카드 반전시킨다.
+    const notSelectedCards = [1, 2, 3, 4, 5, 6].filter(
+      (n) => !cards.includes(n)
     )
+    // 시작 좌표 설정
+    const startX = coordinates[0]
+    const startY = coordinates[1]
 
-    this.checkAround(accessibleDiceArea, accessibles, rowIdx, colIdx)
+    // 이동가능 좌표 설정
+    this.checkAround(pieces, notSelectedCards, startX, startY, true)
 
-    // 현재 자리 이동 가능
-    accessibles[rowIdx][colIdx] = true
-
-    // 타 플레이어 시작점 이동 불가
-    const { initialCoordinates } = player
-    const otherInitialCoordinates = room.players.map((p) => {
-      const someInitialCoordinates = p.initialCoordinates
-      if (
-        someInitialCoordinates[0] === initialCoordinates[0] &&
-        someInitialCoordinates[1] === initialCoordinates[1]
-      ) {
-        return false
-      }
-
-      return someInitialCoordinates
+    // 모든 플레이어 시작점 이동 불가
+    room.players.forEach((plr) => {
+      const initCoord = plr.initialCoordinates
+      pieces[initCoord[0]][initCoord[1]].disabled = true
     })
 
-    otherInitialCoordinates.forEach((someInitialCoordinates) => {
-      const r = someInitialCoordinates[0]
-      const c = someInitialCoordinates[1]
-      accessibles[r][c] = false
-    })
-    // printMap(accessibleDiceArea)
+    // 내 시작자리 이동 가능
+    pieces[startX][startY].disabled = false
+    pieces[startX][startY].checked = true
+    pieces[initialCoordinates[0]][initialCoordinates[1]].disabled = false
 
-    return accessibleDiceArea
-  }
-
-  private getAccessibles(inputMap: number[][], cards: number[]): boolean[][] {
-    const result = Array.from(
-      Array(this.MAP_ROW),
-      () => new Array(this.MAP_COL)
-    )
-
-    for (let r = 0; r < this.MAP_ROW; r += 1) {
-      for (let c = 0; c < this.MAP_COL; c += 1) {
-        const diceNum = inputMap[r][c]
-        const accessible = cards.includes(diceNum)
-        result[r][c] = accessible
-      }
-    }
-
-    return result
+    return pieces
   }
 
   private checkAround(
-    accessibleDiceArea: boolean[][],
-    accessibleMap: boolean[][],
-    rowIdx: number,
-    colIdx: number
+    pieces: Map[][],
+    notSelectedCards: number[],
+    x: number,
+    y: number,
+    isFirst: boolean,
   ): void {
-    // 다이스 부재?
-    if (rowIdx < 0 || rowIdx > 9 || colIdx < 0 || colIdx > 9) {
-      return
-    }
+    // out of range
+    if (x < 0 || x > 9 || y < 0 || y > 9) return
+
+    const piece = pieces[x][y]
 
     // 검사 완료?
-    const checked = typeof accessibleDiceArea[rowIdx][colIdx] === 'boolean'
-    if (checked) {
-      return
-    }
+    if (piece.checked) return
 
     //  이동 가능?
-    const checkedAccessible = accessibleMap[rowIdx][colIdx]
+    const checkedAccessible = notSelectedCards.includes(piece.num)
     // eslint-disable-next-line no-param-reassign
-    accessibleDiceArea[rowIdx][colIdx] = checkedAccessible
-    if (!checkedAccessible) {
-      return
-    }
+    pieces[x][y].disabled = checkedAccessible
+    // eslint-disable-next-line no-param-reassign
+    pieces[x][y].checked = true
 
-    this.checkAround(accessibleDiceArea, accessibleMap, rowIdx - 1, colIdx)
-    this.checkAround(accessibleDiceArea, accessibleMap, rowIdx + 1, colIdx)
-    this.checkAround(accessibleDiceArea, accessibleMap, rowIdx, colIdx + 1)
-    this.checkAround(accessibleDiceArea, accessibleMap, rowIdx, colIdx - 1)
-  }
+    // 이동 불가라면 종료
+    if (!isFirst && checkedAccessible) return
 
-  private printMap(inputMap): void {
-    for (let i = 0; i < this.MAP_ROW; i += 1) {
-      let str = ''
-      for (let j = 0; j < this.MAP_COL; j += 1) {
-        let el = inputMap[i][j]
-        el = el === true ? (el += ' ') : el
-        el = el === undefined ? '-----' : el
-        str += el
-        str += ' '
-      }
-      // eslint-disable-next-line no-console
-      console.log(str)
-    }
-    // eslint-disable-next-line no-console
-    console.log('')
+    this.checkAround(pieces, notSelectedCards, x - 1, y, false)
+    this.checkAround(pieces, notSelectedCards, x + 1, y, false)
+    this.checkAround(pieces, notSelectedCards, x, y + 1, false)
+    this.checkAround(pieces, notSelectedCards, x, y - 1, false)
   }
 }
