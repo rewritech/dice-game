@@ -131,7 +131,6 @@ export class DiceMapService {
 
     // 내 시작자리 이동 가능
     pieces[startX][startY].disabled = false
-    pieces[startX][startY].checked = true
     pieces[initialCoordinates[0]][initialCoordinates[1]].disabled = false
 
     return pieces
