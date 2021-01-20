@@ -122,12 +122,16 @@ export class DiceMapService {
     // 모든 플레이어 시작점 이동 불가
     room.players.forEach((plr) => {
       const initCoord = plr.initialCoordinates
-      pieces[initCoord[0]][initCoord[1]].disabled = true
+      if (
+        !pieces[initCoord[0]][initCoord[1]].disabled &&
+        !this.compare(initialCoordinates, initCoord)
+      ) {
+        pieces[initCoord[0]][initCoord[1]].disabled = true
+      }
     })
 
     // 내 시작자리 이동 가능
     pieces[startX][startY].disabled = false
-    pieces[initialCoordinates[0]][initialCoordinates[1]].disabled = false
 
     return pieces
   }

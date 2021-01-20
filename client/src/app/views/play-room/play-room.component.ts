@@ -143,6 +143,7 @@ export class PlayRoomComponent implements OnInit {
       if (this.selectedCards.length >= this.CARD_SELECT_LIMIT) {
         this.cardDisabled = true
       }
+      this.accessibleArea()
     }
   }
 
@@ -156,6 +157,7 @@ export class PlayRoomComponent implements OnInit {
     if (this.selectedCards.length < this.CARD_SELECT_LIMIT) {
       this.cardDisabled = false
     }
+    this.accessibleArea()
   }
 
   cardSubmit(): void {
@@ -172,15 +174,6 @@ export class PlayRoomComponent implements OnInit {
         (_, i) => !targetIndexes.includes(i)
       )
       this.room.cardDeck.used = this.room.cardDeck.used.concat(targetCards)
-
-      // 맵에 이동가능 아이콘 표시
-      const selectedNums = this.selectedCards.map((card) => card.num)
-      this.aniConfig = null
-      this.pieces = this.diceMapService.getAccessibleArea(
-        this.room,
-        selectedNums,
-        this.player
-      )
       this.selectedCards = []
     }
   }
@@ -305,9 +298,16 @@ export class PlayRoomComponent implements OnInit {
   // 내턴이면 주사위 활성화
   private buildCard(): void {
     this.cardDisabled = !this.roomService.checkMyTurn(this.player, this.room)
-    this.pieces = this.diceMapService.createPieces(
+    this.pieces = this.diceMapService.createPieces(this.room, true)
+  }
+
+  private accessibleArea() {
+    const selectedNums = this.selectedCards.map((card) => card.num)
+    this.aniConfig = null
+    this.pieces = this.diceMapService.getAccessibleArea(
       this.room,
-      !this.roomService.checkMyTurn(this.player, this.room)
+      selectedNums,
+      this.player
     )
   }
 
