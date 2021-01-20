@@ -18,8 +18,8 @@ export class PlayRoomComponent implements OnInit {
   private CARD_SELECT_LIMIT = 3
   private roomId = +this.route.snapshot.paramMap.get('id')
   private playerId = sessionStorage.getItem('pId')
-  private NEW_DECK = 3
-  private ADD_DECK = 2
+  private NEW_DECK: number
+  private ADD_DECK: number
 
   room: Room
   player: Player
@@ -74,7 +74,7 @@ export class PlayRoomComponent implements OnInit {
     })
   }
 
-  @HostListener('window:beforeunload')
+  @HostListener('window:unload')
   ngOnDestroy(): void {
     this.leave()
   }

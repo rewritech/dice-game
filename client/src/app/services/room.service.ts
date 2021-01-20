@@ -11,7 +11,7 @@ import { environment } from '../../environments/environment'
 })
 export class RoomService {
   private apiBaseUrl = environment.apiBaseUrl
-  private NEW_DECK = 4
+  private NEW_DECK = 3
   private ADD_DECK = 2
 
   constructor(private http: HttpClient) {}
