@@ -27,7 +27,6 @@ export class PlayRoomComponent implements OnInit {
   i18n: I18nService
   aniConfig: AnimationOption
   cardDisabled = false
-  canCardSubmit = false
   startBtnDisableClass = 'disabled'
   pieces: Map[][]
   selectedCards: SelectedCard[] = []
@@ -36,7 +35,6 @@ export class PlayRoomComponent implements OnInit {
   callBackUnselectCard = (sc: SelectedCard): void => this.unselectCard(sc)
   callBackShuffle = (): void => this.shuffle()
   callBackStart = (): void => this.start()
-  callBackCardSubmit = (): void => this.cardSubmit()
   time = ONE_MINITE
   timerId: NodeJS.Timeout
   timeOutId: NodeJS.Timeout
@@ -137,7 +135,6 @@ export class PlayRoomComponent implements OnInit {
     // 현재 카드 한계선보다 적게 선택했다면
     if (this.selectedCards.length < this.CARD_SELECT_LIMIT) {
       this.selectedCards.push(selectedCard) // 카드 추가
-      this.canCardSubmit = true // 카드 제출 활성화
 
       // 추가 후에 한계를 넘는다면 카드 비활성화
       if (this.selectedCards.length >= this.CARD_SELECT_LIMIT) {
@@ -151,8 +148,6 @@ export class PlayRoomComponent implements OnInit {
     const index = this.selectedCards.findIndex((c) => c.index === sc.index)
     // 카드제거
     if (index > -1) this.selectedCards.splice(index, 1)
-    // 카드제출 버튼 비활성화
-    if (this.selectedCards.length === 0) this.canCardSubmit = false
     // 카드 선택 한계 보다 작아지면 다시 선택가능 상태로
     if (this.selectedCards.length < this.CARD_SELECT_LIMIT) {
       this.cardDisabled = false
@@ -160,25 +155,8 @@ export class PlayRoomComponent implements OnInit {
     this.accessibleArea()
   }
 
-  cardSubmit(): void {
-    if (this.canCardSubmit) {
-      this.canMove = true // move 가능한 상태로 변경
-      this.canCardSubmit = false // 카드 제출 비활성화
-      this.cardDisabled = true // 카드 비활성화
-      this.initializeTimer() // 타이머 정지
-
-      // 카드 제출 player.cards -> room.used
-      const targetCards = this.selectedCards.map((c) => c.num)
-      const targetIndexes = this.selectedCards.map((c) => c.index)
-      this.player.cards = this.player.cards.filter(
-        (_, i) => !targetIndexes.includes(i)
-      )
-      this.room.cardDeck.used = this.room.cardDeck.used.concat(targetCards)
-      this.selectedCards = []
-    }
-  }
-
   move(x: number, y: number): void {
+    this.cardSubmit()
     // 카드 제출하기 전에는 눌러도 반응이 없어야 한다.
     if (this.canMove && !this.pieces[x][y].disabled) {
       const { coordinates } = this.player
@@ -202,6 +180,21 @@ export class PlayRoomComponent implements OnInit {
   // 선택된 카드인지 확인한다.
   isSelectedCard(num: number, index: number): boolean {
     return !!this.selectedCards.find((c) => c.num === num && c.index === index)
+  }
+
+  private cardSubmit(): void {
+    this.canMove = true // move 가능한 상태로 변경
+    this.cardDisabled = true // 카드 비활성화
+    this.initializeTimer() // 타이머 정지
+
+    // 카드 제출 player.cards -> room.used
+    const targetCards = this.selectedCards.map((c) => c.num)
+    const targetIndexes = this.selectedCards.map((c) => c.index)
+    this.player.cards = this.player.cards.filter(
+      (_, i) => !targetIndexes.includes(i)
+    )
+    this.room.cardDeck.used = this.room.cardDeck.used.concat(targetCards)
+    this.selectedCards = []
   }
 
   // websocket room에서 데이터 전송 받기 위한 연결
@@ -270,7 +263,6 @@ export class PlayRoomComponent implements OnInit {
   private timeOutChangeTurn(): void {
     this.initializeTimer()
     this.canMove = false
-    this.canCardSubmit = false
     this.aniConfig = null
 
     this.selectedCards = []

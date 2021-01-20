@@ -20,11 +20,9 @@ export class ConsoleComponent implements OnInit {
   @Input() room: Room
   @Input() player: Player
   @Input() selectedCards: SelectedCard[]
-  @Input() canCardSubmit: boolean
   @Input() cardDisabled: boolean
   @Input() callBackUnselectCard: (sc: SelectedCard) => void
   @Input() callBackSelectCard: (sc: SelectedCard) => void
-  @Input() callBackCardSubmit: () => void
 
   i18n: I18nService
 
