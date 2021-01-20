@@ -18,7 +18,6 @@ export class PlayRoomComponent implements OnInit {
   private CARD_SELECT_LIMIT = 3
   private roomId = +this.route.snapshot.paramMap.get('id')
   private playerId = sessionStorage.getItem('pId')
-  private canMove = false
   private NEW_DECK = 3
   private ADD_DECK = 2
 
@@ -158,11 +157,11 @@ export class PlayRoomComponent implements OnInit {
   move(x: number, y: number): void {
     this.cardSubmit()
     // 카드 제출하기 전에는 눌러도 반응이 없어야 한다.
-    if (this.canMove && !this.pieces[x][y].disabled) {
+    if (!this.pieces[x][y].disabled) {
+      this.cardSubmit()
       const { coordinates } = this.player
       this.initializeTimer()
       this.moveAnimate([x, y], coordinates)
-      this.canMove = false
 
       this.player.coordinates = [x, y] // player.coordnates 갱신
       this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
@@ -183,7 +182,6 @@ export class PlayRoomComponent implements OnInit {
   }
 
   private cardSubmit(): void {
-    this.canMove = true // move 가능한 상태로 변경
     this.cardDisabled = true // 카드 비활성화
     this.initializeTimer() // 타이머 정지
 
@@ -262,12 +260,12 @@ export class PlayRoomComponent implements OnInit {
 
   private timeOutChangeTurn(): void {
     this.initializeTimer()
-    this.canMove = false
     this.aniConfig = null
 
     this.selectedCards = []
+    const randomIndex = Math.floor(Math.random() * this.player.cards.length - 1)
     this.room.cardDeck.used = this.room.cardDeck.used.concat(
-      this.player.cards.pop()
+      this.player.cards.splice(randomIndex, 1)
     )
     this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
     this.buildCard()
