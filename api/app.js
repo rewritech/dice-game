@@ -61,7 +61,7 @@ async function broadcastRoomWithoutMe (socket, roomId, key=`changeRoomInfo-${roo
 
 async function broadcastRoomMessage (roomId) {
   const messages = await Message.find({ _roomId: roomId });
-    io.of("/dice-map-room").to(`room-${roomId}`).emit(`chat-room-${roomId}`, messages);
+  io.of("/dice-map-room").to(`room-${roomId}`).emit(`chat-room-${roomId}`, messages);
 }
 
 async function broadcastSystemMessage (roomId, systemMsgStatus, content) {
@@ -205,7 +205,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
       await Room.updateOne({ _id: room._id }, { $set: room });
       await Player.updateOne({ _id: player._id }, { $set: player });
 
-      broadcastRoomWithoutMe(socket, room._id, `end-game-${room._id}`);
+      broadcastRoomWithoutMe(socket, room._id);
       broadcastSystemMessage(player._roomId, 'success', 'gameEndMessage');
     } catch (e) {
       console.error(`error: ${e}`);
@@ -226,7 +226,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
         life: 3,
         killedPlayer: 0
       }});
-      
+      broadcastRoom(room._id)
     } catch (e) {
       console.error(`error: ${e}`);
     }

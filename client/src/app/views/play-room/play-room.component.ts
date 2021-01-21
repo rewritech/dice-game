@@ -123,7 +123,7 @@ export class PlayRoomComponent implements OnInit {
       unused: this.cardService.getCardDeck(),
       used: [],
     }
-    this.socket.emit('replay',{room: this.room})
+    this.socket.emit('replay', { room: this.room })
   }
 
   selectCard(selectedCard: SelectedCard): void {
@@ -203,8 +203,9 @@ export class PlayRoomComponent implements OnInit {
         this.player.killedPlayer += 1
 
         // 게임종료 판단
-        if (this.player.killedPlayer === 5 ||
-        this.room.players[targetIndex].life === 0) endGame = true
+        endGame =
+          this.player.killedPlayer === 5 ||
+          this.room.players[targetIndex].life === 0
 
         this.socket.emit('catch-player', this.room.players[targetIndex])
       }
@@ -272,10 +273,6 @@ export class PlayRoomComponent implements OnInit {
       this.aniConfig = aniConfig
       // 내턴이면 카드 활성화
       this.buildCard()
-    })
-    // 게임 종료시
-    this.socket.on(`end-game-${this.room._id}`, (value: any) => {
-    this.room = value
     })
   }
 
