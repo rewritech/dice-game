@@ -31,6 +31,7 @@ export type Map = {
   disabled: boolean
   icon: IconDefinition
   blink: boolean
+  checked: boolean
 }
 
 export type Message = {

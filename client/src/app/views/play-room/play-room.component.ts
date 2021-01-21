@@ -166,16 +166,22 @@ export class PlayRoomComponent implements OnInit {
         (_, i) => !targetIndexes.includes(i)
       )
       this.room.cardDeck.used = this.room.cardDeck.used.concat(targetCards)
-      this.selectedCards = []
 
-      // TODO: 맵에 이동가능 아이콘 표시
-      // TODO: emit
+      // 맵에 이동가능 아이콘 표시
+      const selectedNums = this.selectedCards.map((card) => card.num)
+      this.aniConfig = null
+      this.pieces = this.diceMapService.getAccessibleArea(
+        this.room,
+        selectedNums,
+        this.player
+      )
+      this.selectedCards = []
     }
   }
 
   move(x: number, y: number): void {
     // 카드 제출하기 전에는 눌러도 반응이 없어야 한다.
-    if (this.canMove) {
+    if (this.canMove && !this.pieces[x][y].disabled) {
       const { coordinates } = this.player
       this.canMove = false
       this.cardDisabled = true // 카드 비활성화
