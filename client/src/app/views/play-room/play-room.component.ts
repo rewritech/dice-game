@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { AnimationOption, Map, Player, Room, SelectedCard } from '../../types'
 import { SocketConnectService } from '../../services/socket-connect.service'
 import { DiceMapService } from '../../services/dice-map.service'
@@ -50,6 +51,7 @@ export class PlayRoomComponent implements OnInit {
     private playerService: PlayerService,
     private socket: SocketConnectService,
     private i18nService: I18nService,
+    private modalService: NgbModal,
     private cardService: CardService
   ) {
     this.i18n = i18nService
@@ -112,6 +114,7 @@ export class PlayRoomComponent implements OnInit {
 
   leave(): void {
     if (this.player) {
+      this.modalService.dismissAll()
       this.initializeTimer()
 
       // 지금 내턴이라면 다른 사람에게 턴을 넘긴다.
@@ -142,7 +145,7 @@ export class PlayRoomComponent implements OnInit {
       unused: this.cardService.getCardDeck(),
       used: [],
     }
-    this.socket.emit('replay', { room: this.room })
+    this.socket.emit('replay', this.room)
   }
 
   selectCard(selectedCard: SelectedCard): void {
@@ -179,13 +182,6 @@ export class PlayRoomComponent implements OnInit {
       this.player.coordinates = [x, y] // player.coordnates 갱신
       this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
       this.catch(x, y) // 적플레이어를 잡으면 라이프 -1, 말 위치 초기화
-      this.buildCard() // 말이동 적용
-      this.room = this.roomService.distributeCard(this.room) // 카드 분배
-      this.socket.emit('change-turn', {
-        aniConfig: this.aniConfig,
-        player: this.player,
-        room: this.room,
-      })
 
       if (this.endGame) {
         this.endGame = false
@@ -195,10 +191,8 @@ export class PlayRoomComponent implements OnInit {
           room: this.room,
         })
       } else {
-        this.pieces = this.diceMapService.createPieces(
-          this.room,
-          !this.roomService.checkMyTurn(this.player, this.room)
-        )
+        this.buildCard() // 말이동 적용
+        this.room = this.roomService.distributeCard(this.room) // 카드 분배
         this.socket.emit('change-turn', {
           aniConfig: this.aniConfig,
           player: this.player,
@@ -232,6 +226,8 @@ export class PlayRoomComponent implements OnInit {
   // 자신을 포함한 모든 유저
   private socketOnChangeRoom(roomId: number): void {
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
+      if (newRoom.status === 'END') debugger
+      this.initializeTimer()
       this.aniConfig = null
       this.room = newRoom
       this.player =
@@ -241,7 +237,6 @@ export class PlayRoomComponent implements OnInit {
         this.buildCard() // 내턴이면 카드 활성화
         this.enableStartBtn() // 스타트 버튼 활성화
       } else {
-        this.initializeTimer()
         this.router.navigate(['/rooms'])
       }
     })
@@ -364,7 +359,7 @@ export class PlayRoomComponent implements OnInit {
       this.player.killedPlayer += 1
       // 게임종료 판단
       this.endGame =
-        this.player.killedPlayer === 5 ||
+        this.player.killedPlayer === 1 ||
         this.room.players[targetIndex].life === 0
       this.socket.emit('catch-player', this.room.players[targetIndex])
     }

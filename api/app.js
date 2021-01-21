@@ -115,36 +115,15 @@ io.of('/dice-map-room').on('connection', (socket) => {
 
   socket.on('end-game', async (value) => {
     try {
-      console.log(`[${new Date()}]: end-game`);
-      const player = value.player;
-      const room = value.room;
-
-      // DB room 갱신
-      await Room.updateOne({ _id: room._id }, { $set: room });
-      await Player.updateOne({ _id: player._id }, { $set: player });
-
-      broadcastRoomWithoutMe(socket, room._id);
-      broadcastSystemMessage(player._roomId, 'success', 'gameEndMessage');
+      endFnc.endGame(io, socket, value);
     } catch (e) {
       console.error(`error: ${e}`);
     }
   });
 
-  socket.on('replay', async (value) => {
+  socket.on('replay', async (room) => {
     try {
-      console.log(`[${new Date()}]: replay`);
-      const room = value.room;
-
-      await Room.updateOne({ _id: room._id }, { $set: room });
-      await Player.updateMany({ _roomId: room._id }, { $set: {
-        coordinates: null,
-        initialCoordinates: null,
-        cards: [],
-        piece: {icon: []},
-        life: 3,
-        killedPlayer: 0
-      }});
-      broadcastRoom(room._id)
+      await endFnc.replay(io, room);
     } catch (e) {
       console.error(`error: ${e}`);
     }

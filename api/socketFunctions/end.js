@@ -46,6 +46,36 @@ const leave = async function (io, player) {
   }
 }
 
+const replay = async function (io, room) {
+  console.log(`[${new Date().toISOString()}]: replay`);
+
+  await Room.updateOne({ _id: room._id }, { $set: room });
+  await Player.updateMany({ _roomId: room._id }, { $set: {
+    coordinates: null,
+    initialCoordinates: null,
+    cards: [],
+    piece: {icon: []},
+    life: 3,
+    killedPlayer: 0
+  }});
+  common.broadcastRoom(io, room._id);
+}
+
+const endGame = async function (io, socket, value) {
+  console.log(`[${new Date().toISOString()}]: end-game`);
+  const player = value.player;
+  const room = value.room;
+
+  // DB room 갱신
+  await Room.updateOne({ _id: room._id }, { $set: room });
+  await Player.updateOne({ _id: player._id }, { $set: player });
+
+  common.broadcastRoomWithoutMe(socket, room._id);
+  common.broadcastSystemMessage(io, room._id, 'success', 'gameEndMessage');
+}
+
 module.exports = {
   leave,
+  replay,
+  endGame,
 };
