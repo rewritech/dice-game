@@ -1,44 +1,31 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
-
-# Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the develop branch
   push:
-    branches: [ develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ develop ]
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches: [ main ]
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-#       - name: oci-cli
-#         uses: bytesbay/oci-cli-action@v1.0.1
-#         with:
-#           user: "${{ secrets.OCI_USER }}"
-#           fingerprint: "${{ secrets.OCI_FINGERPRINT }}"
-#           tenancy: "${{ secrets.OCI_TENANCY }}"
-#           region: "${{ secrets.OCI_REGION }}"
-#           api_key: |
-#             ${{ secrets.OCI_API_KEY }}
-#           verbose: true
-              
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
+      - name: Run lint
         run: |
           cd client
           npm install
           npm run lint
+
+      - name: 'deploy'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.INSTANCE_IP }}
+          username: opc
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          script: |
+            cd app/dice-game
+            sh docker-prod.sh down
+            git pull origin main
+            sh docker-prod.sh up
