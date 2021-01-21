@@ -27,7 +27,8 @@ import { DiceBoardComponent } from './components/dice-board/dice-board.component
 import { SelectI18nComponent } from './components/select-i18n/select-i18n.component'
 import { WaitingRoomComponent } from './components/waiting-room/waiting-room.component'
 import { BoardComponent } from './components/board/board.component'
-import { ConsoleComponent } from './components/console/console.component'
+import { ConsoleComponent } from './components/console/console.component';
+import { EndGameModalComponent } from './components/end-game-modal/end-game-modal.component'
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { ConsoleComponent } from './components/console/console.component'
     WaitingRoomComponent,
     BoardComponent,
     ConsoleComponent,
+    EndGameModalComponent,
   ],
   imports: [
     AppRoutingModule,

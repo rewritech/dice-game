@@ -1,0 +1,34 @@
+<ng-template #t let-fill="fill" let-c="close">
+  <span class="star" [class.full]="fill === 100">
+    <span class="half" [style.width.%]="fill">&hearts;</span>&hearts;
+  </span>
+</ng-template>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    {{i18n.get('rank')}}
+  </div>
+  <div class="modal-body">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">{{i18n.get('player')}}</th>
+        <th scope="col">{{i18n.get('kill')}}</th>
+        <th scope="col">{{i18n.get('life')}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let p of room.players; index as i">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{p.name}}</td>
+        <td>{{p.killedPlayer}}</td>
+        <td><ngb-rating [(rate)]="p.life" [starTemplate]="t" [readonly]="true" [max]="3"></ngb-rating></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="onClick()">{{i18n.get('waitingroom')}}</button>
+  </div>
+</ng-template>

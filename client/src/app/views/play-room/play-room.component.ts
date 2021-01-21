@@ -6,6 +6,7 @@ import { DiceMapService } from '../../services/dice-map.service'
 import { RoomService } from '../../services/room.service'
 import { PlayerService } from '../../services/player.service'
 import { I18nService } from '../../services/i18n.service'
+import { CardService } from '../../services/card.service'
 
 const ONE_MINITE = 60000
 
@@ -34,9 +35,12 @@ export class PlayRoomComponent implements OnInit {
   callBackUnselectCard = (sc: SelectedCard): void => this.unselectCard(sc)
   callBackShuffle = (): void => this.shuffle()
   callBackStart = (): void => this.start()
+  callBackCardSubmit = (): void => this.cardSubmit()
+  callBackReplay = (): void => this.replay()
   time = ONE_MINITE
   timerId: NodeJS.Timeout
   timeOutId: NodeJS.Timeout
+  endGame = false
 
   constructor(
     private route: ActivatedRoute,
@@ -45,7 +49,8 @@ export class PlayRoomComponent implements OnInit {
     private roomService: RoomService,
     private playerService: PlayerService,
     private socket: SocketConnectService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private cardService: CardService
   ) {
     this.i18n = i18nService
     this.NEW_DECK = this.roomService.newDeckNum()
@@ -130,6 +135,16 @@ export class PlayRoomComponent implements OnInit {
     }
   }
 
+  replay(): void {
+    this.cardService.createNewCardDeck()
+    this.room.status = 'WAIT'
+    this.room.cardDeck = {
+      unused: this.cardService.getCardDeck(),
+      used: [],
+    }
+    this.socket.emit('replay', { room: this.room })
+  }
+
   selectCard(selectedCard: SelectedCard): void {
     // 현재 카드 한계선보다 적게 선택했다면
     if (this.selectedCards.length < this.CARD_SELECT_LIMIT) {
@@ -155,14 +170,12 @@ export class PlayRoomComponent implements OnInit {
   }
 
   move(x: number, y: number): void {
-    this.cardSubmit()
     // 카드 제출하기 전에는 눌러도 반응이 없어야 한다.
     if (!this.pieces[x][y].disabled) {
-      this.cardSubmit()
       const { coordinates } = this.player
+      this.cardSubmit()
       this.initializeTimer()
       this.moveAnimate([x, y], coordinates)
-
       this.player.coordinates = [x, y] // player.coordnates 갱신
       this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
       this.catch(x, y) // 적플레이어를 잡으면 라이프 -1, 말 위치 초기화
@@ -173,6 +186,25 @@ export class PlayRoomComponent implements OnInit {
         player: this.player,
         room: this.room,
       })
+
+      if (this.endGame) {
+        this.endGame = false
+        this.room.status = 'END'
+        this.socket.emit('end-game', {
+          player: this.player,
+          room: this.room,
+        })
+      } else {
+        this.pieces = this.diceMapService.createPieces(
+          this.room,
+          !this.roomService.checkMyTurn(this.player, this.room)
+        )
+        this.socket.emit('change-turn', {
+          aniConfig: this.aniConfig,
+          player: this.player,
+          room: this.room,
+        })
+      }
     }
   }
 
@@ -330,6 +362,10 @@ export class PlayRoomComponent implements OnInit {
         targetIndex
       ].initialCoordinates
       this.player.killedPlayer += 1
+      // 게임종료 판단
+      this.endGame =
+        this.player.killedPlayer === 5 ||
+        this.room.players[targetIndex].life === 0
       this.socket.emit('catch-player', this.room.players[targetIndex])
     }
   }
