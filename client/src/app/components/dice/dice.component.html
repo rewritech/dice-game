@@ -1,4 +1,4 @@
-<div class="position-relative" [@insertAnimate]="insertConfig" [ngSwitch]="num">
+<div class="position-relative z-1000" [@insertAnimate]="insertConfig" [ngSwitch]="num">
   <div class="btn dice {{colors[this.num - 1]}} {{disabledClass}}" (click)="onClick()">
     <div class="column">
       <div class="dot" [style.background-color]="[2, 3, 4, 5, 6].includes(num) ? 'white' : 'transparent'"></div>

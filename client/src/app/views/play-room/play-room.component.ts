@@ -22,6 +22,8 @@ export class PlayRoomComponent implements OnInit {
   private playerId = sessionStorage.getItem('pId')
   private NEW_DECK: number
   private ADD_DECK: number
+  private GAME_OVER_CONDITION_KILLED = 5
+  private GAME_OVER_CONDITION_LIFE = 0
 
   room: Room
   player: Player
@@ -226,7 +228,6 @@ export class PlayRoomComponent implements OnInit {
   // 자신을 포함한 모든 유저
   private socketOnChangeRoom(roomId: number): void {
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
-      if (newRoom.status === 'END') debugger
       this.initializeTimer()
       this.aniConfig = null
       this.room = newRoom
@@ -359,8 +360,8 @@ export class PlayRoomComponent implements OnInit {
       this.player.killedPlayer += 1
       // 게임종료 판단
       this.endGame =
-        this.player.killedPlayer === 1 ||
-        this.room.players[targetIndex].life === 0
+        this.player.killedPlayer === this.GAME_OVER_CONDITION_KILLED ||
+        this.room.players[targetIndex].life === this.GAME_OVER_CONDITION_LIFE
       this.socket.emit('catch-player', this.room.players[targetIndex])
     }
   }
