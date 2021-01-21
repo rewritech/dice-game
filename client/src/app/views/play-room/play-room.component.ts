@@ -6,6 +6,7 @@ import { DiceMapService } from '../../services/dice-map.service'
 import { RoomService } from '../../services/room.service'
 import { PlayerService } from '../../services/player.service'
 import { I18nService } from '../../services/i18n.service'
+import { CardService } from '../../services/card.service'
 
 @Component({
   selector: 'app-play-room',
@@ -33,6 +34,7 @@ export class PlayRoomComponent implements OnInit {
   callBackShuffle = (): void => this.shuffle()
   callBackStart = (): void => this.start()
   callBackCardSubmit = (): void => this.cardSubmit()
+  callBackReplay = (): void => this.replay()
 
   constructor(
     private route: ActivatedRoute,
@@ -41,7 +43,8 @@ export class PlayRoomComponent implements OnInit {
     private roomService: RoomService,
     private playerService: PlayerService,
     private socket: SocketConnectService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private cardService: CardService
   ) {
     this.i18n = i18nService
   }
@@ -113,6 +116,16 @@ export class PlayRoomComponent implements OnInit {
     if (this.player) this.socket.emit('leave', this.player)
   }
 
+  replay(): void {
+    this.cardService.createNewCardDeck()
+    this.room.status = 'WAIT'
+    this.room.cardDeck = {
+      unused: this.cardService.getCardDeck(),
+      used: [],
+    }
+    this.socket.emit('replay',{room: this.room})
+  }
+
   selectCard(selectedCard: SelectedCard): void {
     // 현재 카드 한계선보다 적게 선택했다면
     if (this.selectedCards.length < this.CARD_SELECT_LIMIT) {
@@ -172,7 +185,7 @@ export class PlayRoomComponent implements OnInit {
         params: { x: 100 * moveTo[0], y: 100 * moveTo[1] },
         target: [x, y],
       }
-
+      let endGame = false
       this.player.coordinates = [x, y] // player.coordnates 갱신
       this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
 
@@ -188,15 +201,13 @@ export class PlayRoomComponent implements OnInit {
           targetIndex
         ].initialCoordinates
         this.player.killedPlayer += 1
+
+        // 게임종료 판단
+        if (this.player.killedPlayer === 5 ||
+        this.room.players[targetIndex].life === 0) endGame = true
+
         this.socket.emit('catch-player', this.room.players[targetIndex])
       }
-
-      // 게임종료 판단 (추후 ngOnChanges나 ngDoCheck로 변경할수도있음)
-      const endGame = !!this.room.players.find(
-        (p) =>
-        p.killedPlayer === 5 ||
-        p.life === 0
-      )
 
       if (endGame) {
         this.room.status = 'END'
@@ -264,10 +275,7 @@ export class PlayRoomComponent implements OnInit {
     })
     // 게임 종료시
     this.socket.on(`end-game-${this.room._id}`, (value: any) => {
-      const { room, aniConfig } = value
-      this.room = room
-//      this.player = room.players.find((p) => p._id === this.playerId)
-      this.aniConfig = aniConfig
+    this.room = value
     })
   }
 

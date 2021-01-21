@@ -61,7 +61,7 @@ async function broadcastRoomWithoutMe (socket, roomId, key=`changeRoomInfo-${roo
 
 async function broadcastRoomMessage (roomId) {
   const messages = await Message.find({ _roomId: roomId });
-  io.of("/dice-map-room").to(`room-${roomId}`).emit(`chat-room-${roomId}`, messages);
+    io.of("/dice-map-room").to(`room-${roomId}`).emit(`chat-room-${roomId}`, messages);
 }
 
 async function broadcastSystemMessage (roomId, systemMsgStatus, content) {
@@ -202,12 +202,31 @@ io.of('/dice-map-room').on('connection', (socket) => {
       const room = value.room;
 
       // DB room 갱신
-      await Player.updateOne({ _id: player._id }, { $set: player });
       await Room.updateOne({ _id: room._id }, { $set: room });
-      const newRoom = await Room.findOne({ _id: room._id, deleted: false }).populate('players');
-      socket.in(`room-${room._id}`).emit(`end-game-${room._id}`, { room: newRoom, aniConfig: value.aniConfig});
+      await Player.updateOne({ _id: player._id }, { $set: player });
 
+      broadcastRoomWithoutMe(socket, room._id, `end-game-${room._id}`);
       broadcastSystemMessage(player._roomId, 'success', 'gameEndMessage');
+    } catch (e) {
+      console.error(`error: ${e}`);
+    }
+  });
+
+  socket.on('replay', async (value) => {
+    try {
+      console.log(`[${new Date()}]: replay`);
+      const room = value.room;
+
+      await Room.updateOne({ _id: room._id }, { $set: room });
+      await Player.updateMany({ _roomId: room._id }, { $set: {
+        coordinates: null,
+        initialCoordinates: null,
+        cards: [],
+        piece: {icon: []},
+        life: 3,
+        killedPlayer: 0
+      }});
+      
     } catch (e) {
       console.error(`error: ${e}`);
     }
