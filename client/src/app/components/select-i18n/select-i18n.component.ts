@@ -12,7 +12,7 @@ export class SelectI18nComponent implements OnInit {
   locales = [
     { key: 'ko', name: '한국어' },
     { key: 'en', name: 'ENGLISH' },
-    { key: 'jp', name: '日本語' },
+    { key: 'ja', name: '日本語' },
   ]
   default: Locale
   globe = faGlobe

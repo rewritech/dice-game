@@ -44,7 +44,7 @@ export const i18n = {
     leaveRoomMessage: ' is gone.',
     catchedMessage: ' is catched.',
   },
-  jp: {
+  ja: {
     loginButton: 'ログイン',
     loginPlaceholder: 'ニックネーム入力',
     insertNickName: 'ニックネームを入力してください',

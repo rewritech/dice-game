@@ -64,7 +64,7 @@ export type Counter = {
   6: number
 }
 
-export type Locale = 'ko' | 'en' | 'jp'
+export type Locale = 'ko' | 'en' | 'ja'
 
 export type AnimationOption = {
   value: string

@@ -9,7 +9,7 @@ export class I18nService {
   private locale: Locale
 
   constructor() {
-    const cookieLocale = sessionStorage.getItem('dice-map-locale') || 'ko'
+    const cookieLocale = sessionStorage.getItem('dice-map-locale') || this.getLanguage()
     this.changeLocale(cookieLocale as Locale)
   }
 
@@ -24,5 +24,23 @@ export class I18nService {
 
   get(key: string): string {
     return i18n[this.locale][key]
+  }
+
+  private getLanguage(): string {
+    let lang = ''
+
+    try {
+      lang = navigator.appName === 'Netscape' ? navigator.language : navigator['userLanguage']
+    } catch {
+      lang = 'ko'
+    }
+
+    let contry = lang.substr(0, 2)
+
+    if (!['ko', 'en', 'ja'].includes(contry)) {
+      contry = 'en'
+    }
+
+    return contry
   }
 }
