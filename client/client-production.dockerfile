@@ -13,9 +13,6 @@ RUN npm install
 COPY . /client
 ARG configuration=production
 
-ENV PORT 8720
-EXPOSE $PORT
-
 # Angular アプリをビルドする
 RUN npm run build -- --output-path=./dist/out --configuration $configuration
 

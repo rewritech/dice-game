@@ -2,20 +2,23 @@ version: '3'
 
 services:
   proxy:
-    image: nginx:latest
+    image: nginx:1.15
     container_name: dice-map-proxy
     ports:
       - "80:80"
     volumes:
-      - ./proxy/proxy.conf:/etc/nginx/nginx.conf
+      - ./proxy/proxy.conf:/etc/nginx/nginx.conf.template
+    environment:
+      - WEB_PORT=${WEB_PORT}
+      - API_PORT=${API_PORT}
+      - SOCKET_PORT=${SOCKET_PORT}
+    command: /bin/sh -c "envsubst '$$WEB_PORT $$API_PORT $$SOCKET_PORT'< /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     restart: "unless-stopped"
   client:
     build:
       context: ./client
       dockerfile: client-production.dockerfile
     container_name: dice-map-client
-    expose:
-      - "8720"
     volumes:
       - /client/node_modules
     restart: "unless-stopped"
@@ -23,10 +26,10 @@ services:
     build:
       context: ./api
       dockerfile: api-production.dockerfile
+      args:
+        - API_PORT=${API_PORT}
+        - SOCKET_PORT=${SOCKET_PORT}
     container_name: dice-map-api
-    expose:
-      - "7145"
-      - "5417"
     volumes:
       - /api/node_modules
     depends_on:
@@ -40,7 +43,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
     expose:
-      - "27017"
+      - "${MONGO_PORT}"
     volumes:
-      - /data/db:/data/db
+      - ./data/db:/data/db
     restart: always
