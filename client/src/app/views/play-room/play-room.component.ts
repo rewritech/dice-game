@@ -27,6 +27,7 @@ export class PlayRoomComponent implements OnInit {
 
   room: Room
   player: Player
+  currentPlayerName: string
   aniConfig: AnimationOption
   cardDisabled = false
   startBtnDisableClass = 'disabled'
@@ -93,6 +94,7 @@ export class PlayRoomComponent implements OnInit {
 
   start(): void {
     if (this.roomService.checkCanStart(this.player, this.room)) {
+      this.currentPlayerName = this.player.name
       this.room.status = 'PLAYING'
       this.room.playerLimit = this.room.players.length
       this.aniConfig = { value: 'insert', params: { x: 0, y: 0 } }
@@ -114,7 +116,6 @@ export class PlayRoomComponent implements OnInit {
   leave(): void {
     if (this.player) {
       this.modalService.dismissAll()
-      this.initializeTimer()
       this.socket.emit('leave', this.player)
     }
   }
@@ -188,7 +189,6 @@ export class PlayRoomComponent implements OnInit {
 
   private cardSubmit(): void {
     this.cardDisabled = true // 카드 비활성화
-    this.initializeTimer() // 타이머 정지
 
     // 카드 제출 player.cards -> room.used
     const targetCards = this.selectedCards.map((c) => c.num)
@@ -205,7 +205,6 @@ export class PlayRoomComponent implements OnInit {
   // 자신을 포함한 모든 유저
   private socketOnChangeRoom(roomId: number): void {
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
-      // this.initializeTimer()
       this.aniConfig = null
       this.room = newRoom
       this.player =
@@ -228,7 +227,9 @@ export class PlayRoomComponent implements OnInit {
       this.room = newRoom
       this.player = newRoom.players.find((p) => p._id === this.playerId)
       this.aniConfig = { value: 'insert', params: { x: 0, y: 0 } }
+      this.setCurrentPlayerName()
       this.buildCard()
+      this.startTimer()
     })
   }
 
@@ -243,30 +244,33 @@ export class PlayRoomComponent implements OnInit {
         this.room = room
         this.player = room.players.find((p) => p._id === this.playerId)
         this.aniConfig = aniConfig
+        this.setCurrentPlayerName()
         this.buildCard() // 내턴이면 카드 활성화
         this.startTimer() // 타이머 시작
       }
     )
   }
 
-  private startTimer() {
-    if (this.roomService.checkMyTurn(this.player, this.room)) {
-      this.initializeTimer()
-      this.timerId = setInterval(() => {
-        if (this.time > 0) this.time -= 10
-      }, 10)
+  private setCurrentPlayerName(): void {
+    const currentPlayer = this.room.players.find(
+      (p) => p._id === this.room.currentPlayer
+    )
+    this.currentPlayerName = currentPlayer.name
+  }
 
-      this.timeOutId = setTimeout(() => {
-        this.initializeTimer()
-        this.timeOutChangeTurn() // 강제 카드 1장 제출 및 턴종료
-      }, ONE_MINITE + 200)
-    }
+  private startTimer() {
+    this.initializeTimer()
+    this.timerId = setInterval(() => {
+      if (this.time > 0) this.time -= 10
+    }, 10)
+
+    this.timeOutId = setTimeout(() => {
+      this.timeOutChangeTurn() // 강제 카드 1장 제출 및 턴종료
+    }, ONE_MINITE + 200)
   }
 
   private timeOutChangeTurn(): void {
-    this.initializeTimer()
     this.aniConfig = null
-
     this.selectedCards = []
 
     // 1 장 랜덤 삭제

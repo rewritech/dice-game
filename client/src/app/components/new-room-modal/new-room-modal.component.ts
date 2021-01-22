@@ -37,6 +37,8 @@ export class NewRoomModalComponent implements OnInit {
   }
 
   open(content: HTMLElement): void {
+    this.validationError = false
+    this.invalidClass = ''
     this.diceMapService.createNewMap()
     this.cardService.createNewCardDeck()
     this.room = {
@@ -55,6 +57,7 @@ export class NewRoomModalComponent implements OnInit {
   }
 
   onSubmit(): void {
+    console.log('aaaaaa')
     if (this.room.title.trim().length > 0) {
       this.modalService.dismissAll()
       this.roomService.createRoom(this.room).subscribe((res) => {

@@ -48,6 +48,7 @@ export const i18n = {
     life: 'LIFE',
     rank: 'RANK',
     waitingroom: 'waiting room',
+    turn: "'s turn",
   },
   ja: {
     loginButton: 'ログイン',
@@ -97,6 +98,7 @@ export const i18n = {
     life: 'ライフ',
     rank: '順位',
     waitingroom: '待機室へ',
+    turn: 'さんのターン',
   },
   ko: {
     loginButton: '로그인',
@@ -146,5 +148,6 @@ export const i18n = {
     life: '라이프',
     rank: '순위',
     waitingroom: '대기방 가기',
+    turn: ' 님의 턴',
   },
 }

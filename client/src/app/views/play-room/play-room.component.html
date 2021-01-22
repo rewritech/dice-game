@@ -1,5 +1,9 @@
-<div class="container" *ngIf="room">
-  <h1 class="text-white">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</h1>
+<div *ngIf="room">
+  <h1 *ngIf="room.status === 'WAIT'" class="text-white">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</h1>
+  <h1 *ngIf="room.status !== 'WAIT'" class="text-white text-center">
+    <span class="d-inline-block text-truncate player-name-width">{{currentPlayerName}}</span>
+    <span>{{i18n.get('turn')}}({{i18n.get('remainTime')}}{{(time / 1000).toFixed(2)}})</span>
+  </h1>
 
   <div class="d-flex justify-content-between">
     <app-waiting-room *ngIf="room.status === 'WAIT'"
@@ -14,7 +18,7 @@
       [callBackOnClick]="callBackOnClick"
       [aniConfig]="aniConfig"
     ></app-board>
-    <div class="border bg-dark p-2 w-100">
+    <div class="border bg-dark p-2 w-100 info-size">
       <div class="d-flex">
         <span class="mt-1 text-white">
           {{i18n.get('player')}}
@@ -22,7 +26,6 @@
         <span class="mt-1 text-white d-inline-block text-truncate player-name-width" title="{{player.name}}">
           ({{player.name}})
         </span>
-        <span class="ml-1 mt-1 text-white">{{i18n.get('remainTime')}}{{(time / 1000).toFixed(2)}}</span>
       </div>
       <app-chat></app-chat>
     </div>
