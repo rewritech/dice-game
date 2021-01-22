@@ -5,7 +5,7 @@ import { I18nService } from '../../services/i18n.service'
 @Component({
   selector: 'app-waiting-room',
   templateUrl: './waiting-room.component.html',
-  styleUrls: ['./waiting-room.component.scss']
+  styleUrls: ['./waiting-room.component.scss'],
 })
 export class WaitingRoomComponent implements OnInit {
   @Input() callBackShuffle: () => void
