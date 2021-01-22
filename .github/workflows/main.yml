@@ -2,8 +2,6 @@ name: CI
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -12,11 +10,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Run lint
-        run: |
-          cd client
-          npm install
-          npm run lint
+#       - name: Run lint
+#         run: |
+#           cd client
+#           npm install
+#           npm run lint
 
       - name: 'deploy'
         uses: appleboy/ssh-action@master
