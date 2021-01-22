@@ -1,4 +1,4 @@
-name: CI
+name: DEPLOY
 on:
   push:
     branches: [ main ]
