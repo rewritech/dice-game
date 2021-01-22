@@ -83,7 +83,7 @@ export class PlayRoomComponent implements OnInit {
     })
   }
 
-  @HostListener('window:unload')
+  // @HostListener('window:unload')
   ngOnDestroy(): void {
     this.leave()
   }
