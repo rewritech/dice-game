@@ -11,15 +11,12 @@ import { Room } from '../../types'
 })
 export class RoomsComponent implements OnInit {
   rooms: Room[]
-  i18n: I18nService
 
   constructor(
     private roomService: RoomService,
-    private i18nService: I18nService,
+    public i18n: I18nService,
     private socket: SocketConnectService
-  ) {
-    this.i18n = i18nService
-  }
+  ) {}
 
   ngOnInit(): void {
     // websocket 연결

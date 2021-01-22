@@ -27,7 +27,6 @@ export class PlayRoomComponent implements OnInit {
 
   room: Room
   player: Player
-  i18n: I18nService
   aniConfig: AnimationOption
   cardDisabled = false
   startBtnDisableClass = 'disabled'
@@ -52,11 +51,10 @@ export class PlayRoomComponent implements OnInit {
     private roomService: RoomService,
     private playerService: PlayerService,
     private socket: SocketConnectService,
-    private i18nService: I18nService,
+    public i18n: I18nService,
     private modalService: NgbModal,
     private cardService: CardService
   ) {
-    this.i18n = i18nService
     this.NEW_DECK = this.roomService.newDeckNum()
     this.ADD_DECK = this.roomService.addDeckNum()
   }

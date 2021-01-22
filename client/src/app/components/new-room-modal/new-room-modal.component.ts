@@ -14,7 +14,6 @@ import { Room } from '../../types'
 })
 export class NewRoomModalComponent implements OnInit {
   room: Room
-  i18n: I18nService
   validationError = false
   invalidClass = ''
 
@@ -27,9 +26,8 @@ export class NewRoomModalComponent implements OnInit {
     private roomService: RoomService,
     private diceMapService: DiceMapService,
     private cardService: CardService,
-    private i18nService: I18nService
+    public i18n: I18nService
   ) {
-    this.i18n = i18nService
     // this.config.backdrop = 'static'
     // this.config.keyboard = false
   }

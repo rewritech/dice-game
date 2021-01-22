@@ -13,16 +13,14 @@ export class LoginComponent implements OnInit {
   player: Player
   validationError = false
   invalidClass = ''
-  i18n: I18nService
 
   private playerId = sessionStorage.getItem('pId')
 
   constructor(
     private router: Router,
     private playerService: PlayerService,
-    private i18nService: I18nService
+    public i18n: I18nService
   ) {
-    this.i18n = i18nService
     if (this.playerId) {
       this.router.navigate(['/'])
     }

@@ -14,7 +14,6 @@ export class ChatComponent implements OnInit {
   planeIcon = faPaperPlane
   message: Message
   messages: Message[]
-  i18n: I18nService
 
   private roomId = +this.route.snapshot.paramMap.get('id')
   playerId = sessionStorage.getItem('pId')
@@ -25,9 +24,8 @@ export class ChatComponent implements OnInit {
     private socket: SocketConnectService,
     private route: ActivatedRoute,
     private messageService: MessageService,
-    private i18nService: I18nService
+    public i18n: I18nService
   ) {
-    this.i18n = i18nService
     this.message = {
       _roomId: this.roomId,
       _playerId: this.playerId,
