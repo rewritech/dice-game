@@ -17,3 +17,6 @@ jobs:
           cd client
           npm install
           npm run lint
+
+#      - name: Run spec
+#        run: npm run test
