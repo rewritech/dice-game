@@ -12,19 +12,16 @@ const getNextPlayer = function (room) {
 }
 
 const distributeCard = function (room) {
-  const nRoom = { ...room }
   // unused에 카드가 2장 미만이면 used의 카드를 다시 가져온다.
-  if (nRoom.cardDeck.unused.length < ADD_DECK) {
-    nRoom.cardDeck.unused = nRoom.cardDeck.unused.concat(nRoom.cardDeck.used)
-    nRoom.cardDeck.used = []
+  if (room.cardDeck.unused.length < ADD_DECK) {
+    room.cardDeck.unused = room.cardDeck.unused.concat(room.cardDeck.used)
+    room.cardDeck.used = []
   }
 
-  const nextPlayer = nRoom.players.find((p) => p._id === nRoom.currentPlayer)
-  const newCards = nRoom.cardDeck.unused.splice(0, ADD_DECK)
+  const nextPlayer = room.players.find((p) => p._id === room.currentPlayer)
+  const newCards = room.cardDeck.unused.splice(0, ADD_DECK)
   newCards.reverse()
   newCards.forEach((c) => nextPlayer.cards.unshift(c))
-
-  return nRoom
 }
 
 const changeTurn = async function (io, value) {
@@ -40,7 +37,7 @@ const changeTurn = async function (io, value) {
   room.currentPlayer = getNextPlayer(room)
 
   // 3. 카드 분배
-  room = distributeCard(room)
+  distributeCard(room)
 
   // DB room 갱신
   await Player.updateOne({ _id: player._id }, { $set: player });

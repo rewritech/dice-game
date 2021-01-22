@@ -205,7 +205,7 @@ export class PlayRoomComponent implements OnInit {
   // 자신을 포함한 모든 유저
   private socketOnChangeRoom(roomId: number): void {
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
-      this.initializeTimer()
+      // this.initializeTimer()
       this.aniConfig = null
       this.room = newRoom
       this.player =

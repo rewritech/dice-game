@@ -4,12 +4,11 @@ const Room = require('../models/Room');
 const Player = require('../models/Player');
 
 const leave = async function (io, player) {
-
   console.log(`[${new Date().toISOString()}]: room leave ${player._id}`);
 
   // 1. room의 player를 내보냄
   await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id } });
-  const room = await Room.findOne({ _id: player._roomId }, { map: 0 })
+  const room = await Room.findOne({ _id: player._roomId }).populate('players')
 
   // 방이 존재한다면
   if (!!room) {
@@ -29,7 +28,14 @@ const leave = async function (io, player) {
         await common.deleteRoom(room)
       } else {
         // 내턴이면 턴을 넘긴다
-        if (room.currentPlayer === player._id) playing.changeTurn(io, value)
+        if (String(room.currentPlayer) === String(player._id)) {
+          const val = {
+            room,
+            player,
+            aniConfig: null
+          }
+          await playing.changeTurn(io, val)
+        }
 
         // 6. 게임중 떠나면 playerLimit가 줄어든다.
         const used = room.cardDeck.used.concat(player.cards)

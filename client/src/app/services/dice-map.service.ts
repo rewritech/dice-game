@@ -65,7 +65,7 @@ export class DiceMapService {
           num: col,
           disabled,
           icon: coordIcons[[i, j].join('.')],
-          blink: this.compare([i, j], blinkPlayer.coordinates),
+          blink: !!blinkPlayer && this.compare([i, j], blinkPlayer.coordinates),
           checked: false,
         }
       })
