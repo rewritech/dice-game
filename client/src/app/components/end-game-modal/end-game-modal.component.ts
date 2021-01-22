@@ -12,16 +12,14 @@ export class EndGameModalComponent implements OnInit {
   @Input() callBackReplay: () => void
   @Input() room: Room
   @ViewChild('content') content: HTMLElement
-  i18n: I18nService
 
   constructor(
     private config: NgbModalConfig,
     private modalService: NgbModal,
-    private i18nService: I18nService
+    public i18n: I18nService
   ) {
     this.config.backdrop = 'static'
     this.config.keyboard = false
-    this.i18n = i18nService
   }
 
   ngOnInit(): void {

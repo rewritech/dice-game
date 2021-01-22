@@ -68,7 +68,11 @@ export class RoomService {
 
   // 내턴 && 말 선택 플레이어 2명 이상
   checkCanStart(player: Player, room: Room): boolean {
-    return this.checkMyTurn(player, room) && this.checkReadyToStart(room)
+    return (
+      room.status === 'WAIT' &&
+      this.checkMyTurn(player, room) &&
+      this.checkReadyToStart(room)
+    )
   }
 
   // 1. room이 존재함
@@ -83,30 +87,6 @@ export class RoomService {
     )
   }
 
-  // 다음 플레이어를 가져온다. 배열의 마지막이면 초기로 돌아온다
-  getNextPlayer(room: Room): string {
-    const { players, currentPlayer } = room
-    const index = players.findIndex((p) => p._id === currentPlayer) + 1
-    const nextIndex = index === players.length ? 0 : index
-    return players[nextIndex]._id
-  }
-
-  distributeCard(room: Room): Room {
-    const nRoom = { ...room }
-    // unused에 카드가 2장 미만이면 used의 카드를 다시 가져온다.
-    if (nRoom.cardDeck.unused.length < this.ADD_DECK) {
-      nRoom.cardDeck.unused = nRoom.cardDeck.unused.concat(nRoom.cardDeck.used)
-      nRoom.cardDeck.used = []
-    }
-
-    const nextPlayer = nRoom.players.find((p) => p._id === nRoom.currentPlayer)
-    const newCards = nRoom.cardDeck.unused.splice(0, this.ADD_DECK)
-    newCards.reverse()
-    newCards.forEach((c) => nextPlayer.cards.unshift(c))
-
-    return nRoom
-  }
-
   newDeckNum(): number {
     return this.NEW_DECK
   }
@@ -118,8 +98,8 @@ export class RoomService {
   // PRIVATE =================================================
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.error(error)
-      console.log(`${operation} failed: ${error.message}`)
+      // console.error(error)
+      // console.log(`${operation} failed: ${error.message}`)
       return of(result as T)
     }
   }

@@ -10,15 +10,12 @@ import { I18nService } from '../../services/i18n.service'
 })
 export class HeaderComponent implements OnInit {
   private playerId = sessionStorage.getItem('pId')
-  i18n: I18nService
 
   constructor(
     private playerService: PlayerService,
     private router: Router,
-    private i18nService: I18nService
-  ) {
-    this.i18n = i18nService
-  }
+    public i18n: I18nService
+  ) {}
 
   ngOnInit(): void {
     // onInit

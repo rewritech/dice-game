@@ -5,7 +5,7 @@ import { I18nService } from '../../services/i18n.service'
 @Component({
   selector: 'app-waiting-room',
   templateUrl: './waiting-room.component.html',
-  styleUrls: ['./waiting-room.component.scss']
+  styleUrls: ['./waiting-room.component.scss'],
 })
 export class WaitingRoomComponent implements OnInit {
   @Input() callBackShuffle: () => void
@@ -14,12 +14,9 @@ export class WaitingRoomComponent implements OnInit {
   @Input() player: Player
   @Input() startBtnDisableClass: string
 
-  i18n: I18nService
   positions = ['left-top', 'right-top', 'left-bottom', 'right-bottom']
 
-  constructor(private i18nService: I18nService) {
-    this.i18n = i18nService
-  }
+  constructor(public i18n: I18nService) {}
 
   ngOnInit(): void {
     //

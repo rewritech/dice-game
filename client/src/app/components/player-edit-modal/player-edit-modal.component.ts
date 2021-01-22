@@ -11,7 +11,6 @@ import { Player } from '../../types'
 })
 export class PlayerEditModalComponent implements OnInit {
   player: Player
-  i18n: I18nService
   validationError = false
   invalidClass = ''
 
@@ -21,9 +20,8 @@ export class PlayerEditModalComponent implements OnInit {
     private config: NgbModalConfig,
     private modalService: NgbModal,
     private playerService: PlayerService,
-    private i18nService: I18nService
+    public i18n: I18nService
   ) {
-    this.i18n = i18nService
     // this.config.backdrop = 'static'
     // this.config.keyboard = false
   }

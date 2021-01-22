@@ -14,11 +14,8 @@ export class ChatMessageComponent implements OnInit {
   kindOfMessage: 'OTHERS' | 'SELF' | 'SYSTEM'
   textBlockClass: string
   smallClass: string
-  i18n: I18nService
 
-  constructor(private i18nService: I18nService) {
-    this.i18n = i18nService
-  }
+  constructor(public i18n: I18nService) {}
 
   ngOnInit(): void {
     const { _playerId, systemMsgStatus } = this.message

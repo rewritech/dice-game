@@ -60,9 +60,11 @@ socketServer.listen(socketPort, () => {
 // ==================== socket connect ====================
 io.of('/dice-map-room').on('connection', (socket) => {
   console.log(`[${new Date().toISOString()}]: user socket connected`);
+  let id = ''
 
   socket.on('join-room', async (player) => {
     try {
+      id = player._id
       await waitFnc.joinRoom(io, socket, player)
     } catch (e) {
       console.error(`error: ${e}`);
@@ -99,7 +101,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
 
   socket.on('change-turn', async (value) => {
     try {
-      await playingFnc.changeTurn(io, socket, value)
+      await playingFnc.changeTurn(io, value)
     } catch (e) {
       console.error(`error: ${e}`);
     }
@@ -150,8 +152,14 @@ io.of('/dice-map-room').on('connection', (socket) => {
     }
   });
 
-  socket.on('disconnect', () => {
+  socket.on('disconnect', async () => {
     console.log(`[${new Date().toISOString()}]: user socket disconnected`);
+    if (id.length > 0) {
+      const player = await Player.findOne({ _id: id })
+      if (player._roomId !== 0) {
+        endFnc.leave(io, player)
+      }
+    }
   });
 
   socket.on('error', () => {

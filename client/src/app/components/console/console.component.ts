@@ -24,11 +24,7 @@ export class ConsoleComponent implements OnInit {
   @Input() callBackUnselectCard: (sc: SelectedCard) => void
   @Input() callBackSelectCard: (sc: SelectedCard) => void
 
-  i18n: I18nService
-
-  constructor(private i18nService: I18nService) {
-    this.i18n = i18nService
-  }
+  constructor(public i18n: I18nService) {}
 
   ngOnInit(): void {
     //
