@@ -24,7 +24,8 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd app/dice-game
-            docker image prune -a -f
+            git checkout main
             git pull origin main
+            docker image prune -a -f
             sh docker-prod.sh down
             sh docker-prod.sh up
