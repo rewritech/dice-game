@@ -101,7 +101,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
 
   socket.on('change-turn', async (value) => {
     try {
-      await playingFnc.changeTurn(io, socket, value)
+      await playingFnc.changeTurn(io, value)
     } catch (e) {
       console.error(`error: ${e}`);
     }
@@ -156,11 +156,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
     console.log(`[${new Date().toISOString()}]: user socket disconnected`);
     if (id.length > 0) {
       const player = await Player.findOne({ _id: id })
-      console.log(player)
       if (player._roomId !== 0) {
-        // 플레이 중인 방이 있으면 leave하라
-        // leave할때 본인턴이면 다른사람에게 넘겨라
-        // 플레이어를 삭제해라
         endFnc.leave(io, player)
       }
     }

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { AnimationOption, Map, Player, Room, SelectedCard } from '../../types'
@@ -81,7 +81,6 @@ export class PlayRoomComponent implements OnInit {
     })
   }
 
-  // @HostListener('window:unload')
   ngOnDestroy(): void {
     this.leave()
   }
@@ -116,24 +115,6 @@ export class PlayRoomComponent implements OnInit {
     if (this.player) {
       this.modalService.dismissAll()
       this.initializeTimer()
-
-      // 지금 내턴이라면 다른 사람에게 턴을 넘긴다.
-      // 플레이어가 3명이상인 경우에
-      if (
-        this.room.status === 'PLAYING' &&
-        this.room.players.length > 2 &&
-        this.roomService.checkMyTurn(this.player, this.room)
-      ) {
-        this.aniConfig = null
-        this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
-        this.room = this.roomService.distributeCard(this.room) // 카드 분배
-        this.socket.emit('change-turn', {
-          aniConfig: this.aniConfig,
-          player: this.player,
-          room: this.room,
-        })
-      }
-
       this.socket.emit('leave', this.player)
     }
   }
@@ -180,7 +161,6 @@ export class PlayRoomComponent implements OnInit {
       this.initializeTimer()
       this.moveAnimate([x, y], coordinates)
       this.player.coordinates = [x, y] // player.coordnates 갱신
-      this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
       this.catch(x, y) // 적플레이어를 잡으면 라이프 -1, 말 위치 초기화
 
       if (this.endGame) {
@@ -192,7 +172,6 @@ export class PlayRoomComponent implements OnInit {
         })
       } else {
         this.buildCard() // 말이동 적용
-        this.room = this.roomService.distributeCard(this.room) // 카드 분배
         this.socket.emit('change-turn', {
           aniConfig: this.aniConfig,
           player: this.player,
@@ -289,13 +268,13 @@ export class PlayRoomComponent implements OnInit {
     this.aniConfig = null
 
     this.selectedCards = []
+
+    // 1 장 랜덤 삭제
     const randomIndex = Math.floor(Math.random() * this.player.cards.length - 1)
     this.room.cardDeck.used = this.room.cardDeck.used.concat(
       this.player.cards.splice(randomIndex, 1)
     )
-    this.room.currentPlayer = this.roomService.getNextPlayer(this.room) // room.currentPlayer 변경
     this.buildCard()
-    this.room = this.roomService.distributeCard(this.room)
 
     this.socket.emit('change-turn', {
       aniConfig: this.aniConfig,
