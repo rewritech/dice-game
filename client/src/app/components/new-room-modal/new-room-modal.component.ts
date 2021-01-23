@@ -5,6 +5,7 @@ import { DiceMapService } from '../../services/dice-map.service'
 import { RoomService } from '../../services/room.service'
 import { CardService } from '../../services/card.service'
 import { I18nService } from '../../services/i18n.service'
+import { PlayerService } from '../../services/player.service'
 import { Room } from '../../types'
 
 @Component({
@@ -26,6 +27,7 @@ export class NewRoomModalComponent implements OnInit {
     private roomService: RoomService,
     private diceMapService: DiceMapService,
     private cardService: CardService,
+    private playerService: PlayerService,
     public i18n: I18nService
   ) {
     // this.config.backdrop = 'static'
@@ -37,23 +39,38 @@ export class NewRoomModalComponent implements OnInit {
   }
 
   open(content: HTMLElement): void {
-    this.validationError = false
-    this.invalidClass = ''
-    this.diceMapService.createNewMap()
-    this.cardService.createNewCardDeck()
-    this.room = {
-      title: '',
-      players: [],
-      playerLimit: 2,
-      map: this.diceMapService.getDiceMap(),
-      currentPlayer: this.playerId,
-      status: 'WAIT',
-      cardDeck: {
-        unused: this.cardService.getCardDeck(),
-        used: [],
-      },
+    const playerId = sessionStorage.getItem('pId')
+    if (playerId) {
+      this.playerService.getPlayer(playerId).subscribe((player) => {
+        if (player) {
+          this.validationError = false
+          this.invalidClass = ''
+          this.diceMapService.createNewMap()
+          this.cardService.createNewCardDeck()
+          this.room = {
+            title: '',
+            players: [],
+            playerLimit: 2,
+            map: this.diceMapService.getDiceMap(),
+            currentPlayer: this.playerId,
+            status: 'WAIT',
+            cardDeck: {
+              unused: this.cardService.getCardDeck(),
+              used: [],
+            },
+          }
+          this.modalService.open(content, {
+            ariaLabelledBy: 'modal-basic-title',
+          })
+        } else {
+          sessionStorage.removeItem('pId')
+          this.router.navigate(['/login'])
+        }
+      })
+    } else {
+      sessionStorage.removeItem('pId')
+      this.router.navigate(['/login'])
     }
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
   }
 
   onSubmit(): void {

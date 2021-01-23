@@ -11,20 +11,25 @@ import { environment } from '../../environments/environment'
 })
 export class PlayerService {
   private apiBaseUrl = environment.apiBaseUrl
-  private playerId = sessionStorage.getItem('pId')
   private player: Player
 
   constructor(private router: Router, private http: HttpClient) {}
 
   checkPlayer(): void {
-    this.getPlayer(this.playerId).subscribe((player) => {
-      if (player) {
-        this.set(player)
-      } else {
-        sessionStorage.removeItem('pId')
-        this.router.navigate(['/login'])
-      }
-    })
+    const playerId = sessionStorage.getItem('pId')
+    if (playerId) {
+      this.getPlayer(playerId).subscribe((player) => {
+        if (player) {
+          this.set(player)
+        } else {
+          sessionStorage.removeItem('pId')
+          this.router.navigate(['/login'])
+        }
+      })
+    } else {
+      sessionStorage.removeItem('pId')
+      this.router.navigate(['/login'])
+    }
   }
 
   set(player: Player): void {

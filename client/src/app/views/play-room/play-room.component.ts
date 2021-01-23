@@ -58,6 +58,7 @@ export class PlayRoomComponent implements OnInit {
   ) {
     this.NEW_DECK = this.roomService.newDeckNum()
     this.ADD_DECK = this.roomService.addDeckNum()
+    this.playerService.checkPlayer()
   }
 
   ngOnInit(): void {

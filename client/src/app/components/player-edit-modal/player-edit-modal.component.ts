@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap'
 import { PlayerService } from '../../services/player.service'
 import { I18nService } from '../../services/i18n.service'
@@ -20,6 +21,7 @@ export class PlayerEditModalComponent implements OnInit {
     private config: NgbModalConfig,
     private modalService: NgbModal,
     private playerService: PlayerService,
+    private router: Router,
     public i18n: I18nService
   ) {
     // this.config.backdrop = 'static'
@@ -33,7 +35,22 @@ export class PlayerEditModalComponent implements OnInit {
   }
 
   open(content: HTMLElement): void {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
+    const playerId = sessionStorage.getItem('pId')
+    if (playerId) {
+      this.playerService.getPlayer(playerId).subscribe((player) => {
+        if (player) {
+          this.modalService.open(content, {
+            ariaLabelledBy: 'modal-basic-title',
+          })
+        } else {
+          sessionStorage.removeItem('pId')
+          this.router.navigate(['/login'])
+        }
+      })
+    } else {
+      sessionStorage.removeItem('pId')
+      this.router.navigate(['/login'])
+    }
   }
 
   onSubmit(value: Player): void {

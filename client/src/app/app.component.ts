@@ -1,5 +1,4 @@
 import { Component } from '@angular/core'
-import { Router } from '@angular/router'
 import { PlayerService } from './services/player.service'
 
 @Component({
@@ -10,13 +9,7 @@ import { PlayerService } from './services/player.service'
 export class AppComponent {
   title = 'DiceMap'
 
-  private playerId = sessionStorage.getItem('pId')
-
-  constructor(private router: Router, private playerService: PlayerService) {
-    if (this.playerId) {
-      this.playerService.checkPlayer()
-    } else {
-      this.router.navigate(['/login'])
-    }
+  constructor(private playerService: PlayerService) {
+    this.playerService.checkPlayer()
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { RoomService } from '../../services/room.service'
 import { I18nService } from '../../services/i18n.service'
 import { SocketConnectService } from '../../services/socket-connect.service'
+import { PlayerService } from '../../services/player.service'
 import { Room } from '../../types'
 
 @Component({
@@ -15,8 +16,11 @@ export class RoomsComponent implements OnInit {
   constructor(
     private roomService: RoomService,
     public i18n: I18nService,
-    private socket: SocketConnectService
-  ) {}
+    private socket: SocketConnectService,
+    private playerService: PlayerService
+  ) {
+    this.playerService.checkPlayer()
+  }
 
   ngOnInit(): void {
     // websocket 연결
