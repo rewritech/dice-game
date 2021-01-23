@@ -9,7 +9,7 @@ import { PlayerService } from '../../services/player.service'
 import { I18nService } from '../../services/i18n.service'
 import { CardService } from '../../services/card.service'
 
-const ONE_MINITE = 60000
+const ONE_MINITE = 10000
 
 @Component({
   selector: 'app-play-room',
@@ -116,6 +116,7 @@ export class PlayRoomComponent implements OnInit {
   leave(): void {
     if (this.player) {
       this.modalService.dismissAll()
+      this.initializeTimer()
       this.socket.emit('leave', this.player)
     }
   }
@@ -205,6 +206,7 @@ export class PlayRoomComponent implements OnInit {
   // 자신을 포함한 모든 유저
   private socketOnChangeRoom(roomId: number): void {
     this.socket.on<Room>(`changeRoomInfo-${roomId}`, (newRoom: Room) => {
+      this.initializeTimer()
       this.aniConfig = null
       this.room = newRoom
       this.player =
@@ -270,21 +272,26 @@ export class PlayRoomComponent implements OnInit {
   }
 
   private timeOutChangeTurn(): void {
-    this.aniConfig = null
-    this.selectedCards = []
+    this.initializeTimer()
+    if (this.roomService.checkMyTurn(this.player, this.room)) {
+      this.aniConfig = null
+      this.selectedCards = []
 
-    // 1 장 랜덤 삭제
-    const randomIndex = Math.floor(Math.random() * this.player.cards.length - 1)
-    this.room.cardDeck.used = this.room.cardDeck.used.concat(
-      this.player.cards.splice(randomIndex, 1)
-    )
-    this.buildCard()
+      // 1 장 랜덤 삭제
+      const randomIndex = Math.floor(
+        Math.random() * (this.player.cards.length - 1)
+      )
+      this.room.cardDeck.used = this.room.cardDeck.used.concat(
+        this.player.cards.splice(randomIndex, 1)
+      )
+      this.buildCard()
 
-    this.socket.emit('change-turn', {
-      aniConfig: this.aniConfig,
-      player: this.player,
-      room: this.room,
-    })
+      this.socket.emit('change-turn', {
+        aniConfig: this.aniConfig,
+        player: this.player,
+        room: this.room,
+      })
+    }
   }
 
   // 타이머 초기화

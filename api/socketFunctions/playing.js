@@ -26,11 +26,10 @@ const distributeCard = function (room) {
 
 const changeTurn = async function (io, value) {
   console.log(`[${new Date().toISOString()}]: change-turn`);
-  let room = value.room
-  const { player, aniConfig } = value
+  const { room, player, aniConfig } = value
 
   // 1. 사용한 카드 가져오기
-  const prevRoom = await Room.findOne({ _id: room._id, deleted: false }).populate('players');
+  const prevRoom = await Room.findOne({ _id: room._id, deleted: false });
   const usedCard = room.cardDeck.used.slice(prevRoom.cardDeck.used.length).join(', ')
 
   // 2. currentPlayer 변경
@@ -40,11 +39,14 @@ const changeTurn = async function (io, value) {
   distributeCard(room)
 
   // DB room 갱신
+  // 지금유저
   await Player.updateOne({ _id: player._id }, { $set: player });
 
+  // 다음유저
   const nextPlayer = room.players.find((p) => p._id === room.currentPlayer)
-
   await Player.updateOne({ _id: room.currentPlayer }, { $set: nextPlayer });
+
+  // cardDeck
   await Room.updateOne({ _id: room._id }, { $set: room });
   // Socket room 갱신
   const newRoom = await Room.findOne({ _id: room._id, deleted: false }).populate('players');
