@@ -6,7 +6,7 @@ RUN mkdir -p /client
 # Change directory so that our commands run inside this new directory
 WORKDIR /client
 
-COPY package*.json /client
+COPY package.json /client
 
 RUN npm install
 RUN npm install -g @angular/cli@11.0.4
