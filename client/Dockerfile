@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:14.15.4-slim
 
 # Create a directory where our app will be placed
 RUN mkdir -p /client
@@ -6,7 +6,7 @@ RUN mkdir -p /client
 # Change directory so that our commands run inside this new directory
 WORKDIR /client
 
-COPY package.json /client
+COPY package*.json /client
 
 RUN npm install
 RUN npm install -g @angular/cli@11.0.4

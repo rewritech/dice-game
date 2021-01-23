@@ -1,5 +1,5 @@
  # Create image based on the official Node 6 image from the dockerhub
-FROM node:12
+FROM node:14.15.4-slim
 
 # Create a directory where our app will be placed
 RUN mkdir -p /api
@@ -8,7 +8,7 @@ RUN mkdir -p /api
 WORKDIR /api
 
 # Copy dependency definitions
-COPY package.json /api
+COPY package*.json /api
 
 # Install dependecies
 RUN npm install
