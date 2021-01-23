@@ -21,8 +21,8 @@ fi
 if [ $1 == "deploy" ]
 then
     sudo systemctl restart docker
-    docker image prune -a -f
     docker-compose -f docker-compose-production.yml --env-file ./api/.env down
+    docker image prune -a -f
     docker-compose -f docker-compose-production.yml --env-file ./api/.env build
     docker-compose -f docker-compose-production.yml --env-file ./api/.env up -d
 fi
