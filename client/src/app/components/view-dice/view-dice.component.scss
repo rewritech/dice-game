@@ -1,16 +1,9 @@
-.dot {
-  width:12px;
-  height:12px;
-  border-radius: 50%;
-}
-
 .dark-dot {
   @extend .dot;
   background-color: #343a40;
 }
 
 .dice {
-  @extend .dice-size;
   margin: 0.25rem;
   padding: 0.25rem;
   display: flex;
@@ -24,7 +17,26 @@
   flex-direction: column;
 }
 
+.dot {
+  width:12px;
+  height:12px;
+  border-radius: 50%;
+}
+
+.mini-dot {
+  width:8px;
+  height:8px;
+  border-radius: 50%;
+}
+
+.mini-dice-size {
+  @extend .dice;
+  height: 40px;
+  width: 40px;
+}
+
 .dice-size {
+  @extend .dice;
   height: 50px;
   width: 50px;
 }

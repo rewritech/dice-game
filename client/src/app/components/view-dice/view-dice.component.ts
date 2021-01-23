@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core'
 export class ViewDiceComponent implements OnInit {
   @Input() num: number
   @Input() disabledClass: string
+  @Input() mini: boolean
 
   colors = [
     'btn-success',
@@ -18,9 +19,12 @@ export class ViewDiceComponent implements OnInit {
     'btn-primary',
   ]
 
-  // constructor() {}
+  dotClass = 'dot'
+  diceSizeClass = 'dice-size'
 
   ngOnInit(): void {
     // onInit
+    this.dotClass = this.mini ? 'mini-dot' : 'dot'
+    this.diceSizeClass = this.mini ? 'mini-dice-size' : 'dice-size'
   }
 }

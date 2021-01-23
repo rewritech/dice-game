@@ -57,7 +57,6 @@ export class NewRoomModalComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('aaaaaa')
     if (this.room.title.trim().length > 0) {
       this.modalService.dismissAll()
       this.roomService.createRoom(this.room).subscribe((res) => {
