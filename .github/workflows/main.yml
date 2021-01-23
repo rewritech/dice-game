@@ -27,6 +27,4 @@ jobs:
             git checkout main
             git fetch --all
             git reset --hard origin/main
-            sh docker-prod.sh down
-            docker image prune -a -f
-            sh docker-prod.sh up
+            sh docker-prod.sh deploy
