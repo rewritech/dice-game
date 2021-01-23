@@ -9,7 +9,7 @@ import { PlayerService } from '../../services/player.service'
 import { I18nService } from '../../services/i18n.service'
 import { CardService } from '../../services/card.service'
 
-const ONE_MINITE = 10000
+const ONE_MINITE = 60000
 
 @Component({
   selector: 'app-play-room',
