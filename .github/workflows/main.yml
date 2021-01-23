@@ -25,7 +25,8 @@ jobs:
           script: |
             cd app/dice-game
             git checkout main
-            git pull origin main
+            git fetch --all
+            git reset --hard origin/master
             sh docker-prod.sh down
             docker image prune -a -f
             sh docker-prod.sh up
