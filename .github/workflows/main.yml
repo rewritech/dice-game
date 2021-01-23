@@ -26,6 +26,6 @@ jobs:
             cd app/dice-game
             git checkout main
             git pull origin main
-            docker image prune -a -f
             sh docker-prod.sh down
+            docker image prune -a -f
             sh docker-prod.sh up
