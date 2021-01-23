@@ -1,11 +1,5 @@
 <div *ngIf="room">
-  <h1 *ngIf="room.status === 'WAIT'" class="text-white">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</h1>
-  <h1 *ngIf="room.status !== 'WAIT'" class="text-white text-center">
-    <span class="d-inline-block text-truncate player-name-width">{{currentPlayerName}}</span>
-    <span>{{i18n.get('turn')}}({{i18n.get('remainTime')}}{{(time / 1000).toFixed(2)}})</span>
-  </h1>
-
-  <div class="d-flex justify-content-between">
+  <div class="d-flex justify-content-center">
     <app-waiting-room *ngIf="room.status === 'WAIT'"
       [room]="room"
       [player]="player"
@@ -19,6 +13,11 @@
       [aniConfig]="aniConfig"
     ></app-board>
     <div class="border bg-dark p-2 w-100 info-size">
+      <h3 *ngIf="room.status === 'WAIT'" class="text-white">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</h3>
+      <h3 *ngIf="room.status !== 'WAIT'" class="text-white text-center">
+        <span class="d-inline-block text-truncate player-name-width">{{currentPlayerName}}</span>
+        <span>{{i18n.get('turn')}}({{(time / 1000).toFixed(2)}})</span>
+      </h3>
       <div class="d-flex">
         <span class="mt-1 text-white">
           {{i18n.get('player')}}
@@ -31,6 +30,7 @@
     </div>
   </div>
   <app-console *ngIf="room.status !== 'WAIT'"
+    class="d-flex justify-content-center"
     [room]="room"
     [player]="player"
     [selectedCards]="selectedCards"
