@@ -20,13 +20,6 @@
     eslint --fix src/**/*.ts
     ```
 
-## For Production
-```bash
-$ ./docker-prod.sh up
-$ ./docker-prod.sh down
-$ ./docker-prod.sh restart
-```
-
 ## For Development
 ```bash
 $ ./docker-dev.sh up
@@ -50,16 +43,7 @@ Web Server(Angular) <-> WebSocket Server(express.js)
 ```
 
 ### 포트
-1. Production
-```
-Reverse Proxy(Nginx) : 80
-Web Server(Nginx) : 8720
-Api Server(express.js) : 7145
-WebSocket Server(express.js) : 5417
-MongoDB : 27017
-```
-
-2. Development
+Development
 ```
 Web Server(Angular) : 4200
 Api Server(express.js) : 3000
