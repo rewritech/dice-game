@@ -49,6 +49,7 @@ export const i18n = {
     rank: 'RANK',
     waitingroom: 'waiting room',
     turn: "'s turn",
+    sec: 's',
   },
   ja: {
     loginButton: 'ログイン',
@@ -99,6 +100,7 @@ export const i18n = {
     rank: '順位',
     waitingroom: '待機室へ',
     turn: 'さんのターン',
+    sec: '秒',
   },
   ko: {
     loginButton: '로그인',
@@ -149,5 +151,6 @@ export const i18n = {
     rank: '순위',
     waitingroom: '대기방 가기',
     turn: ' 님의 턴',
+    sec: '초',
   },
 }

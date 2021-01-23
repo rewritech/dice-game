@@ -22,8 +22,6 @@ export class PlayRoomComponent implements OnInit {
   private playerId = sessionStorage.getItem('pId')
   private NEW_DECK: number
   private ADD_DECK: number
-  private GAME_OVER_CONDITION_KILLED = 5
-  private GAME_OVER_CONDITION_LIFE = 0
 
   room: Room
   player: Player
@@ -43,7 +41,6 @@ export class PlayRoomComponent implements OnInit {
   time = ONE_MINITE
   timerId: NodeJS.Timeout
   timeOutId: NodeJS.Timeout
-  endGame = false
 
   constructor(
     private route: ActivatedRoute,
@@ -75,6 +72,7 @@ export class PlayRoomComponent implements OnInit {
             this.socketOnChangeRoom(this.roomId)
             this.socketOnStartGame(this.roomId)
             this.socketOnChangeTurn(this.roomId)
+            this.socketOnEndGame(this.roomId)
             this.socket.emit<Player>('join-room', this.player)
           })
       } else {
@@ -123,8 +121,10 @@ export class PlayRoomComponent implements OnInit {
   }
 
   replay(): void {
+    this.diceMapService.createNewMap()
     this.cardService.createNewCardDeck()
     this.room.status = 'WAIT'
+    this.room.map = this.diceMapService.getDiceMap()
     this.room.cardDeck = {
       unused: this.cardService.getCardDeck(),
       used: [],
@@ -157,30 +157,14 @@ export class PlayRoomComponent implements OnInit {
   }
 
   move(x: number, y: number): void {
-    // 카드 제출하기 전에는 눌러도 반응이 없어야 한다.
     if (!this.pieces[x][y].disabled) {
-      const { coordinates } = this.player
-      this.cardSubmit()
       this.initializeTimer()
-      this.moveAnimate([x, y], coordinates)
-      this.player.coordinates = [x, y] // player.coordnates 갱신
-      this.catch(x, y) // 적플레이어를 잡으면 라이프 -1, 말 위치 초기화
-
-      if (this.endGame) {
-        this.endGame = false
-        this.room.status = 'END'
-        this.socket.emit('end-game', {
-          player: this.player,
-          room: this.room,
-        })
-      } else {
-        this.buildCard() // 말이동 적용
-        this.socket.emit('change-turn', {
-          aniConfig: this.aniConfig,
-          player: this.player,
-          room: this.room,
-        })
-      }
+      this.cardSubmit()
+      this.socket.emit('move', {
+        moveTo: [x, y],
+        player: this.player,
+        room: this.room,
+      })
     }
   }
 
@@ -238,7 +222,7 @@ export class PlayRoomComponent implements OnInit {
 
   // 턴 변경시
   // change-turn
-  // 자신을 제외한 모든 유저
+  // 모든 유저
   private socketOnChangeTurn(roomId: number): void {
     this.socket.on(
       `change-turn-${roomId}`,
@@ -254,6 +238,19 @@ export class PlayRoomComponent implements OnInit {
     )
   }
 
+  // 게임 종료
+  // 모든 유저
+  private socketOnEndGame(roomId: number): void {
+    this.socket.on(`end-game-${roomId}`, (room: Room) => {
+      this.initializeTimer()
+      this.cardDisabled = true
+      this.pieces = this.diceMapService.createPieces(this.room, true)
+      setTimeout(() => {
+        this.room = room
+      }, 1500)
+    })
+  }
+
   private setCurrentPlayerName(): void {
     const currentPlayer = this.room.players.find(
       (p) => p._id === this.room.currentPlayer
@@ -264,8 +261,8 @@ export class PlayRoomComponent implements OnInit {
   private startTimer() {
     this.initializeTimer()
     this.timerId = setInterval(() => {
-      if (this.time > 0) this.time -= 10
-    }, 10)
+      if (this.time > 0) this.time -= 1000
+    }, 1000)
 
     this.timeOutId = setTimeout(() => {
       this.timeOutChangeTurn() // 강제 카드 1장 제출 및 턴종료
@@ -285,10 +282,9 @@ export class PlayRoomComponent implements OnInit {
       this.room.cardDeck.used = this.room.cardDeck.used.concat(
         this.player.cards.splice(randomIndex, 1)
       )
-      this.buildCard()
 
-      this.socket.emit('change-turn', {
-        aniConfig: this.aniConfig,
+      this.socket.emit('move', {
+        moveTo: this.player.coordinates,
         player: this.player,
         room: this.room,
       })
@@ -316,43 +312,6 @@ export class PlayRoomComponent implements OnInit {
       selectedNums,
       this.player
     )
-  }
-
-  // 말 이동 애니메이션
-  private moveAnimate(
-    coordinates: [number, number],
-    moveTo: [number, number]
-  ): void {
-    const moveCoord: [number, number] = [
-      moveTo[1] - coordinates[1],
-      moveTo[0] - coordinates[0],
-    ]
-    this.aniConfig = {
-      value: 'move',
-      params: { x: 100 * moveCoord[0], y: 100 * moveCoord[1] },
-      target: [coordinates[0], coordinates[1]],
-    }
-  }
-
-  // 이동 좌표에 다른 유저가 있으면 catch-player
-  private catch(x: number, y: number): void {
-    const targetIndex = this.room.players.findIndex(
-      (p) =>
-        this.diceMapService.compare(p.coordinates, [x, y]) &&
-        p._id !== this.player._id
-    )
-    if (targetIndex > -1) {
-      this.room.players[targetIndex].life -= 1
-      this.room.players[targetIndex].coordinates = this.room.players[
-        targetIndex
-      ].initialCoordinates
-      this.player.killedPlayer += 1
-      // 게임종료 판단
-      this.endGame =
-        this.player.killedPlayer === this.GAME_OVER_CONDITION_KILLED ||
-        this.room.players[targetIndex].life === this.GAME_OVER_CONDITION_LIFE
-      this.socket.emit('catch-player', this.room.players[targetIndex])
-    }
   }
 
   // 시작버튼 확성화

@@ -14,10 +14,10 @@
     ></app-board>
     <div class="border bg-dark p-2 w-100 info-size">
       <h3 *ngIf="room.status === 'WAIT'" class="text-white d-inline-block text-truncate title-width" title="{{room.title}}">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</h3>
-      <h3 *ngIf="room.status !== 'WAIT'" class="text-white text-center d-flex">
+      <div *ngIf="room.status !== 'WAIT'" class="text-white current-turn-size d-flex">
         <span class="d-inline-block text-truncate player-name-width" title="{{currentPlayerName}}">{{currentPlayerName}}</span>
-        <span>{{i18n.get('turn')}}({{(time / 1000).toFixed(2)}})</span>
-      </h3>
+        <span>{{i18n.get('turn')}}({{(time / 1000).toFixed(0)}}{{i18n.get('sec')}})</span>
+      </div>
       <div class="mt-1 d-flex">
         <span class="text-white">
           {{i18n.get('player')}}

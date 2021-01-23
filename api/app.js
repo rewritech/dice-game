@@ -99,17 +99,9 @@ io.of('/dice-map-room').on('connection', (socket) => {
     }
   });
 
-  socket.on('change-turn', async (value) => {
+  socket.on('move', async (value) => {
     try {
-      await playingFnc.changeTurn(io, value)
-    } catch (e) {
-      console.error(`error: ${e}`);
-    }
-  });
-
-  socket.on('catch-player', async (player) => {
-    try {
-      await playingFnc.catchPlayer(io, player)
+      await playingFnc.move(io, value)
     } catch (e) {
       console.error(`error: ${e}`);
     }

@@ -1,7 +1,7 @@
-<div class="background container">
+<div class="background container border border-white">
   <div class="card bg-transparent">
     <div class="card-header border-white">
-      <h3 class="text-white">{{i18n.get('selectPositionAndPiece')}}</h3>
+      <h2 class="text-white">{{i18n.get('selectPositionAndPiece')}}</h2>
     </div>
     <div class="card-body border-white">
       <div class="row row-cols-2">
@@ -10,7 +10,7 @@
         </div>
       </div>
     </div>
-    <app-dice-board [room]="room"></app-dice-board>
+    <app-dice-board [room]="room" class="mb-4"></app-dice-board>
     <div class="card-footer d-flex justify-content-end border-white">
       <button class="btn btn-secondary" routerLink="/rooms">{{i18n.get('leaveRoom')}}</button>
       <button class="btn btn-info ml-2" (click)="callBackShuffle()">{{i18n.get('shuffle')}}</button>

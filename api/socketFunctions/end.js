@@ -81,7 +81,7 @@ const replay = async function (io, room) {
   common.broadcastRoom(io, room._id);
 }
 
-const endGame = async function (io, socket, value) {
+const endGame = async function (io, value) {
   console.log(`[${new Date().toISOString()}]: end-game`);
   const { player, room } = value
 
@@ -89,8 +89,8 @@ const endGame = async function (io, socket, value) {
   await Room.updateOne({ _id: room._id }, { $set: room });
   await Player.updateOne({ _id: player._id }, { $set: player });
 
-  common.broadcastRoomWithoutMe(socket, room._id);
-  common.broadcastSystemMessage(io, room._id, 'success', 'gameEndMessage');
+  common.broadcastRoom(io, room._id, `end-game-${room._id}`);
+  common.broadcastSystemMessage(io, room._id, 'warning', 'gameEndMessage');
 }
 
 module.exports = {
