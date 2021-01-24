@@ -23,7 +23,7 @@
         <th scope="row">{{ i + 1 }}</th>
         <td>{{p.name}}</td>
         <td>{{p.killedPlayer}}</td>
-        <td><ngb-rating [rate]="p.life" [starTemplate]="t" [readonly]="true" [max]="3"></ngb-rating></td>
+        <td><ngb-rating [formControl]="ctrl" [rate]="p.life" [starTemplate]="t" [readonly]="true" [max]="3"></ngb-rating></td>
       </tr>
       </tbody>
     </table>

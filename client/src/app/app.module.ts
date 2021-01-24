@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser'
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
-import { FormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -63,6 +63,7 @@ import { EndGameModalComponent } from './components/end-game-modal/end-game-moda
     FontAwesomeModule,
     HttpClientModule,
     NgbModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

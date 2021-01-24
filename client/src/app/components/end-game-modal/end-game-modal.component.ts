@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import { FormControl } from '@angular/forms'
 import { Room } from '../../types'
 import { I18nService } from '../../services/i18n.service'
 
@@ -13,6 +14,7 @@ export class EndGameModalComponent implements OnInit {
   @Input() callBackReplay: () => void
   @Input() room: Room
   @ViewChild('content') content: HTMLElement
+  ctrl = new FormControl()
 
   heart = faHeart
 
@@ -26,6 +28,7 @@ export class EndGameModalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.ctrl.disable()
     // killedPlayer 내림차순 && life 오름차순 && life가 0이면 꼴찌 소트
     this.room.players.sort((a, b): number => {
       if (b.killedPlayer === a.killedPlayer) {
