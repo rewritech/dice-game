@@ -3,24 +3,38 @@ const end = require('./end');
 const Room = require('../models/Room');
 const Player = require('../models/Player');
 
+const DICE = 6
+const CARD_SET = 10
+const TOTAL_CARDS = DICE * CARD_SET
 const ADD_DECK = 2
 const GAME_OVER_CONDITION_KILLED = 5
 const GAME_OVER_CONDITION_LIFE = 0
 
+const getNextIndex = function(index, limit) {
+  return index === limit ? 0 : index
+}
+
 const getNextPlayer = function (room) {
   const { players, currentPlayer } = room
   const index = players.findIndex((p) => p._id === currentPlayer) + 1
-  const nextIndex = index === players.length ? 0 : index
+
+  // 미사용카드가 없는 경우, 카드를 가지고 있는 플레이어를 찾는다.
+  let nextIndex = getNextIndex(index, players.length)
+  if (room.cardDeck.unused.length === 0) {
+    while (players[nextIndex].cards.length === 0) {
+      nextIndex = getNextIndex(nextIndex + 1, players.length)
+    }
+  }
+
   return players[nextIndex]._id
 }
 
 const distributeCard = function (room) {
   // unused에 카드가 2장 미만이면 used의 카드를 다시 가져온다.
-  if (room.cardDeck.unused.length < ADD_DECK) {
-    room.cardDeck.unused = room.cardDeck.unused.concat(room.cardDeck.used)
-    room.cardDeck.used = []
-  }
-
+  // if (room.cardDeck.unused.length < ADD_DECK) {
+  //   room.cardDeck.unused = room.cardDeck.unused.concat(room.cardDeck.used)
+  //   room.cardDeck.used = []
+  // }
   const nextPlayer = room.players.find((p) => p._id === room.currentPlayer)
   const newCards = room.cardDeck.unused.splice(0, ADD_DECK)
   newCards.reverse()
@@ -108,10 +122,14 @@ const move = async function (io, value) {
     await catchPlayer(io, room.players[catchedIndex])
   }
 
+  if (room.cardDeck.used.length === TOTAL_CARDS) {
+    endGame = true
+  }
+
   // ====== 게임 종료 판별 ======
   if (endGame) {
     room.status = 'END'
-    await end.endGame(io, { room, player })
+    await end.endGame(io, { room, player, aniConfig })
   } else {
     await changeTurn(io, { room, player, aniConfig })
   }

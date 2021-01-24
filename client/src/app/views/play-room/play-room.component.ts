@@ -241,14 +241,21 @@ export class PlayRoomComponent implements OnInit {
   // 게임 종료
   // 모든 유저
   private socketOnEndGame(roomId: number): void {
-    this.socket.on(`end-game-${roomId}`, (room: Room) => {
-      this.initializeTimer()
-      this.cardDisabled = true
-      this.pieces = this.diceMapService.createPieces(this.room, true)
-      setTimeout(() => {
+    this.socket.on(
+      `end-game-${roomId}`,
+      (value: { room: Room; aniConfig: AnimationOption }) => {
+        const { room, aniConfig } = value
+        room.status = 'PLAYING'
         this.room = room
-      }, 1500)
-    })
+        this.aniConfig = aniConfig
+        this.initializeTimer()
+        this.cardDisabled = true
+        this.pieces = this.diceMapService.createPieces(this.room, true)
+        setTimeout(() => {
+          this.room.status = 'END'
+        }, 1500)
+      }
+    )
   }
 
   private setCurrentPlayerName(): void {

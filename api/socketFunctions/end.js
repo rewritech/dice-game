@@ -83,13 +83,15 @@ const replay = async function (io, room) {
 
 const endGame = async function (io, value) {
   console.log(`[${new Date().toISOString()}]: end-game`);
-  const { player, room } = value
+  const { player, room, aniConfig } = value
 
   // DB room 갱신
   await Room.updateOne({ _id: room._id }, { $set: room });
   await Player.updateOne({ _id: player._id }, { $set: player });
 
-  common.broadcastRoom(io, room._id, `end-game-${room._id}`);
+  const newRoom = await Room.findOne({ _id: room._id, deleted: false }).populate('players');
+  io.of("/dice-map-room").to(`room-${room._id}`).emit(`end-game-${room._id}`, { room: newRoom, aniConfig });
+
   common.broadcastSystemMessage(io, room._id, 'warning', 'gameEndMessage');
 }
 
