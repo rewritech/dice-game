@@ -24,7 +24,7 @@ export class I18nService {
   }
 
   get(key: string): string {
-    return i18n[this.locale][key]
+    return i18n[this.locale][key] || key
   }
 
   private getLanguage(): string {

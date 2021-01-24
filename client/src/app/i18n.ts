@@ -50,6 +50,9 @@ export const i18n = {
     waitingroom: 'waiting room',
     turn: "'s turn",
     sec: 's',
+    searchKeyword: 'Insert search keyword',
+    all: 'all',
+    noFilteredRooms: 'There is no room that meets your requirements.',
   },
   ja: {
     loginButton: 'ログイン',
@@ -101,6 +104,9 @@ export const i18n = {
     waitingroom: '待機室へ',
     turn: 'さんのターン',
     sec: '秒',
+    searchKeyword: '検索キーワード',
+    all: '全て',
+    noFilteredRooms: '条件に合うルームがありません。',
   },
   ko: {
     loginButton: '로그인',
@@ -125,7 +131,7 @@ export const i18n = {
     gameStart: '게임 시작',
     messagePlaceholder: '메세지를 입력하세요',
     player: '플레이어',
-    gameRole: '게임 룰',
+    gameRole: '게임 규칙',
     role1: '플레이어 수 : 2 ~ 4인',
     role2: '매 턴 카드 2장 뽑기',
     role3: '턴 종료 시 무조건 한 장 낼 것',
@@ -152,5 +158,8 @@ export const i18n = {
     waitingroom: '대기방 가기',
     turn: ' 님의 턴',
     sec: '초',
+    searchKeyword: '검색 키워드',
+    all: '모두',
+    noFilteredRooms: '조건에 맞는 방이 없습니다.',
   },
 }
