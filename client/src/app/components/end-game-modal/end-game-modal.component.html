@@ -1,18 +1,18 @@
 <ng-template #t let-fill="fill" let-c="close">
-  <span class="star" [class.full]="fill === 100">
-    <span class="half" [style.width.%]="fill">&hearts;</span>&hearts;
+  <span class="star mr-1" [class.full]="fill === 100">
+    <span class="half" [style.width.%]="fill"><fa-icon [icon]="heart"></fa-icon></span><fa-icon [icon]="heart"></fa-icon>
   </span>
 </ng-template>
 
 <ng-template #content let-modal>
-  <div class="modal-header">
-    {{i18n.get('rank')}}
+  <div class="modal-header font-weight-bold title-size">
+    {{i18n.get('gameResult')}}
   </div>
-  <div class="modal-body">
-    <table class="table table-striped">
-      <thead>
+  <div class="modal-body p-0">
+    <table class="table table-striped text-center">
+      <thead class="thead-dark">
       <tr>
-        <th scope="col">#</th>
+        <th scope="col">{{i18n.get('rank')}}</th>
         <th scope="col">{{i18n.get('player')}}</th>
         <th scope="col">{{i18n.get('kill')}}</th>
         <th scope="col">{{i18n.get('life')}}</th>
@@ -23,7 +23,7 @@
         <th scope="row">{{ i + 1 }}</th>
         <td>{{p.name}}</td>
         <td>{{p.killedPlayer}}</td>
-        <td><ngb-rating [(rate)]="p.life" [starTemplate]="t" [readonly]="true" [max]="3"></ngb-rating></td>
+        <td><ngb-rating [rate]="p.life" [starTemplate]="t" [readonly]="true" [max]="3"></ngb-rating></td>
       </tr>
       </tbody>
     </table>

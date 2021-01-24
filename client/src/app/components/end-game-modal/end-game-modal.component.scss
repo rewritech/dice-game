@@ -1,7 +1,7 @@
 .star {
   position: relative;
   display: inline-block;
-  font-size: 3rem;
+  font-size: 1.5rem;
   color: #d3d3d3;
 }
 .full {
@@ -12,4 +12,10 @@
   display: inline-block;
   overflow: hidden;
   color: red;
+}
+tr {
+  font-size: 1.5rem;
+}
+.title-size {
+  font-size: 1.5rem;
 }
