@@ -1,4 +1,5 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
+import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons'
 import { RoomService } from '../../services/room.service'
 import { I18nService } from '../../services/i18n.service'
 import { SocketConnectService } from '../../services/socket-connect.service'
@@ -11,8 +12,17 @@ import { Room } from '../../types'
   styleUrls: ['./rooms.component.scss'],
 })
 export class RoomsComponent implements OnInit {
-  filteredRooms: Room[]
+  private PAGE_LIMIT = 5
+  private totalPage = 0
+  private currentPage = 0
+
+  faRight = faCaretRight
+  faLeft = faCaretLeft
   rooms: Room[]
+  filteredRooms: Room[]
+  paginatedRooms: Room[]
+  firstPage = true
+  lastPage = false
   keyword = ''
   limit = '0'
 
@@ -36,6 +46,7 @@ export class RoomsComponent implements OnInit {
     this.roomService.getRooms().subscribe((res) => {
       this.filteredRooms = res
       this.rooms = res
+      this.paging()
     })
   }
 
@@ -49,6 +60,14 @@ export class RoomsComponent implements OnInit {
     this.filter()
   }
 
+  movePage(num: number): void {
+    const nextPage = this.currentPage + Number(num)
+    if (nextPage >= 0 && nextPage <= this.totalPage - 1) {
+      this.currentPage += Number(num)
+      this.setPage()
+    }
+  }
+
   private filter(): void {
     const reg = new RegExp(this.keyword)
     this.filteredRooms = this.rooms.filter((r) => {
@@ -56,5 +75,22 @@ export class RoomsComponent implements OnInit {
         this.limit === '0' ? true : r.playerLimit === Number(this.limit)
       return limitCheck && reg.test(r.title)
     })
+    this.paging()
+  }
+
+  private paging(): void {
+    this.totalPage = Math.ceil(this.filteredRooms.length / this.PAGE_LIMIT)
+    this.currentPage = 0
+    this.setPage()
+  }
+
+  private setPage(): void {
+    this.firstPage = this.currentPage === 0
+    this.lastPage = this.currentPage === this.totalPage - 1
+    const start = this.currentPage * this.PAGE_LIMIT
+    this.paginatedRooms = this.filteredRooms.slice(
+      start,
+      start + this.PAGE_LIMIT
+    )
   }
 }
