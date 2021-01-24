@@ -107,8 +107,13 @@ export class DiceMapService {
     }
   }
 
-  getAccessibleArea(room: Room, cards: number[], player: Player): Map[][] {
-    const { coordinates, initialCoordinates } = player
+  getAccessibleArea(
+    room: Room,
+    selectedCards: number[],
+    player: Player
+  ): Map[][] {
+    const { coordinates, initialCoordinates, cards } = player
+    const { map } = room
 
     // 일단 모두 true(비활성화)인 Map[][] 만든다.
     const pieces = this.createPieces(room, true)
@@ -117,7 +122,7 @@ export class DiceMapService {
     const startY = coordinates[1]
 
     // 이동가능 좌표 설정
-    this.checkAround(pieces, cards, startX, startY, true)
+    this.checkAround(pieces, selectedCards, startX, startY, true)
 
     // 모든 플레이어 시작점 이동 불가
     room.players.forEach((plr) => {
@@ -130,10 +135,28 @@ export class DiceMapService {
       }
     })
 
-    // 내 시작자리 이동 가능
-    pieces[startX][startY].disabled = false
+    if (
+      this.compare(initialCoordinates, coordinates) &&
+      cards.filter((card) =>
+        this.getAroundCard(map, coordinates).includes(card)
+      ).length > 0
+    ) {
+      // 초기 위치에서 움직일 수 있는 카드가 있다면 자기자리 선택 불가
+      pieces[startX][startY].disabled = true
+    } else {
+      // 선택한 카드가 있는 경우 자기자리 선택가능
+      pieces[startX][startY].disabled = selectedCards.length <= 0
+    }
 
     return pieces
+  }
+
+  private getAroundCard(map: number[][], coord: [number, number]): number[] {
+    const x = coord[0]
+    const y = coord[1]
+    const aroundX = [map[x - 1], map[x + 1]].filter((n) => !!n).map((n) => n[y])
+    const aroundY = [map[x][y - 1], map[x][y + 1]].filter((n) => !!n)
+    return aroundX.concat(aroundY)
   }
 
   private checkAround(
