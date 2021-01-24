@@ -12,15 +12,15 @@ import { Room } from '../../types'
   styleUrls: ['./rooms.component.scss'],
 })
 export class RoomsComponent implements OnInit {
-  private PAGE_LIMIT = 5
   private totalPage = 0
   private currentPage = 0
 
+  PAGE_LIMIT = 5
   faRight = faCaretRight
   faLeft = faCaretLeft
-  rooms: Room[]
-  filteredRooms: Room[]
-  paginatedRooms: Room[]
+  rooms: Room[] = []
+  filteredRooms: Room[] = []
+  paginatedRooms: Room[] = []
   firstPage = true
   lastPage = false
   keyword = ''
@@ -44,9 +44,8 @@ export class RoomsComponent implements OnInit {
     })
 
     this.roomService.getRooms().subscribe((res) => {
-      this.filteredRooms = res
       this.rooms = res
-      this.paging()
+      this.filter()
     })
   }
 
