@@ -1,28 +1,30 @@
 <ng-template #content let-modal>
   <div class="modal-header">
-    <span class="modal-title" id="modal-basic-title">{{i18n.get('gameRole')}}</span>
+    <span class="modal-title font-weight-bold title-size" id="modal-basic-title">{{i18n.get('gameRole')}}</span>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')" tabindex="-1">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
-    <div class="container">
-      <a
-      rel="noopener noreferrer"
-      href="https://comic.naver.com/bestChallenge/detail.nhn?titleId=734597&no=8"
-      target="_blank"
-        >
-        {{i18n.get('original')}}
-      </a>
-      <ul>
-        <li>{{i18n.get('role1')}}</li>
-        <li>{{i18n.get('role2')}}</li>
-        <li>{{i18n.get('role3')}}</li>
-        <li>{{i18n.get('role4')}}</li>
-        <li>{{i18n.get('role5')}}</li>
-        <li>{{i18n.get('role6')}}</li>
-        <li>{{i18n.get('role7')}}</li>
-        <li>{{i18n.get('role8')}}</li>
+  <div class="modal-body p-0">
+    <div class="card">
+      <div class="card-header">
+        <a
+          rel="noopener noreferrer"
+          href="https://comic.naver.com/bestChallenge/detail.nhn?titleId=734597&no=8"
+          target="_blank"
+            >
+            {{i18n.get('original')}}
+        </a>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><fa-icon class="mr-1 text-success" [icon]="dotIcon"></fa-icon>{{i18n.get('role1')}}</li>
+        <li class="list-group-item"><fa-icon class="mr-1 text-success" [icon]="dotIcon"></fa-icon>{{i18n.get('role2')}}</li>
+        <li class="list-group-item"><fa-icon class="mr-1 text-success" [icon]="dotIcon"></fa-icon>{{i18n.get('role3')}}</li>
+        <li class="list-group-item"><fa-icon class="mr-1 text-success" [icon]="dotIcon"></fa-icon>{{i18n.get('role4')}}</li>
+        <li class="list-group-item"><fa-icon class="mr-1 text-success" [icon]="dotIcon"></fa-icon>{{i18n.get('role5')}}</li>
+        <li class="list-group-item"><fa-icon class="mr-1 text-success" [icon]="dotIcon"></fa-icon>{{i18n.get('role6')}}</li>
+        <li class="list-group-item"><fa-icon class="mr-1 text-success" [icon]="dotIcon"></fa-icon>{{i18n.get('role7')}}</li>
+        <li class="list-group-item"><fa-icon class="mr-1 text-success" [icon]="dotIcon"></fa-icon>{{i18n.get('role8')}}</li>
       </ul>
     </div>
   </div>
