@@ -13,7 +13,7 @@
         <label for="forPlayerName">{{i18n.get('nickName')}}</label>
         <input type="text" class="form-control {{invalidClass}}" id="forPlayerName" name="name" [ngModel]="player.name">
         <small class="text-danger float-left mb-3" *ngIf="validationError">
-          {{i18n.get('insertNickName')}}
+          {{i18n.get('validationMessageNickName')}}
         </small>
       </div>
     </div>

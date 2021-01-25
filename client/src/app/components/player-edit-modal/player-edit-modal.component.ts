@@ -54,8 +54,9 @@ export class PlayerEditModalComponent implements OnInit {
   }
 
   onSubmit(value: Player): void {
-    if (value.name.trim().length > 0) {
-      this.player.name = value.name
+    const name = value.name.trim()
+    if (name.length > 0 && name.length <= 10) {
+      this.player.name = name
       this.playerService.editPlayer(this.player).subscribe(() => {
         this.modalService.dismissAll()
         this.invalidClass = ''

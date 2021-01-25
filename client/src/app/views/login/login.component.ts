@@ -40,7 +40,8 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.player.name.trim().length > 0) {
+    const name = this.player.name.trim()
+    if (name.length > 0 && name.length <= 10) {
       this.playerService.createPlayer(this.player).subscribe((player) => {
         this.invalidClass = ''
         this.validationError = false

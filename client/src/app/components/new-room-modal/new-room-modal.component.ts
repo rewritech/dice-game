@@ -74,7 +74,8 @@ export class NewRoomModalComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.room.title.trim().length > 0) {
+    const title = this.room.title.trim()
+    if (title.length > 0 && title.length <= 20) {
       this.modalService.dismissAll()
       this.roomService.createRoom(this.room).subscribe((res) => {
         this.router.navigate([`/rooms/${res._id}`])

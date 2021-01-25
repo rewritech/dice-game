@@ -11,7 +11,7 @@
         <label for="forTitle">{{i18n.get('roomTitleLabel')}}</label>
         <input type="text" class="form-control {{invalidClass}}" id="forTitle" placeholder="{{i18n.get('roomTitlePlaceholder')}}" name="title" [(ngModel)]="room.title">
         <small class="text-danger mb-3" *ngIf="validationError">
-          {{i18n.get('roomTitlePlaceholder')}}
+          {{i18n.get('validationMessageRoomTitle')}}
         </small>
       </div>
       <div class="form-group">

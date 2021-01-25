@@ -21,7 +21,7 @@
       <tbody>
       <tr *ngFor="let p of room.players; index as i">
         <th scope="row">{{ i + 1 }}</th>
-        <td>{{p.name}}</td>
+        <td class="d-inline-block text-truncate player-name-width">{{p.name}}</td>
         <td>{{p.killedPlayer}}</td>
         <td><ngb-rating [formControl]="ctrl" [rate]="p.life" [starTemplate]="t" [readonly]="true" [max]="3"></ngb-rating></td>
       </tr>
