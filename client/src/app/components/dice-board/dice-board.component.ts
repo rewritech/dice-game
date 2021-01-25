@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { Room, Counter } from '../../types'
 import { DiceMapService } from '../../services/dice-map.service'
 
@@ -10,6 +11,7 @@ import { DiceMapService } from '../../services/dice-map.service'
 export class DiceBoardComponent implements OnInit {
   @Input() room: Room
   counter: Counter
+  times = faTimes
 
   constructor(private diceMapService: DiceMapService) {}
 
