@@ -2,17 +2,21 @@ version: '3'
 
 services:
   proxy:
-    image: nginx:1.15
+    image: staticfloat/nginx-certbot
     container_name: dice-map-proxy
     ports:
-      - "80:80"
+      - 80:80/tcp
+      - 443:443/tcp
     volumes:
-      - ./proxy/proxy.conf:/etc/nginx/nginx.conf.template
+      - ./proxy/proxy.conf:/etc/nginx/nginx.conf:ro
+      - letsencrypt:/etc/letsencrypt
     environment:
-      - WEB_PORT=${WEB_PORT}
-      - API_PORT=${API_PORT}
-      - SOCKET_PORT=${SOCKET_PORT}
-    command: /bin/sh -c "envsubst '$$WEB_PORT $$API_PORT $$SOCKET_PORT'< /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+      CERTBOT_EMAIL: ${CERTBOT_EMAIL}
+      DOMAIN: ${DOMAIN}
+      WEB_PORT: ${WEB_PORT}
+      API_PORT: ${API_PORT}
+      SOCKET_PORT: ${SOCKET_PORT}
+      ENVSUBST_VARS: DOMAIN WEB_PORT API_PORT SOCKET_PORT
     restart: "unless-stopped"
   client:
     build:
@@ -47,3 +51,6 @@ services:
     volumes:
       - ./data/db:/data/db
     restart: always
+
+volumes:
+  letsencrypt:
