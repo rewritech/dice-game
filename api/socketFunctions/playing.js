@@ -41,7 +41,6 @@ const distributeCard = function (room) {
   newCards.forEach((c) => nextPlayer.cards.unshift(c))
 }
 
-
 // 말 이동 애니메이션
 const moveAnimate = function (coordinates, moveTo) {
   const moveCoord = [moveTo[1] - coordinates[1], moveTo[0] - coordinates[0]]
@@ -65,6 +64,9 @@ const changeTurn = async function (io, value) {
 
   // 3. 카드 분배
   distributeCard(room)
+  if (room.cardDeck.unused.length === 0) {
+    common.broadcastSystemMessage(io, room._id, 'info', 'usedAllCardsMessage');
+  }
 
   // DB room 갱신
   // 지금유저
