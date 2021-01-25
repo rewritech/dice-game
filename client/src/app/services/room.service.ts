@@ -59,9 +59,8 @@ export class RoomService {
   // 말 선택한 플레이어 수가 2명 이상일 경우
   // 내가 선택했는지
   checkReadyToStart(room: Room): boolean {
-    return (
-      room.players.filter((p) => p.coordinates).length === room.players.length
-    )
+    const selectedCount = room.players.filter((p) => p.coordinates).length
+    return selectedCount === room.players.length && selectedCount > 1
   }
 
   // 내턴 && 말 선택 플레이어 2명 이상
