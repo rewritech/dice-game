@@ -137,4 +137,5 @@ const move = async function (io, value) {
 
 module.exports = {
   move,
+  changeTurn,
 };
