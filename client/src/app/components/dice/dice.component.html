@@ -17,6 +17,6 @@
     </div>
   </div>
   <div *ngIf="icon" [@moveAnimate]="moveConfig" class="btn piece position-absolute z-1000 {{blinkClass}} {{disabled ? 'cursor-unset' : ''}}" (click)="onClick()">
-    <span class="icon-size"><fa-icon class="{{iconColorClass}}" [icon]="icon"></fa-icon></span>
+    <span class="icon-size" ngbPopover="{{playerName}}" triggers="mouseenter:mouseleave"><fa-icon class="{{iconColorClass}}" [icon]="icon"></fa-icon></span>
   </div>
 </div>

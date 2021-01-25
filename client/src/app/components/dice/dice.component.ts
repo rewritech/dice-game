@@ -39,6 +39,7 @@ export class DiceComponent implements OnInit {
   @Input() coordinate: [number, number]
   @Input() callBackOnClick: (x: number, y: number) => void
   @Input() aniConfig: AnimationOption
+  @Input() playerName: string
 
   colors = [
     'btn-success',

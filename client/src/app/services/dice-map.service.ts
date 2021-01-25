@@ -64,9 +64,10 @@ export class DiceMapService {
         result[i][j] = {
           num: col,
           disabled,
-          icon: coordIcons[[i, j].join('.')],
+          icon: coordIcons[[i, j].join('.')]?.piece,
           blink: !!blinkPlayer && this.compare([i, j], blinkPlayer.coordinates),
           checked: false,
+          playerName: coordIcons[[i, j].join('.')]?.name,
         }
       })
     })
@@ -81,7 +82,7 @@ export class DiceMapService {
   private createCoordIcon(players: Player[]) {
     const result = {}
     players.forEach((p: Player) => {
-      result[p.coordinates?.join('.')] = p.piece
+      result[p.coordinates?.join('.')] = { piece: p.piece, name: p?.name || '' }
     })
     return result
   }
