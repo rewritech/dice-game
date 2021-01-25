@@ -15,9 +15,10 @@ const joinRoom = async function (io, socket, player) {
       life: 3
     }
   });
+  const newPlayer = await Player.findOne({ _id: player._id })
   socket.join(`room-${player._roomId}`);
   common.broadcastRoom(io, player._roomId);
-  common.broadcastSystemMessage(io, player._roomId, 'success', common.joinMsg([player.name, 'joinRoomMessage']));
+  common.broadcastSystemMessage(io, player._roomId, 'success', common.joinMsg([newPlayer.name, 'joinRoomMessage']));
 }
 
 const shuffleMap = async function (io, shuffledRoom) {
