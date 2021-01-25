@@ -1,16 +1,19 @@
-<div class="{{blinkClass}} d-flex justify-content-between outline rounded p-1 status-width">
-  <div class="border rounded piece-size justify-content-center d-flex">
+<div class="{{blinkClass}} d-flex align-items-center justify-content-between outline rounded p-1 status-width">
+  <div class="justify-content-center d-flex">
     <fa-icon class="text-white font-size" [icon]="icon"></fa-icon>
   </div>
   <div class="text-white ml-1 mr-1">
-    <span class="font-size">X {{life}}</span>
+    <fa-icon class="text-white times-size mr-1" [icon]="times"></fa-icon>
+    <span class="font-size">{{life}}</span>
   </div>
   <div class="pattern card-size"></div>
   <div class="text-white ml-1 mr-1">
-    <span class="font-size">X {{cards}}</span>
+    <fa-icon class="text-white times-size mr-1" [icon]="times"></fa-icon>
+    <span class="font-size">{{cards}}</span>
   </div>
   <span class="icon-size"><fa-icon class="font-size text-white" [icon]="skull"></fa-icon></span>
   <div class="text-white ml-1 mr-1">
-    <span class="font-size">X {{killed}}</span>
+    <fa-icon class="text-white times-size mr-1" [icon]="times"></fa-icon>
+    <span class="font-size">{{killed}}</span>
   </div>
 </div>

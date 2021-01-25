@@ -5,16 +5,16 @@
 }
 
 .status-width {
-  width: 16rem;
-}
-
-.piece-size {
-  height: 100%;
-  width: 40px;
+  width: 11rem;
+  height: 3.3rem;
 }
 
 .font-size {
-  font-size: 1.7rem;
+  font-size: 1.2rem;
+}
+
+.times-size {
+  font-size: 1rem;
 }
 
 .pattern {
@@ -22,7 +22,8 @@
 }
 
 .card-size {
-  width: 25px;
+  width: 17px;
+  height: 85%;
   border-style: solid;
   border-width: thin;
   border-color: white;

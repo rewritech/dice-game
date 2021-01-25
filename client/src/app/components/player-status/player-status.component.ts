@@ -1,5 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core'
-import { faSkull, IconDefinition } from '@fortawesome/free-solid-svg-icons'
+import {
+  faSkull,
+  faTimes,
+  IconDefinition,
+} from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-player-status',
@@ -15,8 +19,7 @@ export class PlayerStatusComponent implements OnInit {
 
   blinkClass: string
   skull = faSkull
-
-  // constructor() {}
+  times = faTimes
 
   ngOnInit(): void {
     this.blinkClass = this.blink ? 'blinking' : ''
