@@ -2,7 +2,6 @@ const common = require('./common');
 const end = require('./end');
 const Room = require('../models/Room');
 const Player = require('../models/Player');
-const Message = require('../models/Message');
 
 const DICE = 6
 const CARD_SET = 20

@@ -24,6 +24,7 @@ export type Room = {
     unused: number[]
     used: number[]
   }
+  mode: 'LIMITED' | 'INFINITY'
 }
 
 export type Map = {

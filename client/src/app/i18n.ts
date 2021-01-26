@@ -59,6 +59,9 @@ export const i18n = {
     noFilteredRooms: 'There is no room that meets your requirements.',
     WAIT: 'WAIT',
     PLAYING: 'PLAYING',
+    modeLabel: 'Select play mode',
+    modeLimited: 'Card Limited Distribution',
+    modeInfinity: 'Card limitless distribution',
   },
   ja: {
     loginButton: 'ログイン',
@@ -119,6 +122,9 @@ export const i18n = {
     noFilteredRooms: '条件に合うルームがありません。',
     WAIT: '待機中',
     PLAYING: 'プレイ中',
+    modeLabel: 'プレイモード選択',
+    modeLimited: 'カード有限分配',
+    modeInfinity: 'カード無限分配',
   },
   ko: {
     loginButton: '로그인',
@@ -179,5 +185,8 @@ export const i18n = {
     noFilteredRooms: '조건에 맞는 방이 없습니다.',
     WAIT: '대기중',
     PLAYING: '플레이중',
+    modeLabel: '플레이 모드 선택',
+    modeLimited: '카드유한분배',
+    modeInfinity: '카드무한분배',
   },
 }
