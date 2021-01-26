@@ -1,5 +1,4 @@
 const common = require('./common');
-const playing = require('./playing');
 const Room = require('../models/Room');
 const Player = require('../models/Player');
 const Message = require('../models/Message');
@@ -35,13 +34,16 @@ const leave = async function (io, player) {
             player,
             aniConfig: null
           }
-          await playing.changeTurn(io, val)
+          await common.changeTurn(io, val)
         }
 
         // 6. 게임중 떠나면 player 카드를 used에 넣는다.
         const used = room.cardDeck.used.concat(player.cards)
         await Room.updateOne({ _id: player._roomId }, { $set: {
-          cardDeck: { used },
+          cardDeck: {
+            unused: room.cardDeck.unused,
+            used
+          },
         }});
       }
     }
