@@ -80,8 +80,12 @@ router.delete('/rooms/:id', async (req, res) => {
  */
 router.get('/players/:id', async (req, res) => {
   console.log(`[${new Date().toISOString()}]: GET player/${req.params.id}`);
-  const player = await Player.findOne({ _id: req.params.id });
-  res.json(player);
+  try {
+    const player = await Player.findOne({ _id: req.params.id });
+    res.json(player);
+  } catch {
+    res.json(null);
+  }
 });
 
 /**
@@ -113,8 +117,12 @@ router.put('/players/:id', async (req, res) => {
  */
 router.delete('/players/:id', async (req, res) => {
   console.log(`[${new Date().toISOString()}]: DELETE players/${req.params.id}`);
-  await Player.deleteOne({ _id: req.params.id });
-  res.json(`deleted players ${req.params.id}`);
+  try {
+    await Player.deleteOne({ _id: req.params.id });
+    res.json(`deleted players ${req.params.id}`);
+  } catch {
+    res.json(null);
+  }
 });
 
 module.exports = router;
