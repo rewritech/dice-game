@@ -58,6 +58,7 @@ export class NewRoomModalComponent implements OnInit {
               unused: this.cardService.getCardDeck(),
               used: [],
             },
+            mode: 'LIMITED',
           }
           this.modalService.open(content, {
             ariaLabelledBy: 'modal-basic-title',

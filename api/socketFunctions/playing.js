@@ -4,42 +4,10 @@ const Room = require('../models/Room');
 const Player = require('../models/Player');
 
 const DICE = 6
-const CARD_SET = 10
+const CARD_SET = 20
 const TOTAL_CARDS = DICE * CARD_SET
-const ADD_DECK = 2
 const GAME_OVER_CONDITION_KILLED = 5
 const GAME_OVER_CONDITION_LIFE = 0
-
-const getNextIndex = function(index, limit) {
-  return index === limit ? 0 : index
-}
-
-const getNextPlayer = function (room) {
-  const { players, currentPlayer } = room
-  const index = players.findIndex((p) => p._id === currentPlayer) + 1
-
-  // 미사용카드가 없는 경우, 카드를 가지고 있는 플레이어를 찾는다.
-  let nextIndex = getNextIndex(index, players.length)
-  if (room.cardDeck.unused.length === 0) {
-    while (players[nextIndex].cards.length === 0) {
-      nextIndex = getNextIndex(nextIndex + 1, players.length)
-    }
-  }
-
-  return players[nextIndex]._id
-}
-
-const distributeCard = function (room) {
-  // unused에 카드가 2장 미만이면 used의 카드를 다시 가져온다.
-  // if (room.cardDeck.unused.length < ADD_DECK) {
-  //   room.cardDeck.unused = room.cardDeck.unused.concat(room.cardDeck.used)
-  //   room.cardDeck.used = []
-  // }
-  const nextPlayer = room.players.find((p) => p._id === room.currentPlayer)
-  const newCards = room.cardDeck.unused.splice(0, ADD_DECK)
-  newCards.reverse()
-  newCards.forEach((c) => nextPlayer.cards.unshift(c))
-}
 
 // 말 이동 애니메이션
 const moveAnimate = function (coordinates, moveTo) {
@@ -55,38 +23,10 @@ const compare = function (soruce, target) {
   return JSON.stringify(soruce) === JSON.stringify(target)
 }
 
-const changeTurn = async function (io, value) {
-  console.log(`[${new Date().toISOString()}]: change-turn`);
-  const { room, player, aniConfig } = value
-
-  // 2. currentPlayer 변경
-  room.currentPlayer = getNextPlayer(room)
-
-  // 3. 카드 분배
-  distributeCard(room)
-  if (room.cardDeck.unused.length === 0) {
-    common.broadcastSystemMessage(io, room._id, 'info', 'usedAllCardsMessage');
-  }
-
-  // DB room 갱신
-  // 지금유저
-  await Player.updateOne({ _id: player._id }, { $set: player });
-
-  // 다음유저
-  const nextPlayer = room.players.find((p) => p._id === room.currentPlayer)
-  await Player.updateOne({ _id: room.currentPlayer }, { $set: nextPlayer });
-
-  // cardDeck
-  await Room.updateOne({ _id: room._id }, { $set: room });
-  // Socket room 갱신
-  const newRoom = await Room.findOne({ _id: room._id, deleted: false }).populate('players');
-  io.of("/dice-map-room").to(`room-${room._id}`).emit(`change-turn-${room._id}`, { room: newRoom, aniConfig });
-}
-
 const catchPlayer = async function (io, player) {
-  console.log(`[${new Date().toISOString()}]: catch-player`);
+  console.log(`[${new Date().toISOString()}]: catch-player-${player?._roomId} ${player?._id}`);
   await Player.updateOne({ _id: player._id }, { $set: player });
-  common.broadcastSystemMessage(io, player._roomId, 'danger', common.joinMsg([player.name, 'catchedMessage']));
+  await common.broadcastSystemMessage(io, player._roomId, 'danger', common.joinMsg([player.name, 'catchedMessage']));
 }
 
 // move
@@ -95,8 +35,8 @@ const catchPlayer = async function (io, player) {
 //   - 잡혔습니다.
 // - change turn || game over
 const move = async function (io, value) {
-  console.log(`[${new Date().toISOString()}]: move`);
   const { moveTo, room, player } = value
+  console.log(`[${new Date().toISOString()}]: move-${room?._id} ${player?._id}`);
 
   // ====== 이동 ======
   // 제출 카드 가져오기
@@ -133,11 +73,10 @@ const move = async function (io, value) {
     room.status = 'END'
     await end.endGame(io, { room, player, aniConfig })
   } else {
-    await changeTurn(io, { room, player, aniConfig })
+    await common.changeTurn(io, { room, player, aniConfig })
   }
 }
 
 module.exports = {
   move,
-  changeTurn,
 };

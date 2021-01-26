@@ -3,11 +3,11 @@
 }
 
 .list-width {
-  min-width: 18rem;
+  min-width: 25.5rem;
 }
 
 .title-width {
-  max-width: 15rem;
+  max-width: 10rem;
 }
 
 .search-width {
@@ -18,8 +18,12 @@
   font-size: 1.2rem;
 }
 
-.select-box-width {
+.limit-select-box-width {
   width: 5.3rem;
+}
+
+.status-select-box-width {
+  width: 7rem;
 }
 
 .pagination-size {

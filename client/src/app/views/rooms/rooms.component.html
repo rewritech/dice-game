@@ -8,11 +8,16 @@
   </div>
   <div class="d-flex justify-content-center" *ngIf="rooms?.length > 0">
     <input type="text" class="border rounded search-width" placeholder="{{i18n.get('searchKeyword')}}" [ngModel]="keyword" (ngModelChange)="onTextChange($event)">
-    <select class="select-box-width custom-select ml-2" (change)="onSelectChange($event.target.value)">
+    <select class="limit-select-box-width custom-select ml-2" (change)="onSelectChangeLimit($event.target.value)">
       <option value="0" selected>{{i18n.get('all')}}</option>
       <option value="2">2</option>
       <option value="3">3</option>
       <option value="4">4</option>
+    </select>
+    <select class="status-select-box-width custom-select ml-2" (change)="onSelectChangeStatus($event.target.value)">
+      <option value="ALL" selected>{{i18n.get('all')}}</option>
+      <option value="WAIT">{{i18n.get('WAIT')}}</option>
+      <option value="PLAYING">{{i18n.get('PLAYING')}}</option>
     </select>
   </div>
   <div class="d-flex mt-3 justify-content-center">
@@ -21,12 +26,10 @@
     </a>
     <div *ngIf="paginatedRooms" class="d-flex flex-column mt-auto mb-auto">
       <div *ngFor="let room of paginatedRooms; let i = index">
-        <a class="list-width btn btn-info btn-sm {{i === paginatedRooms.length - 1 ? '' : 'mb-1'}} d-flex justify-content-center" routerLink="/rooms/{{room._id}}">
-          <span class="title-size d-inline-block text-truncate title-width" title="{{room.title}}">
-            {{room.title}}
-          </span>
-          <span class="title-size">({{room.players.length}}/{{room.playerLimit}})</span>
-        </a>
+        <button class="list-width btn btn-light btn-sm {{i === paginatedRooms.length - 1 ? '' : 'mb-1'}} d-flex justify-content-between {{room.status !== 'WAIT' ? 'disabled cursor-unset' : ''}}" (click)="joinRoom(room)">
+          <span class="title-size">{{room.title}}({{room.players.length}}/{{room.playerLimit}})</span>
+          <span class="ml-1 badge badge-{{room.status === 'WAIT' ? 'success' : 'warning'}}">{{i18n.get(room.status)}}</span>
+        </button>
       </div>
     </div>
     <a *ngIf="filteredRooms.length > PAGE_LIMIT" class="btn text-white pagination-size d-flex align-items-center {{lastPage ? 'disabled cursor-unset' : ''}}" (click)="movePage(1)">

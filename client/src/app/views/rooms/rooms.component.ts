@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons'
+import { Router } from '@angular/router'
 import { RoomService } from '../../services/room.service'
 import { I18nService } from '../../services/i18n.service'
 import { SocketConnectService } from '../../services/socket-connect.service'
@@ -25,12 +26,14 @@ export class RoomsComponent implements OnInit {
   lastPage = false
   keyword = ''
   limit = '0'
+  status = 'ALL'
 
   constructor(
     private roomService: RoomService,
     public i18n: I18nService,
     private socket: SocketConnectService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private router: Router
   ) {
     this.playerService.checkPlayer()
   }
@@ -49,8 +52,13 @@ export class RoomsComponent implements OnInit {
     })
   }
 
-  onSelectChange(value: string): void {
+  onSelectChangeLimit(value: string): void {
     this.limit = value
+    this.filter()
+  }
+
+  onSelectChangeStatus(value: string): void {
+    this.status = value
     this.filter()
   }
 
@@ -67,12 +75,20 @@ export class RoomsComponent implements OnInit {
     }
   }
 
+  joinRoom(room: Room): void {
+    if (room.status === 'WAIT' && room.players.length < room.playerLimit) {
+      this.router.navigate([`/rooms/${room._id}`])
+    }
+  }
+
   private filter(): void {
     const reg = new RegExp(this.keyword)
     this.filteredRooms = this.rooms.filter((r) => {
       const limitCheck =
         this.limit === '0' ? true : r.playerLimit === Number(this.limit)
-      return limitCheck && reg.test(r.title)
+      const statusCheck =
+        this.status === 'ALL' ? true : r.status === this.status
+      return limitCheck && statusCheck && reg.test(r.title)
     })
     this.paging()
   }

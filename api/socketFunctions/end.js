@@ -1,10 +1,10 @@
 const common = require('./common');
-const playing = require('./playing');
 const Room = require('../models/Room');
 const Player = require('../models/Player');
+const Message = require('../models/Message');
 
 const leave = async function (io, player) {
-  console.log(`[${new Date().toISOString()}]: room leave ${player._id}`);
+  console.log(`[${new Date().toISOString()}]: room leave-${player?._roomId} ${player?._id}`);
 
   // 1. room의 player를 내보냄
   await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id } });
@@ -34,13 +34,16 @@ const leave = async function (io, player) {
             player,
             aniConfig: null
           }
-          await playing.changeTurn(io, val)
+          await common.changeTurn(io, val)
         }
 
         // 6. 게임중 떠나면 player 카드를 used에 넣는다.
         const used = room.cardDeck.used.concat(player.cards)
         await Room.updateOne({ _id: player._roomId }, { $set: {
-          cardDeck: { used },
+          cardDeck: {
+            unused: room.cardDeck.unused,
+            used
+          },
         }});
       }
     }
@@ -60,14 +63,15 @@ const leave = async function (io, player) {
 
   if(player._roomId > 0 && !!room && room.players.length > 0) {
     // Socket room 갱신
-    common.broadcastRoom(io, player._roomId);
-    common.broadcastSystemMessage(io, player._roomId, 'success', common.joinMsg([player.name, 'leaveRoomMessage']));
+    await common.broadcastRoom(io, player._roomId);
+    await common.broadcastSystemMessage(io, player._roomId, 'success', common.joinMsg([player.name, 'leaveRoomMessage']));
   }
 }
 
 const replay = async function (io, room) {
-  console.log(`[${new Date().toISOString()}]: replay`);
+  console.log(`[${new Date().toISOString()}]: replay-${room?._id}`);
 
+  await Message.deleteMany({ _roomId: room._id, content: 'usedAllCardsMessage' })
   await Room.updateOne({ _id: room._id }, { $set: room });
   await Player.updateMany({ _roomId: room._id }, { $set: {
     coordinates: null,
@@ -77,12 +81,12 @@ const replay = async function (io, room) {
     life: 3,
     killedPlayer: 0
   }});
-  common.broadcastRoom(io, room._id);
+  await common.broadcastRoom(io, room._id);
 }
 
 const endGame = async function (io, value) {
-  console.log(`[${new Date().toISOString()}]: end-game`);
   const { player, room, aniConfig } = value
+  console.log(`[${new Date().toISOString()}]: end-game-${room?._id} ${player._id}`);
 
   // DB room 갱신
   await Room.updateOne({ _id: room._id }, { $set: room });
@@ -91,7 +95,7 @@ const endGame = async function (io, value) {
   const newRoom = await Room.findOne({ _id: room._id, deleted: false }).populate('players');
   io.of("/dice-map-room").to(`room-${room._id}`).emit(`end-game-${room._id}`, { room: newRoom, aniConfig });
 
-  common.broadcastSystemMessage(io, room._id, 'warning', 'gameEndMessage');
+  await common.broadcastSystemMessage(io, room._id, 'warning', 'gameEndMessage');
 }
 
 module.exports = {
