@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'http://HOST/api',
-  wsBaseUrl: 'http://HOST/dice-map-room',
+  apiBaseUrl: 'https://HOST/api',
+  wsBaseUrl: 'https://HOST/dice-map-room',
 }
