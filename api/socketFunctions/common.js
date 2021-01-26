@@ -21,7 +21,7 @@ const broadcastSystemMessage = async function  (io, roomId, systemMsgStatus, con
   const message = new Message({ _roomId: roomId, _playerId: null, playerName: 'System', systemMsgStatus: systemMsgStatus, sendedAt: new Date(), content });
   await message.save();
   // Socket room 갱신
-  broadcastRoomMessage(io, roomId);
+  await broadcastRoomMessage(io, roomId);
 }
 
 const joinMsg = function (arr) {
@@ -55,7 +55,7 @@ const sendMessage = async function (io, message) {
   const player = await Player.findOne({ _id: message._playerId })
   const newMessage = new Message({ playerName: player.name, sendedAt: new Date(), ...message });
   await newMessage.save();
-  broadcastRoomMessage(io, message._roomId);
+  await broadcastRoomMessage(io, message._roomId);
 }
 
 module.exports = {

@@ -98,13 +98,33 @@ export class DiceMapService {
     )
   }
 
-  private newMap() {
+  private newMap(): void {
     for (let i = 0; i < this.MAP_ROW; i += 1) {
       for (let j = 0; j < this.MAP_COL; j += 1) {
         const randomNumber = this.createRandomNumber()
         this.diceMap[i][j] = randomNumber
         this.counter[randomNumber] += 1
       }
+    }
+
+    // 스타팅 옆에 있는 주사위는 서로 다르게 한다.
+    this.changeStartingSideNum([0, 1], [1, 0])
+    this.changeStartingSideNum([0, 8], [1, 9])
+    this.changeStartingSideNum([8, 0], [9, 1])
+    this.changeStartingSideNum([9, 8], [8, 9])
+  }
+
+  private changeStartingSideNum(source, target): void {
+    const sourceNum = this.diceMap[source[0]][source[1]]
+    const targetNum = this.diceMap[target[0]][target[1]]
+    if (sourceNum === targetNum) {
+      const dices = [1, 2, 3, 4, 5, 6]
+      const i = dices.findIndex((d) => d === sourceNum)
+      dices.splice(i, 1)
+      const newNum = dices[Math.floor(Math.random() * (this.DICE_MAX - 1))]
+      this.counter[targetNum] -= 1
+      this.counter[newNum] += 1
+      this.diceMap[target[0]][target[1]] = newNum
     }
   }
 
