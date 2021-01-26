@@ -32,6 +32,7 @@ export type Map = {
   icon: IconDefinition
   blink: boolean
   checked: boolean
+  playerName: string
 }
 
 export type Message = {

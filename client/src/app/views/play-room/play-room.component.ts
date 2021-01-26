@@ -324,10 +324,7 @@ export class PlayRoomComponent implements OnInit {
   // 시작버튼 확성화
   // 대기상태 && 시작가능 상태(2인 이상 선택)
   private enableStartBtn(): void {
-    if (
-      this.room.status === 'WAIT' &&
-      this.roomService.checkCanStart(this.player, this.room)
-    ) {
+    if (this.roomService.checkCanStart(this.player, this.room)) {
       this.startBtnDisableClass = ''
     } else {
       this.startBtnDisableClass = 'disabled'

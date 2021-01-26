@@ -37,11 +37,10 @@ const leave = async function (io, player) {
           await playing.changeTurn(io, val)
         }
 
-        // 6. 게임중 떠나면 playerLimit가 줄어든다.
+        // 6. 게임중 떠나면 player 카드를 used에 넣는다.
         const used = room.cardDeck.used.concat(player.cards)
         await Room.updateOne({ _id: player._roomId }, { $set: {
           cardDeck: { used },
-          playerLimit: room.players.length
         }});
       }
     }
