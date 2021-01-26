@@ -2,9 +2,10 @@ const common = require('./common');
 const end = require('./end');
 const Room = require('../models/Room');
 const Player = require('../models/Player');
+const Message = require('../models/Message');
 
 const DICE = 6
-const CARD_SET = 10
+const CARD_SET = 20
 const TOTAL_CARDS = DICE * CARD_SET
 const ADD_DECK = 2
 const GAME_OVER_CONDITION_KILLED = 5
@@ -65,7 +66,10 @@ const changeTurn = async function (io, value) {
   // 3. 카드 분배
   distributeCard(room)
   if (room.cardDeck.unused.length === 0) {
-    common.broadcastSystemMessage(io, room._id, 'info', 'usedAllCardsMessage');
+    const prevMsg = await Message.findOne({ _roomId: room._id, content: 'usedAllCardsMessage' })
+    if (!prevMsg) {
+      await common.broadcastSystemMessage(io, room._id, 'info', 'usedAllCardsMessage');
+    }
   }
 
   // DB room 갱신
@@ -86,7 +90,7 @@ const changeTurn = async function (io, value) {
 const catchPlayer = async function (io, player) {
   console.log(`[${new Date().toISOString()}]: catch-player-${player?._roomId} ${player?._id}`);
   await Player.updateOne({ _id: player._id }, { $set: player });
-  common.broadcastSystemMessage(io, player._roomId, 'danger', common.joinMsg([player.name, 'catchedMessage']));
+  await common.broadcastSystemMessage(io, player._roomId, 'danger', common.joinMsg([player.name, 'catchedMessage']));
 }
 
 // move

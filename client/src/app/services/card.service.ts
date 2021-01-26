@@ -12,7 +12,7 @@ export class CardService {
 
   createNewCardDeck(): void {
     this.cardDeck = []
-    for (let s = 0; s < this.CARD_SET; s += 2) {
+    for (let s = 0; s < this.CARD_SET; s += 1) {
       this.cardDeck.push(...this.shuffle([1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6]))
     }
   }
