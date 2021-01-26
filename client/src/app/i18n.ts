@@ -57,6 +57,8 @@ export const i18n = {
     searchKeyword: 'Insert search keyword',
     all: 'all',
     noFilteredRooms: 'There is no room that meets your requirements.',
+    WAIT: 'WAIT',
+    PLAYING: 'PLAYING',
   },
   ja: {
     loginButton: 'ログイン',
@@ -115,6 +117,8 @@ export const i18n = {
     searchKeyword: '検索キーワード',
     all: '全て',
     noFilteredRooms: '条件に合うルームがありません。',
+    WAIT: '待機中',
+    PLAYING: 'プレイ中',
   },
   ko: {
     loginButton: '로그인',
@@ -173,5 +177,7 @@ export const i18n = {
     searchKeyword: '검색 키워드',
     all: '모두',
     noFilteredRooms: '조건에 맞는 방이 없습니다.',
+    WAIT: '대기중',
+    PLAYING: '플레이중',
   },
 }
