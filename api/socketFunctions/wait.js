@@ -3,7 +3,7 @@ const Room = require('../models/Room');
 const Player = require('../models/Player');
 
 const joinRoom = async function (io, socket, player) {
-  console.log(`[${new Date().toISOString()}]: room-${player._roomId} join`);
+  console.log(`[${new Date().toISOString()}]: room-join ${player?._roomId}`);
   await Player.updateOne({ _id: player._id }, {
     $set: {
       _roomId: player._roomId,
@@ -22,20 +22,20 @@ const joinRoom = async function (io, socket, player) {
 }
 
 const shuffleMap = async function (io, shuffledRoom) {
-  console.log(`[${new Date().toISOString()}]: room shuffle`);
+  console.log(`[${new Date().toISOString()}]: room shuffle-${shuffledRoom._id}`);
   await Room.updateOne({ _id: shuffledRoom._id }, { $set: { map: shuffledRoom.map } });
   common.broadcastRoom(io, shuffledRoom._id);
   common.broadcastSystemMessage(io, shuffledRoom._id, 'success', 'shuffleMapMessage');
 }
 
 const selectPiece = async function (io, player) {
-  console.log(`[${new Date().toISOString()}]: select-piece`);
+  console.log(`[${new Date().toISOString()}]: select-piece-${player?._roomId} ${player?._id}`);
   await Player.updateOne({ _id: player._id }, { $set: player });
   common.broadcastRoom(io, player._roomId);
 }
 
 const gameStart = async function (io, socket, room) {
-  console.log(`[${new Date().toISOString()}]: game-start`);
+  console.log(`[${new Date().toISOString()}]: game-start-${room._id}`);
 
   room.players.forEach(async (p) => {
     await Player.updateOne({ _id: p._id }, { $set: p });

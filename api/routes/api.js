@@ -79,8 +79,8 @@ router.delete('/rooms/:id', async (req, res) => {
  * 특정 플레이어 정보 가져오기
  */
 router.get('/players/:id', async (req, res) => {
-  console.log(`[${new Date().toISOString()}]: GET player/${req.params.id}`);
   try {
+    console.log(`[${new Date().toISOString()}]: GET player/${req.params.id}`);
     const player = await Player.findOne({ _id: req.params.id });
     res.json(player);
   } catch {
@@ -93,7 +93,7 @@ router.get('/players/:id', async (req, res) => {
  * 플레이어 추가하기
  */
 router.post('/players', async (req, res) => {
-  console.log(`[${new Date().toISOString()}]: POST players ${req.body._roomId}`);
+  console.log(`[${new Date().toISOString()}]: POST players ${req.body.name}`);
 
   const newPlayer = new Player(req.body);
   await newPlayer.save();
@@ -105,7 +105,7 @@ router.post('/players', async (req, res) => {
  * 플레이어 이름 변경하기
  */
 router.put('/players/:id', async (req, res) => {
-  console.log(`[${new Date().toISOString()}]: PUT players ${req.body._roomId}`);
+  console.log(`[${new Date().toISOString()}]: PUT players ${req.body._id}`);
   await Player.updateOne({ _id: req.params.id }, { $set: { name: req.body.name } });
   const player = await Player.findOne({ _id: req.params.id })
   res.json(player);
@@ -116,8 +116,8 @@ router.put('/players/:id', async (req, res) => {
  * 플레이어 삭제
  */
 router.delete('/players/:id', async (req, res) => {
-  console.log(`[${new Date().toISOString()}]: DELETE players/${req.params.id}`);
   try {
+    console.log(`[${new Date().toISOString()}]: DELETE players/${req.params.id}`);
     await Player.deleteOne({ _id: req.params.id });
     res.json(`deleted players ${req.params.id}`);
   } catch {

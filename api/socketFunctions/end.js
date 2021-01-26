@@ -4,7 +4,7 @@ const Room = require('../models/Room');
 const Player = require('../models/Player');
 
 const leave = async function (io, player) {
-  console.log(`[${new Date().toISOString()}]: room leave ${player._id}`);
+  console.log(`[${new Date().toISOString()}]: room leave-${player?._roomId} ${player?._id}`);
 
   // 1. room의 player를 내보냄
   await Room.updateOne({ _id: player._roomId }, { $pull: { players: player._id } });
@@ -66,7 +66,7 @@ const leave = async function (io, player) {
 }
 
 const replay = async function (io, room) {
-  console.log(`[${new Date().toISOString()}]: replay`);
+  console.log(`[${new Date().toISOString()}]: replay-${room?._id}`);
 
   await Room.updateOne({ _id: room._id }, { $set: room });
   await Player.updateMany({ _roomId: room._id }, { $set: {
@@ -81,8 +81,8 @@ const replay = async function (io, room) {
 }
 
 const endGame = async function (io, value) {
-  console.log(`[${new Date().toISOString()}]: end-game`);
   const { player, room, aniConfig } = value
+  console.log(`[${new Date().toISOString()}]: end-game-${room?._id} ${player._id}`);
 
   // DB room 갱신
   await Room.updateOne({ _id: room._id }, { $set: room });

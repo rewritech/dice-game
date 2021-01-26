@@ -51,7 +51,7 @@ const deleteRoom = async function (room) {
 }
 
 const sendMessage = async function (io, message) {
-  console.log(`[${new Date().toISOString()}]: send-message`);
+  console.log(`[${new Date().toISOString()}]: send-message-${message._playerId}`);
   const player = await Player.findOne({ _id: message._playerId })
   const newMessage = new Message({ playerName: player.name, sendedAt: new Date(), ...message });
   await newMessage.save();

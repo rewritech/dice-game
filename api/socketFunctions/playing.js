@@ -56,8 +56,8 @@ const compare = function (soruce, target) {
 }
 
 const changeTurn = async function (io, value) {
-  console.log(`[${new Date().toISOString()}]: change-turn`);
   const { room, player, aniConfig } = value
+  console.log(`[${new Date().toISOString()}]: change-turn-${room?._id} ${player?._id}`);
 
   // 2. currentPlayer 변경
   room.currentPlayer = getNextPlayer(room)
@@ -84,7 +84,7 @@ const changeTurn = async function (io, value) {
 }
 
 const catchPlayer = async function (io, player) {
-  console.log(`[${new Date().toISOString()}]: catch-player`);
+  console.log(`[${new Date().toISOString()}]: catch-player-${player?._roomId} ${player?._id}`);
   await Player.updateOne({ _id: player._id }, { $set: player });
   common.broadcastSystemMessage(io, player._roomId, 'danger', common.joinMsg([player.name, 'catchedMessage']));
 }
@@ -95,8 +95,8 @@ const catchPlayer = async function (io, player) {
 //   - 잡혔습니다.
 // - change turn || game over
 const move = async function (io, value) {
-  console.log(`[${new Date().toISOString()}]: move`);
   const { moveTo, room, player } = value
+  console.log(`[${new Date().toISOString()}]: move-${room?._id} ${player?._id}`);
 
   // ====== 이동 ======
   // 제출 카드 가져오기
