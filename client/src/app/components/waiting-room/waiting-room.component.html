@@ -1,7 +1,10 @@
 <div class="background container border border-white">
   <div class="card bg-transparent">
     <div class="card-header border-white">
-      <h2 class="text-white">{{i18n.get('selectPositionAndPiece')}}</h2>
+      <div class="d-flex justify-content-between">
+        <h2 class="text-white">{{i18n.get('selectPositionAndPiece')}}</h2>
+        <span class="badge-size d-table badge badge-{{room.mode === 'LIMITED' ? 'success' : 'warning'}}">{{i18n.get(room.mode)}}</span>
+      </div>
     </div>
     <div class="card-body border-white">
       <div class="row row-cols-2">
