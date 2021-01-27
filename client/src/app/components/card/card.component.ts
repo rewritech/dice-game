@@ -25,11 +25,7 @@ export class CardComponent implements OnInit {
 
   disabledClass: string
   isItem: boolean
-  bgColors = [
-    'bg-danger',
-    'bg-warning',
-    'bg-primary',
-  ]
+  bgColors = ['bg-danger', 'bg-warning', 'bg-primary']
 
   // constructor() {}
 

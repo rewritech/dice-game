@@ -1,5 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core'
-import { faBomb, faHeart, faRandom, IconDefinition } from '@fortawesome/free-solid-svg-icons'
+import {
+  faBomb,
+  faHeart,
+  faRandom,
+  IconDefinition,
+} from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-item-card',
@@ -11,11 +16,7 @@ export class ItemCardComponent implements OnInit {
   @Input() disabledClass: string
 
   icon: IconDefinition
-  colors = [
-    'text-dark',
-    'text-danger',
-    'text-warning',
-  ]
+  colors = ['text-dark', 'text-danger', 'text-warning']
 
   ngOnInit(): void {
     // init
@@ -28,6 +29,8 @@ export class ItemCardComponent implements OnInit {
         break
       case 9:
         this.icon = faRandom
+        break
+      default:
         break
     }
   }
