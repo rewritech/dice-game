@@ -1,6 +1,11 @@
-<div #scrollMe class="p-2 mb-1 rounded chat-size chat-bg overflow-auto">
+<div #chatSystem class="p-2 mb-1 rounded chat-size-system chat-bg overflow-auto">
   <div *ngFor="let message of messages">
-    <app-chat-message [message]="message" [playerId]="playerId"></app-chat-message>
+    <app-chat-message *ngIf="!message._playerId" [message]="message" [playerId]="playerId"></app-chat-message>
+  </div>
+</div>
+<div #chat class="p-2 mb-1 rounded chat-size chat-bg overflow-auto">
+  <div *ngFor="let message of messages">
+    <app-chat-message *ngIf="message._playerId" [message]="message" [playerId]="playerId"></app-chat-message>
   </div>
 </div>
 <form #f="ngForm" (ngSubmit)="onSubmit()">

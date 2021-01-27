@@ -18,7 +18,8 @@ export class ChatComponent implements OnInit {
   private roomId = +this.route.snapshot.paramMap.get('id')
   playerId = sessionStorage.getItem('pId')
 
-  @ViewChild('scrollMe') private chatRef: ElementRef
+  @ViewChild('chat') private chatRef: ElementRef
+  @ViewChild('chatSystem') private chatSystemRef: ElementRef
 
   constructor(
     private socket: SocketConnectService,
@@ -62,5 +63,6 @@ export class ChatComponent implements OnInit {
 
   private scrollToBottom(): void {
     this.chatRef.nativeElement.scrollTop = this.chatRef.nativeElement.scrollHeight
+    this.chatSystemRef.nativeElement.scrollTop = this.chatSystemRef.nativeElement.scrollHeight
   }
 }
