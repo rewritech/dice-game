@@ -29,6 +29,7 @@ import { WaitingRoomComponent } from './components/waiting-room/waiting-room.com
 import { BoardComponent } from './components/board/board.component'
 import { ConsoleComponent } from './components/console/console.component'
 import { EndGameModalComponent } from './components/end-game-modal/end-game-modal.component'
+import { ItemCardComponent } from './components/item-card/item-card.component'
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { EndGameModalComponent } from './components/end-game-modal/end-game-moda
     BoardComponent,
     ConsoleComponent,
     EndGameModalComponent,
+    ItemCardComponent,
   ],
   imports: [
     AppRoutingModule,

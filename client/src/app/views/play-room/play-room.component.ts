@@ -122,11 +122,10 @@ export class PlayRoomComponent implements OnInit {
 
   replay(): void {
     this.diceMapService.createNewMap()
-    this.cardService.createNewCardDeck()
     this.room.status = 'WAIT'
     this.room.map = this.diceMapService.getDiceMap()
     this.room.cardDeck = {
-      unused: this.cardService.getCardDeck(),
+      unused: this.cardService.createNewCardDeck(this.room.mode === 'ITEM'),
       used: [],
     }
     this.socket.emit('replay', this.room)

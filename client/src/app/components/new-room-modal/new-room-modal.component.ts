@@ -46,7 +46,6 @@ export class NewRoomModalComponent implements OnInit {
           this.validationError = false
           this.invalidClass = ''
           this.diceMapService.createNewMap()
-          this.cardService.createNewCardDeck()
           this.room = {
             title: '',
             players: [],
@@ -55,7 +54,7 @@ export class NewRoomModalComponent implements OnInit {
             currentPlayer: this.playerId,
             status: 'WAIT',
             cardDeck: {
-              unused: this.cardService.getCardDeck(),
+              unused: [],
               used: [],
             },
             mode: 'LIMITED',
@@ -78,6 +77,7 @@ export class NewRoomModalComponent implements OnInit {
     const title = this.room.title.trim()
     if (title.length > 0 && title.length <= 20) {
       this.modalService.dismissAll()
+      this.room.cardDeck.unused = this.cardService.createNewCardDeck(this.room.mode === 'ITEM')
       this.roomService.createRoom(this.room).subscribe((res) => {
         this.router.navigate([`/rooms/${res._id}`])
       })

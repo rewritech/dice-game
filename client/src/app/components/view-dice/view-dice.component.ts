@@ -23,7 +23,6 @@ export class ViewDiceComponent implements OnInit {
   diceSizeClass = 'dice-size'
 
   ngOnInit(): void {
-    // onInit
     this.dotClass = this.mini ? 'mini-dot' : 'dot'
     this.diceSizeClass = this.mini ? 'mini-dice-size' : 'dice-size'
   }

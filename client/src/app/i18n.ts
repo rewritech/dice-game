@@ -60,8 +60,9 @@ export const i18n = {
     WAIT: 'WAIT',
     PLAYING: 'PLAYING',
     modeLabel: 'Select play mode',
-    LIMITED: 'Card Limited Distribution',
+    LIMITED: 'Card limited distribution',
     INFINITY: 'Card limitless distribution',
+    ITEM: 'Add item card',
   },
   ja: {
     loginButton: 'ログイン',
@@ -125,6 +126,7 @@ export const i18n = {
     modeLabel: 'プレイモード選択',
     LIMITED: 'カード有限分配',
     INFINITY: 'カード無限分配',
+    ITEM: 'アイテム戦',
   },
   ko: {
     loginButton: '로그인',
@@ -188,5 +190,6 @@ export const i18n = {
     modeLabel: '플레이 모드 선택',
     LIMITED: '카드유한분배',
     INFINITY: '카드무한분배',
+    ITEM: '아이템전',
   },
 }

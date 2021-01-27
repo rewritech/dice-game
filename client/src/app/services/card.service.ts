@@ -6,15 +6,18 @@ import { Injectable } from '@angular/core'
 export class CardService {
   private CARD_SET = 10
 
-  private cardDeck: number[]
+  private baseCards = [1, 2, 3, 4, 5, 6]
+  private itemCards = [7, 8, 9]
 
-  // constructor() {}
+  createNewCardDeck(isItem = false): number[] {
+    const cardDeck: number[] = []
+    let base = this.baseCards.concat(this.baseCards)
+    if (isItem) base = base.concat(this.itemCards)
 
-  createNewCardDeck(): void {
-    this.cardDeck = []
     for (let s = 0; s < this.CARD_SET; s += 1) {
-      this.cardDeck.push(...this.shuffle([1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6]))
+      cardDeck.push(...this.shuffle(base))
     }
+    return cardDeck
   }
 
   private shuffle(arr: number[]): number[] {
@@ -28,9 +31,5 @@ export class CardService {
     }
 
     return result
-  }
-
-  getCardDeck(): number[] {
-    return this.cardDeck
   }
 }

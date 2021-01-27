@@ -24,11 +24,18 @@ export class CardComponent implements OnInit {
   @Input() selected: boolean
 
   disabledClass: string
+  isItem: boolean
+  bgColors = [
+    'bg-danger',
+    'bg-warning',
+    'bg-primary',
+  ]
 
   // constructor() {}
 
   ngOnInit(): void {
     // onInit
+    this.isItem = this.num > 6
   }
 
   ngOnChanges(): void {
