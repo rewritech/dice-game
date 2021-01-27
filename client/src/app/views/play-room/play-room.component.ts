@@ -158,11 +158,18 @@ export class PlayRoomComponent implements OnInit {
   move(x: number, y: number): void {
     if (!this.pieces[x][y].disabled) {
       this.initializeTimer()
+      // 셔플카드 방 다시 섞기
+      let newMap = []
+      if (this.selectedCards.filter((c) => c.num === 9).length > 0) {
+        this.diceMapService.createNewMap()
+        newMap = this.diceMapService.getDiceMap()
+      }
       this.cardSubmit()
       this.socket.emit('move', {
         moveTo: [x, y],
         player: this.player,
         room: this.room,
+        newMap,
       })
     }
   }
@@ -227,12 +234,25 @@ export class PlayRoomComponent implements OnInit {
       `change-turn-${roomId}`,
       (value: { room: Room; aniConfig: AnimationOption }) => {
         const { room, aniConfig } = value
-        this.room = room
+        const isShuffled = this.diceMapService.compare<number[][]>(this.room.map, room.map)
+
+        this.room.players = room.players
+        this.room.cardDeck = room.cardDeck
+        this.room.currentPlayer = room.currentPlayer
+
         this.player = room.players.find((p) => p._id === this.playerId)
         this.aniConfig = aniConfig
         this.setCurrentPlayerName()
         this.buildCard() // 내턴이면 카드 활성화
         this.startTimer() // 타이머 시작
+
+        if (!isShuffled) {
+          setTimeout(() => {
+            this.room.map = room.map
+            this.aniConfig = { value: 'insert', params: { x: 0, y: 0 } }
+            this.buildCard()
+          }, 500)
+        }
       }
     )
   }

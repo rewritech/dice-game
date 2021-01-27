@@ -65,7 +65,7 @@ export class DiceMapService {
           num: col,
           disabled,
           icon: coordIcons[[i, j].join('.')]?.piece,
-          blink: !!blinkPlayer && this.compare([i, j], blinkPlayer.coordinates),
+          blink: !!blinkPlayer && this.compare<number[]>([i, j], blinkPlayer.coordinates),
           checked: false,
           playerName: coordIcons[[i, j].join('.')]?.name,
         }
@@ -75,7 +75,7 @@ export class DiceMapService {
   }
 
   // 두 배열을 비교한다. 좌표 비교할 때 사용함
-  compare(x: number[], y: number[]): boolean {
+  compare<T>(x: T, y: T): boolean {
     return JSON.stringify(x) === JSON.stringify(y)
   }
 
@@ -150,14 +150,14 @@ export class DiceMapService {
       const initCoord = plr.initialCoordinates
       if (
         !pieces[initCoord[0]][initCoord[1]].disabled &&
-        !this.compare(initialCoordinates, initCoord)
+        !this.compare<number[]>(initialCoordinates, initCoord)
       ) {
         pieces[initCoord[0]][initCoord[1]].disabled = true
       }
     })
 
     if (
-      this.compare(initialCoordinates, coordinates) &&
+      this.compare<number[]>(initialCoordinates, coordinates) &&
       cards.filter((card) =>
         this.getAroundCard(map, coordinates).includes(card)
       ).length > 0

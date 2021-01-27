@@ -23,10 +23,33 @@ const compare = function (soruce, target) {
   return JSON.stringify(soruce) === JSON.stringify(target)
 }
 
+// TODO : 폭탄카드 다수 캐치 대응
 const catchPlayer = async function (io, player) {
   console.log(`[${new Date().toISOString()}]: catch-player-${player?._roomId} ${player?._id}`);
   await Player.updateOne({ _id: player._id }, { $set: player });
   await common.broadcastSystemMessage(io, player._roomId, 'danger', common.joinMsg([player.name, 'catchedMessage']));
+}
+
+const getCatchedIndex = function (players, moveTo, isBomb) {
+  const catchedIndex = players.findIndex((p) => compare(p.coordinates, moveTo) && p._id !== player._id)
+
+  return catchedIndex
+}
+
+const convertToText = function (cards) {
+  const result = cards.slice()
+  return result.map((c) => {
+    switch (Number(c)) {
+      case 7:
+        return 'Bomb'
+      case 8:
+        return 'Heart'
+      case 9:
+        return 'Shuffle'
+      default:
+        return c
+    }
+  })
 }
 
 // move
@@ -35,22 +58,31 @@ const catchPlayer = async function (io, player) {
 //   - 잡혔습니다.
 // - change turn || game over
 const move = async function (io, value) {
-  const { moveTo, room, player } = value
+  const { moveTo, room, player, newMap } = value
   console.log(`[${new Date().toISOString()}]: move-${room?._id} ${player?._id}`);
 
   // ====== 이동 ======
   // 제출 카드 가져오기
   const prevRoom = await Room.findOne({ _id: room._id, deleted: false });
-  const usedCard = room.cardDeck.used.slice(prevRoom.cardDeck.used.length).join(', ')
+  const usedCards = room.cardDeck.used.slice(prevRoom.cardDeck.used.length)
   // 애니메이션 좌표 계산하기
   const aniConfig = moveAnimate(moveTo, player.coordinates)
   // DB 갱신
   player.coordinates = moveTo
   // 카드 제출 메세지
-  await common.broadcastSystemMessage(io, room._id, 'success', common.joinMsg([player.name, 'changeTurnMessage1', usedCard, 'changeTurnMessage2']));
+  await common.broadcastSystemMessage(io, room._id, 'success', common.joinMsg([player.name, 'changeTurnMessage1', convertToText(usedCards).join(', '), 'changeTurnMessage2']));
 
+  // 하트 1장당 생명력 + 1
+  if (usedCards.includes(8)) {
+    player.life += usedCards.filter((c) => c === 8).length
+  }
+  if (usedCards.includes(9)) {
+    room.map = newMap
+  }
   // ====== catch 판별 ======
   // 메세지 + DB갱신
+  // TODO : 폭탄 여러명 잡는 인덱스 구하기
+  // const catchedIndex = getCatchedIndex(room.players, moveTo, usedCards.includes(7))
   const catchedIndex = room.players.findIndex((p) => compare(p.coordinates, moveTo) && p._id !== player._id)
   let endGame = false
   if (catchedIndex > -1) {
