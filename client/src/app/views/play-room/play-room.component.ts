@@ -235,7 +235,10 @@ export class PlayRoomComponent implements OnInit {
       `change-turn-${roomId}`,
       (value: { room: Room; aniConfig: AnimationOption }) => {
         const { room, aniConfig } = value
-        const isShuffled = this.diceMapService.compare<number[][]>(this.room.map, room.map)
+        const isShuffled = this.diceMapService.compare<number[][]>(
+          this.room.map,
+          room.map
+        )
 
         this.room.players = room.players
         this.room.cardDeck = room.cardDeck
@@ -270,7 +273,11 @@ export class PlayRoomComponent implements OnInit {
         this.aniConfig = aniConfig
         this.initializeTimer()
         this.cardDisabled = true
-        this.pieces = this.diceMapService.createPieces(this.room, this.player._id, true)
+        this.pieces = this.diceMapService.createPieces(
+          this.room,
+          this.player._id,
+          true
+        )
         setTimeout(() => {
           this.room.status = 'END'
         }, 1500)
@@ -328,7 +335,11 @@ export class PlayRoomComponent implements OnInit {
   // 내턴이면 주사위 활성화
   private buildCard(): void {
     this.cardDisabled = !this.roomService.checkMyTurn(this.player, this.room)
-    this.pieces = this.diceMapService.createPieces(this.room, this.player._id, true)
+    this.pieces = this.diceMapService.createPieces(
+      this.room,
+      this.player._id,
+      true
+    )
   }
 
   private accessibleArea() {
