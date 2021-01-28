@@ -76,6 +76,7 @@ export class PlayRoomComponent implements OnInit {
             this.socket.emit<Player>('join-room', this.player)
           })
       } else {
+        this.modalService.dismissAll()
         this.router.navigate([`/rooms`])
       }
     })

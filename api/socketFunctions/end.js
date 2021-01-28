@@ -28,7 +28,7 @@ const leave = async function (io, player) {
         await common.deleteRoom(room)
       } else {
         // 내턴이면 턴을 넘긴다
-        if (String(room.currentPlayer) === String(player._id)) {
+        if (room.status === 'PLAYING' && String(room.currentPlayer) === String(player._id)) {
           const val = {
             room,
             player,

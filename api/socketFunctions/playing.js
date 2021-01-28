@@ -23,17 +23,33 @@ const compare = function (soruce, target) {
   return JSON.stringify(soruce) === JSON.stringify(target)
 }
 
-// TODO : 폭탄카드 다수 캐치 대응
 const catchPlayer = async function (io, player) {
   console.log(`[${new Date().toISOString()}]: catch-player-${player?._roomId} ${player?._id}`);
   await Player.updateOne({ _id: player._id }, { $set: player });
   await common.broadcastSystemMessage(io, player._roomId, 'danger', common.joinMsg([player.name, 'catchedMessage']));
 }
 
-const getCatchedIndex = function (players, moveTo, isBomb) {
-  const catchedIndex = players.findIndex((p) => compare(p.coordinates, moveTo) && p._id !== player._id)
+const getCatchedIndex = function (players, playerId, moveTo, isBomb) {
+  let result = []
+  if (isBomb) {
+    const targets = getBombTargets(moveTo[0], moveTo[1])
+    players.forEach((p, i) => {
+      if (targets.includes(JSON.stringify(p.coordinates)) && p._id !== playerId) {
+        result.push(i)
+      }
+    })
+  } else {
+    result.push(players.findIndex((p) => compare(p.coordinates, moveTo) && p._id !== playerId))
+  }
+  return result
+}
 
-  return catchedIndex
+const getBombTargets = function (x, y) {
+  return [
+    JSON.stringify([x - 1, y - 1]), JSON.stringify([x - 1, y]), JSON.stringify([x - 1, y + 1]),
+    JSON.stringify([x    , y - 1]), JSON.stringify([x    , y]), JSON.stringify([x    , y + 1]),
+    JSON.stringify([x + 1, y - 1]), JSON.stringify([x + 1, y]), JSON.stringify([x + 1, y + 1]),
+  ]
 }
 
 const convertToText = function (cards) {
@@ -81,19 +97,19 @@ const move = async function (io, value) {
   }
   // ====== catch 판별 ======
   // 메세지 + DB갱신
-  // TODO : 폭탄 여러명 잡는 인덱스 구하기
-  // const catchedIndex = getCatchedIndex(room.players, moveTo, usedCards.includes(7))
-  const catchedIndex = room.players.findIndex((p) => compare(p.coordinates, moveTo) && p._id !== player._id)
+  const catchedIndexes = getCatchedIndex(room.players, player._id, moveTo, usedCards.includes(7))
   let endGame = false
-  if (catchedIndex > -1) {
-    // 잡힌 유저의 라이프 감소
-    room.players[catchedIndex].life -= 1
-    // 잡힌 유저 좌표 초기화
-    room.players[catchedIndex].coordinates = room.players[catchedIndex].initialCoordinates
-    player.killedPlayer += 1
+  if (catchedIndexes.length > 0 && !catchedIndexes.includes(-1)) {
+    catchedIndexes.forEach(async (index) => {
+      // 잡힌 유저의 라이프 감소
+      room.players[index].life -= 1
+      // 잡힌 유저 좌표 초기화
+      room.players[index].coordinates = room.players[index].initialCoordinates
+      player.killedPlayer += 1
+      await catchPlayer(io, room.players[index])
+    })
     // 게임종료 판단
-    endGame = player.killedPlayer === GAME_OVER_CONDITION_KILLED || room.players[catchedIndex].life === GAME_OVER_CONDITION_LIFE
-    await catchPlayer(io, room.players[catchedIndex])
+    endGame = player.killedPlayer === GAME_OVER_CONDITION_KILLED || room.players.findIndex((p) => p.life === 0) !== -1
   }
 
   if (room.cardDeck.used.length === TOTAL_CARDS) {
