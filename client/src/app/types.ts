@@ -34,6 +34,7 @@ export type Map = {
   blink: boolean
   checked: boolean
   playerName: string
+  isMe: boolean
 }
 
 export type Message = {

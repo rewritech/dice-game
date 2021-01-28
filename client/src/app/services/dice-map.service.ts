@@ -54,11 +54,11 @@ export class DiceMapService {
     return this.DICE_MAX
   }
 
-  createPieces(room: Room, disabled: boolean): Map[][] {
+  createPieces(room: Room, myId: string, disabled: boolean): Map[][] {
     const result: Map[][] = Array.from(Array(10), () => new Array(10))
     const { currentPlayer, players, map } = room
     const blinkPlayer = players.find((p) => p._id === currentPlayer)
-    const coordIcons = this.createCoordIcon(players)
+    const coordIcons = this.createCoordIcon(players, myId)
     map.forEach((row, i) => {
       row.forEach((col, j) => {
         result[i][j] = {
@@ -68,6 +68,7 @@ export class DiceMapService {
           blink: !!blinkPlayer && this.compare<number[]>([i, j], blinkPlayer.coordinates),
           checked: false,
           playerName: coordIcons[[i, j].join('.')]?.name,
+          isMe: coordIcons[[i, j].join('.')]?.isMe,
         }
       })
     })
@@ -79,10 +80,10 @@ export class DiceMapService {
     return JSON.stringify(x) === JSON.stringify(y)
   }
 
-  private createCoordIcon(players: Player[]) {
+  private createCoordIcon(players: Player[], myId: string) {
     const result = {}
     players.forEach((p: Player) => {
-      result[p.coordinates?.join('.')] = { piece: p.piece, name: p?.name || '' }
+      result[p.coordinates?.join('.')] = { piece: p.piece, name: p?.name || '', isMe: p._id === myId }
     })
     return result
   }
@@ -137,7 +138,7 @@ export class DiceMapService {
     const { map } = room
 
     // 일단 모두 true(비활성화)인 Map[][] 만든다.
-    const pieces = this.createPieces(room, true)
+    const pieces = this.createPieces(room, player._id, true)
     // 시작 좌표 설정
     const startX = coordinates[0]
     const startY = coordinates[1]

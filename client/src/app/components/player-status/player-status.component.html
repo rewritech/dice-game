@@ -1,6 +1,6 @@
 <div class="{{blinkClass}} d-flex align-items-center justify-content-between outline rounded p-1 status-width">
   <div class="ml-1 justify-content-center d-flex">
-    <fa-icon class="text-white font-size" [icon]="icon"></fa-icon>
+    <fa-icon class="font-size" [style.color]="isMe ? 'darkorange' : 'white'" [icon]="icon"></fa-icon>
   </div>
   <div class="text-white ml-1 mr-1">
     <fa-icon class="text-white times-size mr-1" [icon]="times"></fa-icon>
@@ -11,7 +11,7 @@
     <fa-icon class="text-white times-size mr-1" [icon]="times"></fa-icon>
     <span class="font-size">{{cards}}</span>
   </div>
-  <span class="icon-size"><fa-icon class="font-size text-white" [icon]="skull"></fa-icon></span>
+  <span class="icon-size"><fa-icon class="font-size" [style.color]="isMe ? 'darkorange' : 'white'" [icon]="skull"></fa-icon></span>
   <div class="text-white ml-1 mr-1">
     <fa-icon class="text-white times-size mr-1" [icon]="times"></fa-icon>
     <span class="font-size">{{killed}}</span>

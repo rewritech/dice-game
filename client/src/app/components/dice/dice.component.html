@@ -16,7 +16,9 @@
       <div class="dot" [style.background-color]="[2, 3, 4, 5, 6].includes(num) ? 'white' : 'transparent'"></div>
     </div>
   </div>
-  <div *ngIf="icon" [@moveAnimate]="moveConfig" class="btn piece position-absolute z-1000 {{blinkClass}} {{disabled ? 'cursor-unset' : ''}}" (click)="onClick()">
-    <span class="icon-size"><fa-icon class="{{iconColorClass}}" [icon]="icon"></fa-icon></span>
+  <div *ngIf="icon" [@moveAnimate]="moveConfig" class="btn piece position-absolute z-1000 {{disabled ? 'cursor-unset' : ''}}" (click)="onClick()">
+    <span class="{{blinkClass}} icon-size" [style.color]="isMe ? 'darkorange' : 'white'">
+      <fa-icon [icon]="icon"></fa-icon>
+    </span>
   </div>
 </div>

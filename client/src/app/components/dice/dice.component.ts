@@ -37,6 +37,7 @@ export class DiceComponent implements OnInit {
   @Input() disabled: boolean
   @Input() blink: boolean
   @Input() coordinate: [number, number]
+  @Input() isMe: boolean
   @Input() callBackOnClick: (x: number, y: number) => void
   @Input() aniConfig: AnimationOption
   @Input() playerName: string
@@ -50,7 +51,6 @@ export class DiceComponent implements OnInit {
     'btn-primary',
   ]
   blinkClass: string
-  iconColorClass: string
   disabledClass: string
   insertConfig: AnimationOption = null
   moveConfig: AnimationOption = null
@@ -58,8 +58,7 @@ export class DiceComponent implements OnInit {
   constructor(private diceMapService: DiceMapService) {}
 
   ngOnInit(): void {
-    this.blinkClass = this.blink ? 'blinking-dice' : ''
-    this.iconColorClass = this.blink ? '' : 'icon-color'
+    this.blinkClass = this.blink ? 'blinking' : ''
     this.disabledClass = this.disabled ? 'disabled cursor-unset' : ''
     if (this.aniConfig?.value === 'insert') {
       this.insertConfig = {

@@ -15,6 +15,7 @@ export class PlayerStatusComponent implements OnInit {
   @Input() life: number
   @Input() cards: number
   @Input() blink: boolean
+  @Input() isMe: boolean
   @Input() killed: number
 
   blinkClass: string
