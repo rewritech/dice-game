@@ -3,7 +3,7 @@
     <div class="card-header border-white">
       <div class="d-flex justify-content-between">
         <h2 class="text-white">{{i18n.get('selectPositionAndPiece')}}</h2>
-        <span class="badge-size d-table badge badge-{{room.mode === 'LIMITED' ? 'success' : 'warning'}}">{{i18n.get(room.mode)}}</span>
+        <span class="badge-size d-table badge badge-{{color[room.mode]}}">{{i18n.get(room.mode)}}</span>
       </div>
     </div>
     <div class="card-body border-white">

@@ -57,7 +57,7 @@ export class NewRoomModalComponent implements OnInit {
               unused: [],
               used: [],
             },
-            mode: 'LIMITED',
+            mode: 'INFINITY',
           }
           this.modalService.open(content, {
             ariaLabelledBy: 'modal-basic-title',

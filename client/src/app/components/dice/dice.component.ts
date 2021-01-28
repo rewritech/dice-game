@@ -28,6 +28,16 @@ import { DiceMapService } from '../../services/dice-map.service'
         ],
         { params: { x: 0, y: 0 } }
       ),
+      transition(
+        '* => bomb',
+        [
+          style({ transform: `translate({{x}}%, {{y}}%)` }),
+          animate('0.2s'),
+          style({ transform: `scale(4)` }),
+          animate('0.3s'),
+        ],
+        { params: { x: 0, y: 0 } }
+      ),
     ]),
   ],
 })
@@ -69,7 +79,7 @@ export class DiceComponent implements OnInit {
         },
       }
     } else if (
-      this.aniConfig?.value === 'move' &&
+      ['move', 'bomb'].includes(this.aniConfig?.value) &&
       this.diceMapService.compare(this.coordinate, this.aniConfig.target)
     ) {
       this.moveConfig = this.aniConfig

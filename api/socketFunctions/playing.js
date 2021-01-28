@@ -88,6 +88,9 @@ const move = async function (io, value) {
   // 카드 제출 메세지
   await common.broadcastSystemMessage(io, room._id, 'success', common.joinMsg([player.name, 'changeTurnMessage1', convertToText(usedCards).join(', '), 'changeTurnMessage2']));
 
+  if (usedCards.includes(7)) {
+    aniConfig.value = 'bomb'
+  }
   // 하트 1장당 생명력 + 1
   if (usedCards.includes(8)) {
     player.life += usedCards.filter((c) => c === 8).length

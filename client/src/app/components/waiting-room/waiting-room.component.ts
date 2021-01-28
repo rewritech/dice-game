@@ -15,6 +15,11 @@ export class WaitingRoomComponent implements OnInit {
   @Input() startBtnDisableClass: string
 
   positions = ['left-top', 'right-top', 'left-bottom', 'right-bottom']
+  color = {
+    LIMITED: 'success',
+    INFINITY: 'warning',
+    ITEM: 'danger',
+  }
 
   constructor(public i18n: I18nService) {}
 
