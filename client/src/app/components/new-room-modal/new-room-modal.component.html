@@ -35,13 +35,13 @@
           <option [ngValue]="false">{{i18n.get('normal')}}</option>
           <option [ngValue]="true">{{i18n.get('scramble')}}</option>
         </select>
-        <span *ngIf="!room.mode.scramble" class="text-danger ml-2 description-size">{{i18n.get('normalModeDescription')}}</span>
-        <span *ngIf="room.mode.scramble" class="text-danger ml-2 description-size">{{i18n.get('scrambleModeDescription')}}</span>
+        <span *ngIf="!room.mode.scramble" class="text-success ml-2 description-size">{{i18n.get('normalModeDescription')}}</span>
+        <span *ngIf="room.mode.scramble" class="text-success ml-2 description-size">{{i18n.get('scrambleModeDescription')}}</span>
       </div>
       <div class="form-group">
         <label for="item" class="mr-1">{{i18n.get('item')}}</label>
         <input type="checkbox" id="item" name="mode.item" [(ngModel)]="room.mode.item">
-        <p *ngIf="room.mode.item" class="text-danger ml-2 description-size">{{i18n.get('itemModeDescription')}}</p>
+        <p *ngIf="room.mode.item" class="text-success ml-2 description-size">{{i18n.get('itemModeDescription')}}</p>
       </div>
     </div>
     <div class="modal-footer">

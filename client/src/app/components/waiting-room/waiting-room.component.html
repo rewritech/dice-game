@@ -1,9 +1,13 @@
 <div class="background container border border-white">
   <div class="card bg-transparent">
     <div class="card-header border-white">
-      <div class="d-flex justify-content-between">
-        <h2 class="text-white">{{i18n.get('selectPositionAndPiece')}}</h2>
-        <span class="badge-size d-table badge badge-{{color[room.mode]}}">{{i18n.get(room.mode)}}</span>
+      <div class="d-flex justify-content-end">
+        <span class="badge-size mr-1 d-table badge badge-{{room.mode.infinity ? 'success' : 'warning'}}">{{i18n.get(infinityBadge)}}</span>
+        <span class="badge-size mr-1 d-table badge badge-primary" *ngIf="room.mode.item">{{i18n.get(itemBadge)}}</span>
+        <span class="badge-size d-table badge badge-{{room.mode.scramble ? 'info' : 'danger'}}">{{i18n.get(scrambleBadge)}}</span>
+      </div>
+      <div class="d-flex">
+        <span class="title-size text-white">{{i18n.get('selectPositionAndPiece')}}</span>
       </div>
     </div>
     <div class="card-body border-white">

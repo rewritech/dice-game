@@ -15,15 +15,16 @@ export class WaitingRoomComponent implements OnInit {
   @Input() startBtnDisableClass: string
 
   positions = ['left-top', 'right-top', 'left-bottom', 'right-bottom']
-  color = {
-    LIMITED: 'success',
-    INFINITY: 'warning',
-    ITEM: 'danger',
-  }
+  infinityBadge: string
+  itemBadge: string
+  scrambleBadge: string
 
   constructor(public i18n: I18nService) {}
 
   ngOnInit(): void {
     //
+    this.infinityBadge = this.room.mode.infinity ? 'infinity' : 'limited'
+    this.itemBadge = 'item'
+    this.scrambleBadge = this.room.mode.scramble ? 'scramble' : 'normal'
   }
 }
