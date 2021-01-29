@@ -145,7 +145,7 @@ io.of('/dice-map-room').on('connection', (socket) => {
   });
 
   socket.on('disconnect', async () => {
-    console.log(`[${new Date().toISOString()}]: user socket disconnected`);
+    console.log(`[${new Date().toISOString()}]: user socket disconnected ${id}`);
     if (id.length > 0) {
       const player = await Player.findOne({ _id: id })
       if (player && player._roomId !== 0) {
