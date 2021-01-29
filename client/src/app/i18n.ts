@@ -30,10 +30,12 @@ export const i18n = {
     role4: 'You can move to the appropriate space for the submitted dice card',
     role5: '1 time limit per turn 1 minute',
     role6: 'Given three lives',
-    role7: "End Game Condition 1: if one player's life goes to zero",
+    role7: 'General : If my life is 0 or I get caught 5 times, game over.',
     role8:
-      'End Game Condition 2: If the number of catches for a player reaches 5',
-    role9: 'End Game Condition 3 : If you use all 120 cards',
+      "Candy Battle : Take away another user's candy, collect 7 or get taken away, and game over when 0 hits.",
+    role9: 'Card finite distribution : If you use all 120 cards, game over',
+    role10:
+      'Item Battle : Add Bomb, Heart, Shuffle Card (Exclude Heart in case of Candy Battle)',
     original: 'Origianl Webtoon (korean)',
     remainTime: 'Remain Time : ',
     joinRoomMessage: ' participated.',
@@ -71,7 +73,7 @@ export const i18n = {
     scrambleModeDescription:
       "Take away another user's candy, collect 7 or get taken away, and game over when 0 hits.",
     itemModeDescription:
-      'Bomb, Heart, Shuffle Card (Exclude Heart in case of Candy Battle)',
+      'Add Bomb, Heart, Shuffle Card (Exclude Heart in case of Candy Battle)',
   },
   ja: {
     loginButton: 'ログイン',
@@ -104,9 +106,12 @@ export const i18n = {
     role4: '提出したサイコロカードに移動可能',
     role5: '各ターンは１分の時間制限',
     role6: 'ライフは3個',
-    role7: 'クリア条件1：１人のライフが０になる場合',
-    role8: 'クリア条件2：１人のチャッチカウントが５になる場合',
-    role9: 'クリア条件3 : 120枚のカードを全て使用する場合',
+    role7: '一般 : ライフが0なったり、5回捕まったら終了',
+    role8:
+      'キャンディー争奪戦 : キャンディーを奪い取り７つ集めたり、奪われて０になる場合終了',
+    role9: 'カード有限分配 : 120枚のカードを全て使用する場合終了',
+    role10:
+      'アイテム戦 : 爆弾、ハート、シャプールカード追加（キャンディー争奪戦の場合、ハートは除外）',
     original: '原作漫画（韓国語）',
     remainTime: '残り時間 : ',
     joinRoomMessage: 'さんが、参加しました。',
@@ -176,9 +181,12 @@ export const i18n = {
     role4: '제출한 주사위 카드에 해당하는 칸으로 이동가능',
     role5: '1 턴당 시간 제한 1분',
     role6: '생명 3개씩 주어짐',
-    role7: '게임 종료 조건1 : 한 플레이어의 생명이 0이 되는 경우',
-    role8: '게임 종료 조건2 : 한 플레이어의 잡은 수가 5가 되는 경우',
-    role9: '게임 종료 조건3 : 120장의 카드를 모두 사용하는 경우',
+    role7: '일반 : 생명이 0이 되거나 5번 잡으면 종료',
+    role8:
+      '캔디쟁탈전 : 다른 유저의 캔디를 뺏아 7개 모으거나 빼앗겨서 0개가 되면 종료',
+    role9: '카드유한모드 : 120장의 카드를 모두 사용하는 경우 종료',
+    role10:
+      '아이템전 : 폭탄, 생명, 셔플 카드 추가(캔디쟁탈전의 경우 생명카드 제외)',
     original: '자작 보드게임 동아리 - 다이스맵',
     remainTime: '남은 시간 : ',
     joinRoomMessage: '님이 참가하셨습니다.',
