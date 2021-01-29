@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { Mode } from '../types'
 
 @Injectable({
   providedIn: 'root',
@@ -8,11 +9,14 @@ export class CardService {
 
   private baseCards = [1, 2, 3, 4, 5, 6]
   private itemCards = [7, 8, 9]
+  private candyItemCards = [7, 9]
 
-  createNewCardDeck(isItem = false): number[] {
+  createNewCardDeck(mode: Mode): number[] {
     const cardDeck: number[] = []
     let base = this.baseCards.concat(this.baseCards)
-    if (isItem) base = base.concat(this.itemCards)
+    if (mode.item) {
+      base = base.concat(mode.scramble ? this.candyItemCards : this.itemCards)
+    }
 
     for (let s = 0; s < this.CARD_SET; s += 1) {
       cardDeck.push(...this.shuffle(base))

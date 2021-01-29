@@ -12,6 +12,11 @@ export type Player = {
   killedPlayer: number
 }
 
+export type Mode = {
+  infinity: boolean
+  item: boolean
+  scramble: boolean
+}
 export type Room = {
   _id?: number
   title: string
@@ -24,11 +29,7 @@ export type Room = {
     unused: number[]
     used: number[]
   }
-  mode: {
-    infinity: boolean
-    item: boolean
-    scramble: boolean
-  }
+  mode: Mode
 }
 
 export type Map = {

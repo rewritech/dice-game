@@ -6,6 +6,7 @@ const Player = require('../models/Player');
 const DICE = 6
 const CARD_SET = 20
 const TOTAL_CARDS = DICE * CARD_SET
+const GAME_OVER_CONDITION_CANDY = 7
 const GAME_OVER_CONDITION_KILLED = 5
 const GAME_OVER_CONDITION_LIFE = 0
 
@@ -108,11 +109,19 @@ const move = async function (io, value) {
       room.players[index].life -= 1
       // 잡힌 유저 좌표 초기화
       room.players[index].coordinates = room.players[index].initialCoordinates
-      player.killedPlayer += 1
+      if (room.mode.scramble) {
+        player.life += 1
+      } else {
+        player.killedPlayer += 1
+      }
       await catchPlayer(io, room.players[index])
     })
     // 게임종료 판단
-    endGame = player.killedPlayer === GAME_OVER_CONDITION_KILLED || room.players.findIndex((p) => p.life === 0) !== -1
+    if (room.mode.scramble) {
+      endGame = player.life === GAME_OVER_CONDITION_CANDY || room.players.findIndex((p) => p.life === GAME_OVER_CONDITION_LIFE) !== -1
+    } else {
+      endGame = player.killedPlayer === GAME_OVER_CONDITION_KILLED || room.players.findIndex((p) => p.life === GAME_OVER_CONDITION_LIFE) !== -1
+    }
   }
 
   if (room.cardDeck.used.length === TOTAL_CARDS) {
