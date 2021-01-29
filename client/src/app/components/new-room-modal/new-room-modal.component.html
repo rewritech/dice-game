@@ -23,12 +23,25 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="forMode">{{i18n.get('modeLabel')}}</label>
-        <select class="form-control" id="forMode" name="mode" [(ngModel)]="room.mode">
-          <option value="LIMITED">{{i18n.get('LIMITED')}}</option>
-          <option value="INFINITY">{{i18n.get('INFINITY')}}</option>
-          <option value="ITEM">{{i18n.get('ITEM')}}</option>
+        <label for="forMode">{{i18n.get('distributeModeLabel')}}</label>
+        <select class="form-control" id="forMode" name="mode.infinity" [(ngModel)]="room.mode.infinity">
+          <option [ngValue]="false">{{i18n.get('limited')}}</option>
+          <option [ngValue]="true">{{i18n.get('infinity')}}</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label for="forCandy">{{i18n.get('clearModeLabel')}}</label>
+        <select class="form-control" id="forCandy" name="mode.scramble" [(ngModel)]="room.mode.scramble">
+          <option [ngValue]="false">{{i18n.get('normal')}}</option>
+          <option [ngValue]="true">{{i18n.get('scramble')}}</option>
+        </select>
+        <span *ngIf="!room.mode.scramble" class="text-danger ml-2 description-size">{{i18n.get('normalModeDescription')}}</span>
+        <span *ngIf="room.mode.scramble" class="text-danger ml-2 description-size">{{i18n.get('scrambleModeDescription')}}</span>
+      </div>
+      <div class="form-group">
+        <label for="item" class="mr-1">{{i18n.get('item')}}</label>
+        <input type="checkbox" id="item" name="mode.item" [(ngModel)]="room.mode.item">
+        <p *ngIf="room.mode.item" class="text-danger ml-2 description-size">{{i18n.get('itemModeDescription')}}</p>
       </div>
     </div>
     <div class="modal-footer">

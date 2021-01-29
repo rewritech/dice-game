@@ -57,7 +57,11 @@ export class NewRoomModalComponent implements OnInit {
               unused: [],
               used: [],
             },
-            mode: 'INFINITY',
+            mode: {
+              infinity: true,
+              item: false,
+              scramble: false,
+            },
           }
           this.modalService.open(content, {
             ariaLabelledBy: 'modal-basic-title',
@@ -78,7 +82,7 @@ export class NewRoomModalComponent implements OnInit {
     if (title.length > 0 && title.length <= 20) {
       this.modalService.dismissAll()
       this.room.cardDeck.unused = this.cardService.createNewCardDeck(
-        this.room.mode === 'ITEM'
+        this.room.mode.item
       )
       this.roomService.createRoom(this.room).subscribe((res) => {
         this.router.navigate([`/rooms/${res._id}`])

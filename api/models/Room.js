@@ -10,7 +10,11 @@ const RoomSchema = mongoose.Schema({
   currentPlayer: { type: Schema.Types.ObjectId, ref: 'Player' },
   status: String,
   cardDeck: { unused: [], used: [] },
-  mode: String,
+  mode: {
+    infinity: Boolean,
+    item: Boolean,
+    scramble: Boolean,
+  },
   deleted: Boolean,
 });
 

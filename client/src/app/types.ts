@@ -24,7 +24,11 @@ export type Room = {
     unused: number[]
     used: number[]
   }
-  mode: 'LIMITED' | 'INFINITY' | 'ITEM'
+  mode: {
+    infinity: boolean
+    item: boolean
+    scramble: boolean
+  }
 }
 
 export type Map = {

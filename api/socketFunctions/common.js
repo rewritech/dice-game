@@ -82,7 +82,7 @@ const getNextPlayer = function (room) {
 
 const distributeCard = function (room) {
   // unused에 카드가 2장 미만이면 used의 카드를 다시 가져온다.
-  if (['INFINITY', 'ITEM'].includes(room.mode) && room.cardDeck.unused.length <= ADD_DECK) {
+  if (room.mode.infinity && room.cardDeck.unused.length <= ADD_DECK) {
     room.cardDeck.unused = room.cardDeck.unused.concat(room.cardDeck.used)
     room.cardDeck.used = []
   }
@@ -101,7 +101,7 @@ const changeTurn = async function (io, value) {
 
   // 3. 카드 분배
   distributeCard(room)
-  if (room.mode === 'LIMITED' && room.cardDeck.unused.length === 0) {
+  if (!room.mode.infinity && room.cardDeck.unused.length === 0) {
     const prevMsg = await Message.findOne({ _roomId: room._id, content: 'usedAllCardsMessage' })
     if (!prevMsg) {
       await broadcastSystemMessage(io, room._id, 'info', 'usedAllCardsMessage');

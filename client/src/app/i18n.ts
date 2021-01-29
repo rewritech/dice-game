@@ -59,10 +59,19 @@ export const i18n = {
     noFilteredRooms: 'There is no room that meets your requirements.',
     WAIT: 'WAIT',
     PLAYING: 'PLAYING',
-    modeLabel: 'Select play mode',
-    LIMITED: 'Card limited distribution',
-    INFINITY: 'Card limitless distribution',
-    ITEM: 'Add item card',
+    distributeModeLabel: 'Select Card Distribution Mode',
+    clearModeLabel: 'Select Game Clear Condition',
+    limited: 'Card finite distribution',
+    infinity: 'Card infinite distribution',
+    item: 'Item Battle',
+    normal: 'General',
+    scramble: 'Candy Battle',
+    normalModeDescription:
+      'If my life is 0 or I get caught 5 times, game over.',
+    scrambleModeDescription:
+      "Take away another user's candy, collect 7 or get taken away, and game over when 0 hits.",
+    itemModeDescription:
+      'Bomb, Heart, Shuffle Card (Exclude Heart in case of Candy Battle)',
   },
   ja: {
     loginButton: 'ログイン',
@@ -123,10 +132,18 @@ export const i18n = {
     noFilteredRooms: '条件に合うルームがありません。',
     WAIT: '待機中',
     PLAYING: 'プレイ中',
-    modeLabel: 'プレイモード選択',
-    LIMITED: 'カード有限分配',
-    INFINITY: 'カード無限分配',
-    ITEM: 'アイテム戦',
+    distributeModeLabel: 'カード分配モード選択',
+    clearModeLabel: 'ゲームクリア条件選択',
+    limited: 'カード有限分配',
+    infinity: 'カード無限分配',
+    item: 'アイテム戦',
+    normal: '一般',
+    scramble: 'キャンディー争奪戦',
+    normalModeDescription: 'ライフが0なったり、5回捕まったら終了',
+    scrambleModeDescription:
+      'キャンディーを奪い取り７つ集めたり、奪われて０になる場合終了',
+    itemModeDescription:
+      '爆弾、ハート、シャプールカード追加（キャンディー争奪戦の場合、ハートは除外）',
   },
   ko: {
     loginButton: '로그인',
@@ -187,9 +204,17 @@ export const i18n = {
     noFilteredRooms: '조건에 맞는 방이 없습니다.',
     WAIT: '대기중',
     PLAYING: '플레이중',
-    modeLabel: '플레이 모드 선택',
-    LIMITED: '카드유한분배',
-    INFINITY: '카드무한분배',
-    ITEM: '아이템전',
+    distributeModeLabel: '카드분배 모드 선택',
+    clearModeLabel: '게임오버 모드 선택',
+    limited: '카드유한분배',
+    infinity: '카드무한분배',
+    item: '아이템전',
+    normal: '일반',
+    scramble: '캔디쟁탈전',
+    normalModeDescription: '생명이 0이 되거나 5번 잡으면 종료',
+    scrambleModeDescription:
+      '다른 유저의 캔디를 뺏아 7개 모으거나 빼앗겨서 0개가 되면 종료',
+    itemModeDescription:
+      '폭탄, 생명, 셔플 카드 추가(캔디쟁탈전의 경우 생명카드 제외)',
   },
 }
