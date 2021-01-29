@@ -179,7 +179,7 @@ export class DiceMapService {
     return pieces
   }
 
-  private getAroundCard(map: number[][], coord: [number, number]): number[] {
+  getAroundCard(map: number[][], coord: [number, number]): number[] {
     const x = coord[0]
     const y = coord[1]
     const aroundX = [map[x - 1], map[x + 1]].filter((n) => !!n).map((n) => n[y])

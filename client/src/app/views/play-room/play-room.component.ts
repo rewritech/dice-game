@@ -308,23 +308,55 @@ export class PlayRoomComponent implements OnInit {
     if (this.roomService.checkMyTurn(this.player, this.room)) {
       this.aniConfig = null
       this.selectedCards = []
-
-      // 1 장 랜덤 삭제
-      const randomIndex = Math.floor(
-        Math.random() * (this.player.cards.length - 1)
+      const { cards, coordinates, initialCoordinates } = this.player
+      let index = Math.floor(Math.random() * (cards.length - 1))
+      let moveTo = this.player.coordinates
+      const aroundCards = this.diceMapService.getAroundCard(
+        this.room.map,
+        initialCoordinates
       )
+      const movableCard = cards.filter((card) => aroundCards.includes(card))
+
+      // 초기 위치이며 이동가능 카드가 있으면 이동하고 종료
+      if (
+        this.diceMapService.compare(coordinates, initialCoordinates) &&
+        movableCard.length > 0
+      ) {
+        index = cards.findIndex((card) => card === movableCard[0])
+        moveTo = this.findMoveIndex(
+          this.room.map,
+          initialCoordinates,
+          movableCard[0]
+        ) as [number, number]
+      }
+
       this.room.cardDeck.used = this.room.cardDeck.used.concat(
-        this.player.cards.splice(randomIndex, 1)
+        this.player.cards.splice(index, 1)
       )
 
       this.socket.emit('move', {
-        moveTo: this.player.coordinates,
+        moveTo,
         player: this.player,
         room: this.room,
+        newMap: this.room.map,
       })
     }
   }
 
+  private findMoveIndex(
+    map: number[][],
+    coord: [number, number],
+    card: number
+  ): number[] {
+    const target: number[][] = [
+      [coord[0] - 1, coord[1]],
+      [coord[0] + 1, coord[1]],
+      [coord[0], coord[1] - 1],
+      [coord[0], coord[1] + 1],
+    ].filter((t) => t[0] >= 0 && t[0] <= 9 && t[1] >= 0 && t[1] <= 9)
+
+    return target.find((c) => map[c[0]][c[1]] === card)
+  }
   // 타이머 초기화
   private initializeTimer() {
     clearInterval(this.timerId)

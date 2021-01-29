@@ -81,7 +81,7 @@ const getNextPlayer = function (room) {
 }
 
 const distributeCard = function (room) {
-  // unused에 카드가 2장 미만이면 used의 카드를 다시 가져온다.
+  // unused에 카드가 2장 이하면 used의 카드를 다시 가져온다.
   if (room.mode.infinity && room.cardDeck.unused.length <= ADD_DECK) {
     room.cardDeck.unused = room.cardDeck.unused.concat(room.cardDeck.used)
     room.cardDeck.used = []

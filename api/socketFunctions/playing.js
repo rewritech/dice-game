@@ -69,6 +69,32 @@ const convertToText = function (cards) {
   })
 }
 
+const scramble = function (io, catchedIndexes, room, player) {
+  catchedIndexes.forEach(async (index) => {
+    // 잡힌 유저의 라이프 감소
+    room.players[index].life -= 1
+    // 잡힌 유저 좌표 초기화
+    room.players[index].coordinates = room.players[index].initialCoordinates
+    player.life += 1
+    await catchPlayer(io, room.players[index])
+  })
+  // 게임종료 판단
+  return player.life === GAME_OVER_CONDITION_CANDY || room.players.findIndex((p) => p.life === GAME_OVER_CONDITION_LIFE) !== -1
+}
+
+const normal = function (io, catchedIndexes, room, player) {
+  catchedIndexes.forEach(async (index) => {
+    // 잡힌 유저의 라이프 감소
+    room.players[index].life -= 1
+    // 잡힌 유저 좌표 초기화
+    room.players[index].coordinates = room.players[index].initialCoordinates
+    player.killedPlayer += 1
+    await catchPlayer(io, room.players[index])
+  })
+  // 게임종료 판단
+  return player.killedPlayer === GAME_OVER_CONDITION_KILLED || room.players.findIndex((p) => p.life === GAME_OVER_CONDITION_LIFE) !== -1
+}
+
 // move
 // - 카드 제출했습니다. + 애니메이션
 // - catch
@@ -104,24 +130,7 @@ const move = async function (io, value) {
   const catchedIndexes = getCatchedIndex(room.players, player._id, moveTo, usedCards.includes(7))
   let endGame = false
   if (catchedIndexes.length > 0 && !catchedIndexes.includes(-1)) {
-    catchedIndexes.forEach(async (index) => {
-      // 잡힌 유저의 라이프 감소
-      room.players[index].life -= 1
-      // 잡힌 유저 좌표 초기화
-      room.players[index].coordinates = room.players[index].initialCoordinates
-      if (room.mode.scramble) {
-        player.life += 1
-      } else {
-        player.killedPlayer += 1
-      }
-      await catchPlayer(io, room.players[index])
-    })
-    // 게임종료 판단
-    if (room.mode.scramble) {
-      endGame = player.life === GAME_OVER_CONDITION_CANDY || room.players.findIndex((p) => p.life === GAME_OVER_CONDITION_LIFE) !== -1
-    } else {
-      endGame = player.killedPlayer === GAME_OVER_CONDITION_KILLED || room.players.findIndex((p) => p.life === GAME_OVER_CONDITION_LIFE) !== -1
-    }
+    endGame = room.mode.scramble ? scramble(io, catchedIndexes, room, player) : normal(io, catchedIndexes, room, player)
   }
 
   if (room.cardDeck.used.length === TOTAL_CARDS) {
