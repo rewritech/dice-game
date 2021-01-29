@@ -17,6 +17,7 @@ export class PlayerStatusComponent implements OnInit {
   @Input() blink: boolean
   @Input() isMe: boolean
   @Input() killed: number
+  @Input() isScramble: boolean
 
   blinkClass: string
   skull = faSkull

@@ -28,3 +28,16 @@
   border-width: thin;
   border-color: white;
 }
+
+.candy-size {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.orange {
+  filter: invert(65%) sepia(80%) saturate(2979%) hue-rotate(356deg) brightness(98%) contrast(110%);
+}
+
+.white {
+  filter: invert(100%) sepia(4%) saturate(14%) hue-rotate(54deg) brightness(103%) contrast(105%);
+}

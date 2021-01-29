@@ -1,8 +1,8 @@
 <div class="{{blinkClass}} d-flex align-items-center justify-content-between outline rounded p-1 status-width">
   <div class="ml-1 justify-content-center d-flex">
-    <fa-icon class="font-size" [style.color]="isMe ? 'darkorange' : 'white'" [icon]="icon"></fa-icon>
+    <fa-icon [style.fontSize]="isScramble ? '1.7rem' : '1.2rem'" [style.color]="isMe ? 'darkorange' : 'white'" [icon]="icon"></fa-icon>
   </div>
-  <div class="text-white ml-1 mr-1">
+  <div class="text-white ml-1 mr-1" *ngIf="!isScramble">
     <fa-icon class="text-white times-size mr-1" [icon]="times"></fa-icon>
     <span class="font-size">{{life}}</span>
   </div>
@@ -11,7 +11,12 @@
     <fa-icon class="text-white times-size mr-1" [icon]="times"></fa-icon>
     <span class="font-size">{{cards}}</span>
   </div>
-  <span class="icon-size"><fa-icon class="font-size" [style.color]="isMe ? 'darkorange' : 'white'" [icon]="skull"></fa-icon></span>
+  <span class="icon-size" *ngIf="!isScramble">
+    <fa-icon class="font-size" [style.color]="isMe ? 'darkorange' : 'white'" [icon]="skull"></fa-icon>
+  </span>
+  <span class="icon-size" *ngIf="isScramble">
+    <img class="candy-size {{isMe ? 'orange' : 'white'}}" src="../../../assets/candy.svg" alt="candy"/>
+  </span>
   <div class="text-white ml-1 mr-1">
     <fa-icon class="text-white times-size mr-1" [icon]="times"></fa-icon>
     <span class="font-size">{{killed}}</span>
