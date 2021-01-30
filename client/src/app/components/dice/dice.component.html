@@ -17,7 +17,7 @@
     </div>
   </div>
   <div *ngIf="icon" [@moveAnimate]="moveConfig" class="btn piece position-absolute z-1000 {{disabled ? 'cursor-unset' : ''}}" (click)="onClick()">
-    <span class="{{blinkClass}} icon-size" [style.color]="isMe ? 'darkorange' : 'white'">
+    <span class="{{blinkClass}} icon-size" [style.color]="isMe ? 'darkorange' : 'white'" [style.left]="iconLeft">
       <fa-icon [icon]="icon"></fa-icon>
     </span>
   </div>

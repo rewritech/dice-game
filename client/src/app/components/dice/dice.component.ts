@@ -64,12 +64,14 @@ export class DiceComponent implements OnInit {
   disabledClass: string
   insertConfig: AnimationOption = null
   moveConfig: AnimationOption = null
+  iconLeft: string
 
   constructor(private diceMapService: DiceMapService) {}
 
   ngOnInit(): void {
     this.blinkClass = this.blink ? 'blinking' : ''
     this.disabledClass = this.disabled ? 'disabled cursor-unset' : ''
+    if (this.icon) this.setIconLeft()
     if (this.aniConfig?.value === 'insert') {
       this.insertConfig = {
         value: 'insert',
@@ -92,5 +94,19 @@ export class DiceComponent implements OnInit {
 
   private randomCoordinate(): number {
     return Math.floor(Math.random() * 300) - Math.floor(Math.random() * 290)
+  }
+
+  private setIconLeft(): void {
+    switch (this.icon.iconName) {
+      case 'chess-queen':
+        this.iconLeft = '0'
+        break
+      case 'chess-king':
+        this.iconLeft = '0.8px'
+        break
+      default:
+        this.iconLeft = '1.5px'
+        break
+    }
   }
 }

@@ -51,3 +51,41 @@
 .z-1000 {
   z-index: 1000;
 }
+
+@media screen and (max-width: 768px) {
+  .dice-size {
+    height: 29px;
+    width: 29px;
+  }
+  .dot {
+    width:6px;
+    height:6px;
+    border-radius: 50%;
+  }
+  .dice {
+    @extend .dice-size;
+    margin: 0.21rem;
+    padding: 0.21rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  .piece {
+    height: 25px;
+    width: 25px;
+    border-style: solid;
+    border-width: thick;
+    border-color: black;
+    border-radius: 50%;
+    justify-content: center;
+    z-index: 1300;
+    top: 3px;
+    left: 6.5px;
+    background: black;
+    padding: 0;
+  }
+  .icon-size {
+    font-size: 1rem;
+    position: absolute;
+    top: -6px;
+  }
+}
