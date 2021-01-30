@@ -6,7 +6,7 @@
   <div class="d-flex justify-content-center mt-5 mb-4">
     <h2>{{i18n.get('roomList')}}</h2>
   </div>
-  <div class="d-flex justify-content-center" *ngIf="rooms?.length > 0">
+  <div class="d-flex justify-content-center pl-2 pr-2" *ngIf="rooms?.length > 0">
     <input type="text" class="border rounded search-width" placeholder="{{i18n.get('searchKeyword')}}" [ngModel]="keyword" (ngModelChange)="onTextChange($event)">
     <select class="limit-select-box-width custom-select ml-2" (change)="onSelectChangeLimit($event.target.value)">
       <option value="0" selected>{{i18n.get('all')}}</option>
