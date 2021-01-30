@@ -14,3 +14,16 @@
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
+
+@media screen and (max-width: 768px) {
+  .chat-size {
+    width: 100%;
+    max-height: 7rem;
+    min-height: 7rem;
+  }
+  .chat-size-system {
+    width: 100%;
+    max-height: 5rem;
+    min-height: 5rem;
+  }
+}

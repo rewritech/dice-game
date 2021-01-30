@@ -14,3 +14,17 @@
 .current-turn-size {
   font-size: 1.4rem;
 }
+
+.align {
+  justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+  .align {
+    flex-wrap: wrap-reverse;
+  }
+  .info-size {
+    min-width: 100%;
+    max-width: 100%;
+  }
+}

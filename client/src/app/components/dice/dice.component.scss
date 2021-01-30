@@ -54,24 +54,24 @@
 
 @media screen and (max-width: 768px) {
   .dice-size {
-    height: 29px;
-    width: 29px;
+    height: calc(100vw/11.6);
+    width: calc(100vw/11.6);
   }
   .dot {
-    width:6px;
-    height:6px;
+    width: calc(100vw/50);
+    height: calc(100vw/50);
     border-radius: 50%;
   }
   .dice {
     @extend .dice-size;
-    margin: 0.21rem;
+    margin: 0.15rem;
     padding: 0.21rem;
     display: flex;
     justify-content: space-between;
   }
   .piece {
-    height: 25px;
-    width: 25px;
+    height: calc(100vw/15);
+    width: calc(100vw/15);
     border-style: solid;
     border-width: thick;
     border-color: black;
@@ -84,7 +84,7 @@
     padding: 0;
   }
   .icon-size {
-    font-size: 1rem;
+    font-size: calc(100vw/22);
     position: absolute;
     top: -6px;
   }
