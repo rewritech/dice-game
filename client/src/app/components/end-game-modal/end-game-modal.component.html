@@ -4,6 +4,12 @@
   </span>
 </ng-template>
 
+<ng-template #tt let-fill="fill" let-c="close">
+  <span class="star mr-1" [class.full]="fill === 100">
+    <span class="half" [style.width.%]="fill"><img class="candy-size orange" src="../../../assets/candy.svg" alt="candy"/></span><img class="candy-size" src="../../../assets/candy.svg" alt="candy"/>
+  </span>
+</ng-template>
+
 <ng-template #content let-modal>
   <div class="modal-header font-weight-bold title-size">
     {{i18n.get('gameResult')}}
@@ -14,16 +20,16 @@
       <tr>
         <th scope="col">{{i18n.get('rank')}}</th>
         <th scope="col">{{i18n.get('player')}}</th>
-        <th scope="col">{{i18n.get('kill')}}</th>
-        <th scope="col">{{i18n.get('life')}}</th>
+        <th scope="col" *ngIf="!room.mode.scramble">{{i18n.get('kill')}}</th>
+        <th scope="col">{{i18n.get(room.mode.scramble ? 'candy' : 'life')}}</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let p of room.players; index as i">
         <th scope="row">{{ i + 1 }}</th>
         <td class="d-inline-block text-truncate player-name-width">{{p.name}}</td>
-        <td>{{p.killedPlayer}}</td>
-        <td><ngb-rating [formControl]="ctrl" [rate]="p.life" [starTemplate]="t" [readonly]="true" [max]="3"></ngb-rating></td>
+        <td *ngIf="!room.mode.scramble">{{p.killedPlayer}}</td>
+        <td><ngb-rating [formControl]="ctrl" [rate]="p.life" [starTemplate]="room.mode.scramble ? tt : t" [readonly]="true" [max]="room.mode.scramble ? 7 : 3"></ngb-rating></td>
       </tr>
       </tbody>
     </table>

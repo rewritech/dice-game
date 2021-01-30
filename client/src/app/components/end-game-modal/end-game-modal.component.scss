@@ -22,3 +22,10 @@ tr {
 .player-name-width {
   max-width: 10rem;
 }
+.orange {
+  filter: invert(65%) sepia(80%) saturate(2979%) hue-rotate(356deg) brightness(98%) contrast(110%);
+}
+.candy-size {
+  width: 1.5rem;
+  height: 1.5rem;
+}

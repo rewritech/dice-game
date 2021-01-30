@@ -74,6 +74,7 @@ export const i18n = {
       "Take away another user's candy, collect 7 or get taken away, and game over when 0 hits.",
     itemModeDescription:
       'Add Bomb, Heart, Shuffle Card (Exclude Heart in case of Candy Battle)',
+    candy: 'candy',
   },
   ja: {
     loginButton: 'ログイン',
@@ -149,6 +150,7 @@ export const i18n = {
       'キャンディーを奪い取り７つ集めたり、奪われて０になる場合終了',
     itemModeDescription:
       '爆弾、ハート、シャプールカード追加（キャンディー争奪戦の場合、ハートは除外）',
+    candy: 'キャンディー',
   },
   ko: {
     loginButton: '로그인',
@@ -224,5 +226,6 @@ export const i18n = {
       '다른 유저의 캔디를 뺏아 7개 모으거나 빼앗겨서 0개가 되면 종료',
     itemModeDescription:
       '폭탄, 생명, 셔플 카드 추가(캔디쟁탈전의 경우 생명카드 제외)',
+    candy: '캔디',
   },
 }
