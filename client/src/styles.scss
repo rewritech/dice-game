@@ -69,6 +69,12 @@ body {
   width: 20rem;
 }
 
+@media screen and (max-width: 768px) {
+  .menu-width {
+    width: 70vw;
+  }
+}
+
 .i18n-select {
   max-width: 9rem;
   right: 0;
