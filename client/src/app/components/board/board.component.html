@@ -1,19 +1,16 @@
-<div class="mgr-2">
-  <div class="border border-white d-flex flex-column p-1 bg-dark fit-contents">
-    <div class="d-flex" *ngFor="let piecesRow of pieces; index as i">
-      <div *ngFor="let piece of piecesRow; index as j">
-        <app-dice
-          [num]="piece.num"
-          [disabled]="piece.disabled"
-          [icon]="piece.icon"
-          [blink]="piece.blink"
-          [playerName]="piece.playerName"
-          [coordinate]="[i, j]"
-          [callBackOnClick]="callBackOnClick"
-          [aniConfig]="aniConfig"
-          [isMe]="piece.isMe"
-        ></app-dice>
-      </div>
-    </div>
+<div class="mgr-2 board-border d-flex flex-column p-1 bg-dark fit-contents">
+  <div class="d-flex" *ngFor="let piecesRow of pieces; index as i">
+    <app-dice
+      *ngFor="let piece of piecesRow; index as j"
+      [num]="piece.num"
+      [disabled]="piece.disabled"
+      [icon]="piece.icon"
+      [blink]="piece.blink"
+      [playerName]="piece.playerName"
+      [coordinate]="[i, j]"
+      [callBackOnClick]="callBackOnClick"
+      [aniConfig]="aniConfig"
+      [isMe]="piece.isMe"
+    ></app-dice>
   </div>
 </div>
