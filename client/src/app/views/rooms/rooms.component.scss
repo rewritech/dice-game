@@ -11,11 +11,14 @@
 }
 
 .search-width {
-  width: 12.2rem;
+  width: 18rem;
 }
 
 .title-size {
   font-size: 1.2rem;
+}
+.title-max-width {
+  max-width: 19rem;
 }
 
 .limit-select-box-width {
@@ -28,4 +31,19 @@
 
 .pagination-size {
   font-size: 4rem;
+}
+
+@media screen and (max-width: 768px) {
+  .list-width {
+    min-width: 18rem;
+  }
+  .search-width {
+    width: 8rem;
+  }
+  .title-size {
+    font-size: 1.2rem;
+  }
+  .title-max-width {
+    max-width: 11rem;
+  }
 }
