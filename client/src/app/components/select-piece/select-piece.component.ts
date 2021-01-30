@@ -129,7 +129,8 @@ export class SelectPieceComponent implements OnInit {
       player.coordinates,
       this.getCoordinate(this.position)
     )
-    switch (player.piece?.iconName) {
+    const iconName = player.piece ? player.piece.iconName : ''
+    switch (iconName) {
       case 'chess-knight' as IconName:
         this.knightPiece.isActive = isActive
         if (condition) this.knightPiece.selectedId = player._id

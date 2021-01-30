@@ -49,6 +49,8 @@ export class SelectPieceMobileComponent implements OnInit {
     this.positions[position] = true
     this.position = position
     this.player.piece = null
+    this.player.coordinates = null
+    this.player.initialCoordinates = null
     this.socket.emit<Player>('select-piece', this.player)
   }
 
@@ -155,7 +157,8 @@ export class SelectPieceMobileComponent implements OnInit {
       player.coordinates,
       this.getCoordinate(this.position)
     )
-    switch (player.piece?.iconName) {
+    const iconName = player.piece ? player.piece.iconName : ''
+    switch (iconName) {
       case 'chess-knight' as IconName:
         this.knightPiece.isActive = isActive
         if (condition) this.knightPiece.selectedId = player._id
