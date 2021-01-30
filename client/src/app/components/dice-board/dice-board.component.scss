@@ -2,3 +2,11 @@
   font-size: 1.2rem;
   line-height: 46px;
 }
+.dice-board-align {
+  justify-content: space-between;
+}
+@media screen and (max-width: 768px) {
+  .dice-board-align {
+    flex-wrap: wrap
+  }
+}

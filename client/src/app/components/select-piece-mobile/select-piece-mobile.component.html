@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="d-flex justify-content-between">
+    <div class="w-100 m-2 border border-white d-flex flex-column p-0">
+      <div class="d-flex justify-content-between h-100">
+        <button class="p-0 w-100 h-100 {{positions['leftTop'] ? 'bg-primary' : 'bg-dark'}} border border-white d-flex" (click)="selectPosition('leftTop')">
+          <div class="dot ml-2    mr-auto mt-2 mb-auto"></div>
+        </button>
+        <button class="p-0 w-100 h-100 {{positions['rightTop'] ? 'bg-primary' : 'bg-dark'}} border border-white d-flex" (click)="selectPosition('rightTop')">
+          <div class="dot ml-auto mr-2    mt-2 mb-auto"></div>
+        </button>
+      </div>
+      <div class="d-flex justify-content-between h-100">
+        <button class="p-0 w-100 h-100 {{positions['leftBottom'] ? 'bg-primary' : 'bg-dark'}} border border-white d-flex" (click)="selectPosition('leftBottom')">
+          <div class="dot ml-2    mr-auto mb-2 mt-auto"></div>
+        </button>
+        <button class="p-0 w-100 h-100 {{positions['rightBottom'] ? 'bg-primary' : 'bg-dark'}} border border-white d-flex" (click)="selectPosition('rightBottom')">
+          <div class="dot ml-auto mr-2    mb-2 mt-auto"></div>
+        </button>
+      </div>
+    </div>
+    <div class="w-100">
+      <div class="d-flex">
+        <button class="dice-size p-0 btn m-2 {{setClassName(knightPiece)}}" (click)="selectPiece(knightPiece)">
+          <span class="icon-size"><fa-icon [icon]="knightPiece.piece"></fa-icon></span>
+        </button>
+        <button class="dice-size p-0 btn m-2 {{setClassName(rookPiece)}}" (click)="selectPiece(rookPiece)">
+          <span class="icon-size"><fa-icon [icon]="rookPiece.piece"></fa-icon></span>
+        </button>
+      </div>
+      <div class="d-flex">
+        <button class="dice-size p-0 btn m-2 {{setClassName(kingPiece)}}" (click)="selectPiece(kingPiece)">
+          <span class="icon-size"><fa-icon [icon]="kingPiece.piece"></fa-icon></span>
+        </button>
+        <button class="dice-size p-0 btn m-2 {{setClassName(queenPiece)}}" (click)="selectPiece(queenPiece)">
+          <span class="icon-size"><fa-icon [icon]="queenPiece.piece"></fa-icon></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

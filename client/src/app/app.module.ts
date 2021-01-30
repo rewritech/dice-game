@@ -18,6 +18,7 @@ import { DiceComponent } from './components/dice/dice.component'
 import { ViewDiceComponent } from './components/view-dice/view-dice.component'
 import { LoginComponent } from './views/login/login.component'
 import { SelectPieceComponent } from './components/select-piece/select-piece.component'
+import { SelectPieceMobileComponent } from './components/select-piece-mobile/select-piece-mobile.component'
 import { HeaderComponent } from './components/header/header.component'
 import { ChatComponent } from './components/chat/chat.component'
 import { ChatMessageComponent } from './components/chat-message/chat-message.component'
@@ -44,6 +45,7 @@ import { ItemCardComponent } from './components/item-card/item-card.component'
     ViewDiceComponent,
     LoginComponent,
     SelectPieceComponent,
+    SelectPieceMobileComponent,
     HeaderComponent,
     ChatComponent,
     ChatMessageComponent,

@@ -11,17 +11,24 @@ import { SocketConnectService } from '../../services/socket-connect.service'
 import { Player, PieceBtn, Room } from '../../types'
 
 @Component({
-  selector: 'app-select-piece',
-  templateUrl: './select-piece.component.html',
-  styleUrls: ['./select-piece.component.scss'],
+  selector: 'app-select-piece-mobile',
+  templateUrl: './select-piece-mobile.component.html',
+  styleUrls: ['./select-piece-mobile.component.scss'],
 })
-export class SelectPieceComponent implements OnInit {
-  @Input() position: string
+export class SelectPieceMobileComponent implements OnInit {
   @Input() player: Player
   @Input() room: Room
 
   private defaultBtnClass = 'btn-outline-light'
   private disableBtnClass = 'disabled cursor-unset'
+
+  positions = {
+    leftTop: true,
+    rightTop: false,
+    leftBottom: false,
+    rightBottom: false,
+  }
+  position: string
 
   knightPiece: PieceBtn
   rookPiece: PieceBtn
@@ -34,7 +41,15 @@ export class SelectPieceComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // onInit
+    this.setPieceBtn(this.room)
+  }
+
+  selectPosition(position: string): void {
+    this.initializePosition()
+    this.positions[position] = true
+    this.position = position
+    this.player.piece = null
+    this.socket.emit<Player>('select-piece', this.player)
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -60,11 +75,22 @@ export class SelectPieceComponent implements OnInit {
     if (pieceBtn.selectedId) {
       const ids = this.room.players.map((p) => p._id)
       const index = ids.indexOf(pieceBtn.selectedId)
-      result = `${base} ${colors[index]}`
+      result = `${pieceBtn.isActive ? '' : this.disableBtnClass} ${
+        colors[index]
+      }`
     } else {
       result = `${base}${pieceBtn.isActive ? '' : ' btn-outline-secondary'}`
     }
     return result
+  }
+
+  private initializePosition(): void {
+    this.positions = {
+      leftTop: false,
+      rightTop: false,
+      leftBottom: false,
+      rightBottom: false,
+    }
   }
 
   // PieceBtn에 값을 넣는다.
@@ -94,22 +120,6 @@ export class SelectPieceComponent implements OnInit {
       })
   }
 
-  // position에 따른 좌표값을 반환한다
-  private getCoordinate(position: string): [number, number] {
-    switch (position) {
-      case 'left-top':
-        return [0, 0]
-      case 'right-top':
-        return [0, 9]
-      case 'left-bottom':
-        return [9, 0]
-      case 'right-bottom':
-        return [9, 9]
-      default:
-        return [0, 0]
-    }
-  }
-
   // 버튼의 초기 상태
   private initializeBtnClass() {
     this.knightPiece = {
@@ -120,6 +130,22 @@ export class SelectPieceComponent implements OnInit {
     this.rookPiece = { isActive: true, selectedId: null, piece: faChessRook }
     this.kingPiece = { isActive: true, selectedId: null, piece: faChessKing }
     this.queenPiece = { isActive: true, selectedId: null, piece: faChessQueen }
+  }
+
+  // position에 따른 좌표값을 반환한다
+  private getCoordinate(position: string): [number, number] {
+    switch (position) {
+      case 'leftTop':
+        return [0, 0]
+      case 'rightTop':
+        return [0, 9]
+      case 'leftBottom':
+        return [9, 0]
+      case 'rightBottom':
+        return [9, 9]
+      default:
+        return [0, 0]
+    }
   }
 
   // 각 버튼의 isActive를 할당한다.

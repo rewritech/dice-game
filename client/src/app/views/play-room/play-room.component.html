@@ -1,6 +1,7 @@
 <div *ngIf="room">
   <div class="d-flex align">
     <app-waiting-room *ngIf="room.status === 'WAIT'"
+      class="waiting-width"
       [room]="room"
       [player]="player"
       [startBtnDisableClass]="startBtnDisableClass"

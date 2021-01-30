@@ -11,11 +11,12 @@
       </div>
     </div>
     <div class="card-body border-white">
-      <div class="row row-cols-2">
+      <div *ngIf="!isMobile" class="row row-cols-2">
         <div class="col border border-white p-0" *ngFor="let position of positions">
           <app-select-piece [position]="position" [player]="player" [room]="room"></app-select-piece>
         </div>
       </div>
+      <app-select-piece-mobile *ngIf="isMobile" [position]="positions[0]" [player]="player" [room]="room"></app-select-piece-mobile>
     </div>
     <app-dice-board [room]="room" class="mb-4"></app-dice-board>
     <div class="card-footer d-flex justify-content-end border-white">
