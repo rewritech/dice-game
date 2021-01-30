@@ -14,6 +14,7 @@ export class ChatComponent implements OnInit {
   planeIcon = faPaperPlane
   message: Message
   messages: Message[]
+  newMsg = false
 
   private roomId = +this.route.snapshot.paramMap.get('id')
   playerId = sessionStorage.getItem('pId')
@@ -39,15 +40,20 @@ export class ChatComponent implements OnInit {
     // messages 가져오기
     this.messageService.getMessages(this.roomId).subscribe((messages) => {
       this.messages = messages
+      this.newMsg = true
     })
     // 소켓 연결
     this.socket.on(`chat-room-${this.roomId}`, (messages: Message[]) => {
       this.messages = messages
+      this.newMsg = true
     })
   }
 
   ngAfterViewChecked(): void {
-    this.scrollToBottom()
+    if (this.newMsg) {
+      this.newMsg = false
+      this.scrollToBottom()
+    }
   }
 
   onSubmit(): void {
